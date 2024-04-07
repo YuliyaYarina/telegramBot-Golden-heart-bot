@@ -15,8 +15,7 @@ public class TelegramBotSender {
      *  Отправляет сообщения к указанному chatId
      */
     public void sendMessage(String messageText, Long chatId) {
-        SendMessage message = new SendMessage(chatId, messageText);
-        SendResponse response = telegramBot.execute(message);
+        SendResponse response = telegramBot.execute(new SendMessage(chatId, messageText));
     }
 
 }
