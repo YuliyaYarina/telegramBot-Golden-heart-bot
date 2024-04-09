@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.listener;
 
+import com.example.golden.heart.bot.command.CommandContainer;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 
@@ -24,6 +26,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     @Autowired
     private TelegramBotSender telegramBotSender;
 
+    @Autowired
+    CommandContainer commandContainer;
+
+    private final String commandPrefix = "/";
+
     @PostConstruct
     public void init() {
         telegramBot.setUpdatesListener(this);
@@ -33,8 +40,9 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-            if (update.message() != null && update.message().text().equals("/start")) {
-                telegramBotSender.sendMessage("Hello", update.message().chat().id());
+            String messageText = update.message().text();
+            if (update.message() != null && messageText.startsWith(commandPrefix)) {
+                commandContainer.findCommand(messageText.toLowerCase()).execute(update);
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
