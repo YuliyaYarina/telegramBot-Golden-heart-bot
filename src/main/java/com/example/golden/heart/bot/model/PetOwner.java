@@ -15,7 +15,7 @@ public class PetOwner {
     private long id;
     private String name;
     private String phone;
-    @OneToMany(mappedBy = "pet")
+    @OneToMany(mappedBy = "petOwner")
     private Collection<Pet> pets;
 
     public long getId() {
