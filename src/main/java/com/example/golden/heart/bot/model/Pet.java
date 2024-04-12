@@ -12,8 +12,11 @@ public class Pet {
     private String nick;
 
     @ManyToOne
-    @JoinColumn(name = "petOwner_id")
+    @JoinColumn(name = "pet_owner_id")
     private PetOwner petOwner;
+
+    public Pet() {
+    }
 
     public long getId() {
         return id;
