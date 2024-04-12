@@ -15,6 +15,10 @@ public class Pet {
     @JoinColumn(name = "pet_owner_id")
     private PetOwner petOwner;
 
+    @ManyToOne
+    @JoinColumn(name = "animal_shelter_id")
+    private AnimalShelter animalShelter;
+
     public Pet() {
     }
 
@@ -28,6 +32,14 @@ public class Pet {
 
     public String getNick() {
         return nick;
+    }
+
+    public AnimalShelter getAnimalShelter() {
+        return animalShelter;
+    }
+
+    public void setAnimalShelter(AnimalShelter animalShelter) {
+        this.animalShelter = animalShelter;
     }
 
     public void setNick(String nick) {
