@@ -23,6 +23,9 @@ public class OwnerReport {
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
+    public OwnerReport() {
+    }
+
     public long getId() {
         return id;
     }

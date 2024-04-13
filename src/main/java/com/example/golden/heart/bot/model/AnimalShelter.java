@@ -1,9 +1,6 @@
 package com.example.golden.heart.bot.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +9,7 @@ import java.util.Objects;
 @Entity
 public class AnimalShelter {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String address;
     private String workSchedule;
@@ -23,6 +20,9 @@ public class AnimalShelter {
 
     @OneToMany(mappedBy = "animalShelter")
     private Collection<Pet> shelterPets;
+
+    public AnimalShelter() {
+    }
 
     public long getId() {
         return id;
