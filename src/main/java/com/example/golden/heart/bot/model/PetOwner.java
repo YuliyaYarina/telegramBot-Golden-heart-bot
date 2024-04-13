@@ -1,9 +1,6 @@
 package com.example.golden.heart.bot.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -15,8 +12,14 @@ public class PetOwner {
     private long id;
     private String name;
     private String phone;
-    @OneToMany(mappedBy = "petOwner")
-    private Collection<Pet> pets;
+    @OneToOne(mappedBy = "petOwner")
+    private Pet pet;
+
+    public PetOwner(String name, String phone, Pet pet) {
+        this.name = name;
+        this.phone = phone;
+        this.pet = pet;
+    }
 
     public long getId() {
         return id;
@@ -42,12 +45,12 @@ public class PetOwner {
         this.phone = phone;
     }
 
-    public Collection<Pet> getPets() {
-        return pets;
+    public Pet getPet() {
+        return pet;
     }
 
-    public void setPets(Collection<Pet> pets) {
-        this.pets = pets;
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 
     @Override
@@ -55,12 +58,12 @@ public class PetOwner {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PetOwner petOwner = (PetOwner) o;
-        return id == petOwner.id && Objects.equals(name, petOwner.name) && Objects.equals(phone, petOwner.phone) && Objects.equals(pets, petOwner.pets);
+        return id == petOwner.id && Objects.equals(name, petOwner.name) && Objects.equals(phone, petOwner.phone) && Objects.equals(pet, petOwner.pet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, phone, pets);
+        return Objects.hash(id, name, phone, pet);
     }
 
     @Override
@@ -69,7 +72,7 @@ public class PetOwner {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", pets=" + pets +
+                ", pet=" + pet +
                 '}';
     }
 }
