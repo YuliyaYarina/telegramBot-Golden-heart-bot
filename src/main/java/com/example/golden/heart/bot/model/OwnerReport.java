@@ -19,11 +19,19 @@ public class OwnerReport {
     private String mediaType;
     private byte[] data;
 
-    @OneToOne
-    @JoinColumn(name = "pet_id")
-    private Pet pet;
+    @ManyToOne
+    @JoinColumn(name = "petOwner_id")
+    private PetOwner petOwner;
 
-    public OwnerReport() {
+    public OwnerReport(String diet, String wellBeing, String behaviourChange, String filePath, long fileSize, String mediaType, byte[] data, PetOwner petOwner) {
+        this.diet = diet;
+        this.wellBeing = wellBeing;
+        this.behaviourChange = behaviourChange;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.mediaType = mediaType;
+        this.data = data;
+        this.petOwner = petOwner;
     }
 
     public long getId() {
@@ -90,12 +98,12 @@ public class OwnerReport {
         this.data = data;
     }
 
-    public Pet getPet() {
-        return pet;
+    public PetOwner getPetOwner() {
+        return petOwner;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public void setPetOwner(PetOwner petOwner) {
+        this.petOwner = petOwner;
     }
 
     @Override
@@ -103,12 +111,12 @@ public class OwnerReport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OwnerReport that = (OwnerReport) o;
-        return id == that.id && fileSize == that.fileSize && Objects.equals(diet, that.diet) && Objects.equals(wellBeing, that.wellBeing) && Objects.equals(behaviourChange, that.behaviourChange) && Objects.equals(filePath, that.filePath) && Objects.equals(mediaType, that.mediaType) && Arrays.equals(data, that.data) && Objects.equals(pet, that.pet);
+        return id == that.id && fileSize == that.fileSize && Objects.equals(diet, that.diet) && Objects.equals(wellBeing, that.wellBeing) && Objects.equals(behaviourChange, that.behaviourChange) && Objects.equals(filePath, that.filePath) && Objects.equals(mediaType, that.mediaType) && Arrays.equals(data, that.data) && Objects.equals(petOwner, that.petOwner);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, diet, wellBeing, behaviourChange, filePath, fileSize, mediaType, pet);
+        int result = Objects.hash(id, diet, wellBeing, behaviourChange, filePath, fileSize, mediaType, petOwner);
         result = 31 * result + Arrays.hashCode(data);
         return result;
     }
@@ -124,7 +132,10 @@ public class OwnerReport {
                 ", fileSize=" + fileSize +
                 ", mediaType='" + mediaType + '\'' +
                 ", data=" + Arrays.toString(data) +
-                ", pet=" + pet +
+                ", petOwner=" + petOwner +
                 '}';
     }
 }
+
+
+

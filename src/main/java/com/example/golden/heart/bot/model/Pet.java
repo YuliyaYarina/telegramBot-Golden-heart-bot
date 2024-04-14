@@ -12,14 +12,12 @@ public class Pet {
     private String nick;
 
     @ManyToOne
-    @JoinColumn(name = "pet_owner_id")
-    private PetOwner petOwner;
-
-    @ManyToOne
-    @JoinColumn(name = "animal_shelter_id")
+    @JoinColumn(name = "animalShelter_id")
     private AnimalShelter animalShelter;
 
-    public Pet() {
+    public Pet(String nick, AnimalShelter animalShelter) {
+        this.nick = nick;
+        this.animalShelter = animalShelter;
     }
 
     public long getId() {
@@ -34,6 +32,10 @@ public class Pet {
         return nick;
     }
 
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
     public AnimalShelter getAnimalShelter() {
         return animalShelter;
     }
@@ -42,29 +44,17 @@ public class Pet {
         this.animalShelter = animalShelter;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public PetOwner getPetOwner() {
-        return petOwner;
-    }
-
-    public void setPetOwner(PetOwner petOwner) {
-        this.petOwner = petOwner;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return id == pet.id && Objects.equals(nick, pet.nick) && Objects.equals(petOwner, pet.petOwner);
+        return id == pet.id && Objects.equals(nick, pet.nick) && Objects.equals(animalShelter, pet.animalShelter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nick, petOwner);
+        return Objects.hash(id, nick, animalShelter);
     }
 
     @Override
@@ -72,7 +62,10 @@ public class Pet {
         return "Pet{" +
                 "id=" + id +
                 ", nick='" + nick + '\'' +
-                ", petOwner=" + petOwner +
+                ", animalShelter=" + animalShelter +
                 '}';
     }
 }
+
+
+
