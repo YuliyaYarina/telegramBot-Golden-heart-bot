@@ -8,7 +8,8 @@ import javax.xml.stream.events.Comment;
  */
 public enum CommandName {
     START("/start"),
-    STOP("/stop");
+    INFO("/info"),
+    VOLUNTEER("/volonter");
 
     private final String command;
 

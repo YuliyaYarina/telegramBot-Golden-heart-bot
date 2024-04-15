@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TelegramBotSender {
-    @Autowired
-    private TelegramBot telegramBot;
+//    @Autowired
+//    private TelegramBot telegramBot;
 
     /**
      *  Отправляет сообщения к указанному chatId
      */
     public void sendMessage(String messageText, Long chatId) {
-        SendResponse response = telegramBot.execute(new SendMessage(chatId, messageText));
+//        SendResponse response = telegramBot.execute(new SendMessage(chatId, messageText));
     }
 
 }
