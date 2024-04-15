@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class OwnerReport {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String diet;
     private String wellBeing;
@@ -22,6 +22,9 @@ public class OwnerReport {
     @ManyToOne
     @JoinColumn(name = "petOwner_id")
     private PetOwner petOwner;
+
+    public OwnerReport() {
+    }
 
     public OwnerReport(String diet, String wellBeing, String behaviourChange, String filePath, long fileSize, String mediaType, byte[] data, PetOwner petOwner) {
         this.diet = diet;

@@ -18,7 +18,7 @@ public class StartCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        String message = "Привет";
+        String message = "Привет Ынукивп";
         telegramBotSender.sendMessage(message, getChatId(update));
     }
 }

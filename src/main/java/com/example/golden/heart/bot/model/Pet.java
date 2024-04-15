@@ -7,13 +7,20 @@ import java.util.Objects;
 @Entity
 public class Pet {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nick;
 
     @ManyToOne
     @JoinColumn(name = "animalShelter_id")
     private AnimalShelter animalShelter;
+
+    @OneToOne
+    @JoinColumn(name = "pet_owner_id")
+    private PetOwner petOwner;
+
+    public Pet() {
+    }
 
     public Pet(String nick, AnimalShelter animalShelter) {
         this.nick = nick;
@@ -42,6 +49,14 @@ public class Pet {
 
     public void setAnimalShelter(AnimalShelter animalShelter) {
         this.animalShelter = animalShelter;
+    }
+
+    public PetOwner getPetOwner() {
+        return petOwner;
+    }
+
+    public void setPetOwner(PetOwner petOwner) {
+        this.petOwner = petOwner;
     }
 
     @Override

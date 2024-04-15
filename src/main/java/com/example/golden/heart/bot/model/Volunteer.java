@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.util.Objects;
@@ -9,11 +10,14 @@ import java.util.Objects;
 @Entity
 public class Volunteer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 
     private String phone;
+
+    public Volunteer() {
+    }
 
     public Volunteer(String name, String phone) {
         this.name = name;

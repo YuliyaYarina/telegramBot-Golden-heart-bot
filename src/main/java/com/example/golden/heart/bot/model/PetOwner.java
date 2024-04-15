@@ -8,12 +8,15 @@ import java.util.Objects;
 @Entity
 public class PetOwner {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String phone;
     @OneToOne(mappedBy = "petOwner")
     private Pet pet;
+
+    public PetOwner() {
+    }
 
     public PetOwner(String name, String phone, Pet pet) {
         this.name = name;

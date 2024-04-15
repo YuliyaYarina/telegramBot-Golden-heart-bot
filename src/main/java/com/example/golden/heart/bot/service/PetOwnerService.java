@@ -4,7 +4,9 @@ import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.PetOwner;
 import com.example.golden.heart.bot.repository.PetOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PetOwnerService {
 
     @Autowired

@@ -1,9 +1,7 @@
 package com.example.golden.heart.bot.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,17 +10,19 @@ import java.util.Objects;
 @Entity
 public class AnimalShelter {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String address;
     private String workSchedule;
-    private String filePath;
-    private long  fileSize;
-    private String mediaType;
-    private byte[] data;
+
+    private String name;
 
     @OneToMany(mappedBy = "animalShelter")
+    @JsonIgnore
     private Collection<Pet> shelterPets;
+
+    public AnimalShelter() {
+    }
 
     public long getId() {
         return id;
@@ -48,38 +48,6 @@ public class AnimalShelter {
         this.workSchedule = workSchedule;
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public String getMediaType() {
-        return mediaType;
-    }
-
-    public void setMediaType(String mediaType) {
-        this.mediaType = mediaType;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-
     public Collection<Pet> getShelterPets() {
         return shelterPets;
     }
@@ -88,19 +56,25 @@ public class AnimalShelter {
         this.shelterPets = shelterPets;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AnimalShelter that = (AnimalShelter) o;
-        return id == that.id && fileSize == that.fileSize && Objects.equals(address, that.address) && Objects.equals(workSchedule, that.workSchedule) && Objects.equals(filePath, that.filePath) && Objects.equals(mediaType, that.mediaType) && Arrays.equals(data, that.data) && Objects.equals(shelterPets, that.shelterPets);
+        return id == that.id && Objects.equals(address, that.address) && Objects.equals(workSchedule, that.workSchedule) && Objects.equals(name, that.name) && Objects.equals(shelterPets, that.shelterPets);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, address, workSchedule, filePath, fileSize, mediaType, shelterPets);
-        result = 31 * result + Arrays.hashCode(data);
-        return result;
+        return Objects.hash(id, address, workSchedule, name, shelterPets);
     }
 
     @Override
@@ -109,10 +83,7 @@ public class AnimalShelter {
                 "id=" + id +
                 ", address='" + address + '\'' +
                 ", workSchedule='" + workSchedule + '\'' +
-                ", filePath='" + filePath + '\'' +
-                ", fileSize=" + fileSize +
-                ", mediaType='" + mediaType + '\'' +
-                ", data=" + Arrays.toString(data) +
+                ", name='" + name + '\'' +
                 ", shelterPets=" + shelterPets +
                 '}';
     }
