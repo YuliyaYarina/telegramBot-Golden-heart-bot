@@ -3,7 +3,9 @@ package com.example.golden.heart.bot.service;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PhotoService {
     @Autowired
     PhotoRepository photoRepository;

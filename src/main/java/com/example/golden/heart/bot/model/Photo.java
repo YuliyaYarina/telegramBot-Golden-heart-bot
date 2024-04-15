@@ -24,7 +24,7 @@ public class Photo {
 
     @ManyToOne
     @JoinColumn(name = "pet_owner_id")
-    private PetOwner petOwner;
+    private OwnerReport ownerReport;
 
     public Photo() {
     }

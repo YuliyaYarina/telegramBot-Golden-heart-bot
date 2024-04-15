@@ -3,6 +3,7 @@ package com.example.golden.heart.bot.controller;
 import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.service.AnimalShelterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +46,4 @@ public class AnimalShelterController {
         }
         return ResponseEntity.notFound().build();
     }
-
 }

@@ -20,7 +20,7 @@ public class OwnerReport {
     @JoinColumn(name = "pet_owner_id")
     private PetOwner petOwner;
 
-    @OneToMany(mappedBy = "petOwner")
+    @OneToMany(mappedBy = "ownerReport")
     @JsonIgnore
     private Collection<Photo> photos;
 

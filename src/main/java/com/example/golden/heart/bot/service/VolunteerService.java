@@ -3,7 +3,9 @@ package com.example.golden.heart.bot.service;
 import com.example.golden.heart.bot.model.Volunteer;
 import com.example.golden.heart.bot.repository.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class VolunteerService {
     @Autowired
     private VolunteerRepository volunteerRepository;

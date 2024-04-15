@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +19,9 @@ public class PetOwner {
     @OneToOne(mappedBy = "petOwner")
     @JsonIgnore
     private Pet pet;
+    @OneToMany(mappedBy = "petOwner")
+    @JsonIgnore
+    private List<OwnerReport> ownerReports;
 
     public PetOwner() {
     }

@@ -5,6 +5,8 @@ import com.example.golden.heart.bot.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PetService {
 
@@ -25,6 +27,9 @@ public class PetService {
 
     public void removePetById(Long id) {
         petRepository.deleteById(id);
+    }
 
+    public List<Pet> saveAll(List<Pet> pets) {
+        return petRepository.saveAll(pets);
     }
 }
