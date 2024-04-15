@@ -3,6 +3,8 @@ package com.example.golden.heart.bot.command.commands;
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
@@ -16,6 +18,12 @@ public class UnknownCommand implements Command {
     @Override
     public void execute(Update update) {
         String message = "Я не понимаю вас. Пожалуйста нажмите /info";
-        telegramBotSender.sendMessage(message, getChatId(update));
+        telegramBotSender.sendMessage(message, getChatId(update), setButtons());
+    }
+
+    private InlineKeyboardMarkup setButtons() {
+        return new InlineKeyboardMarkup(
+                new InlineKeyboardButton("Информация").callbackData("Информация"),
+                new InlineKeyboardButton("Назад").callbackData("Назад"));
     }
 }

@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.util.List;
 
 
@@ -20,11 +19,12 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
 
-//    @Autowired
-//    private TelegramBot telegramBot;
 
     @Autowired
     private TelegramBotSender telegramBotSender;
+
+    @Autowired
+    TelegramBot telegramBot;
 
     @Autowired
     CommandContainer commandContainer;
@@ -33,7 +33,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
 
     @PostConstruct
     public void init() {
-//        telegramBot.setUpdatesListener(this);
+        telegramBot.setUpdatesListener(this);
     }
 
     @Override
