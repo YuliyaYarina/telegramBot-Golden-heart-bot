@@ -17,5 +17,4 @@ public class TelegramBotSender {
     public void sendMessage(String messageText, Long chatId) {
         SendResponse response = telegramBot.execute(new SendMessage(chatId, messageText));
     }
-
 }
