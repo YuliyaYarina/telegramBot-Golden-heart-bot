@@ -30,5 +30,4 @@ public class InfoCommand implements Command {
                 new InlineKeyboardButton("Информация о приюте").callbackData("Информация о приюте"),
                 new InlineKeyboardButton("Информация о боте").callbackData("Инфо о боте"));
     }
-
 }
