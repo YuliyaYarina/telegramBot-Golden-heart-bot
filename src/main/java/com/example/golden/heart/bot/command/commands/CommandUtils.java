@@ -9,6 +9,10 @@ import com.pengrad.telegrambot.model.Update;
 public class CommandUtils {
 
     public static Long getChatId(Update update) {
+        if (update.message()!=  null){
         return update.message().chat().id();
-    }
+    } else {
+            return update.callbackQuery().message().chat().id();
+        }
+}
 }

@@ -6,8 +6,7 @@ import com.example.golden.heart.bot.command.commands.UnknownCommand;
 import com.example.golden.heart.bot.configuration.TelegramBotConfiguration;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 
-import lombok.extern.slf4j.Slf4j;;
-
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;
 
@@ -22,6 +21,7 @@ import static com.example.golden.heart.bot.command.CommandName.*;
 public class CommandContainer{
 
     private TelegramBotSender telegramBotSender;
+    private StartCommand startCommand;
 
     public CommandContainer(TelegramBotSender telegramBotSender) {
         this.telegramBotSender = telegramBotSender;
@@ -42,6 +42,10 @@ public class CommandContainer{
         commandMap.put(START.getCommand(), new StartCommand(telegramBotSender));
         commandMap.put(INFO.getCommand(), new InfoCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new InfoCommand(telegramBotSender));
+        commandMap.put(CAT.getCommand(), new InfoCommand(telegramBotSender));
+        commandMap.put(DOG.getCommand(), new InfoCommand(telegramBotSender));
+        commandMap.put(BACK.getCommand(), new InfoCommand(telegramBotSender));
+
 
         return commandMap;
     }

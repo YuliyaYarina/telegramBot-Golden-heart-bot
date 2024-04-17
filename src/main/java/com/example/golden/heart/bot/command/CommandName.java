@@ -7,9 +7,13 @@ import javax.xml.stream.events.Comment;
  * Имя команды должен быть уникальным
  */
 public enum CommandName {
+
     START("/start"),
     INFO("/info"),
-    VOLUNTEER("/volonter");
+    VOLUNTEER("/volonter"),
+    CAT("/cat"),
+    DOG("/dog"),
+    BACK("/back");
 
     private final String command;
 

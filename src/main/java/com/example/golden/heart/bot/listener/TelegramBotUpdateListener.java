@@ -1,6 +1,7 @@
 package com.example.golden.heart.bot.listener;
 
 import com.example.golden.heart.bot.command.CommandContainer;
+import com.example.golden.heart.bot.command.CommandName;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -40,9 +41,12 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-            String messageText = update.message().text();
-            if (update.message() != null && messageText.startsWith(commandPrefix)) {
-                commandContainer.findCommand(messageText.toLowerCase()).execute(update);
+            if (update.message() != null && update.message().text().startsWith(commandPrefix)) {
+                commandContainer.findCommand(update.message().text().toLowerCase()).execute(update);
+            }else {
+                if (update.callbackQuery() != null) {
+                    commandContainer.findCommand(update.callbackQuery().data()).execute(update);
+                }
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
