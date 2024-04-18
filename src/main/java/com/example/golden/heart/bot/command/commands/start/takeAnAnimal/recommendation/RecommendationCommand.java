@@ -22,7 +22,7 @@ public class RecommendationCommand implements Command {
         map.put("рекомендации по транспортировке животного", "/transportation");
         map.put("рекомендаций по обустройству дома для щенка/котенка", "/homeImprovementYoung");
         map.put("рекомендаций по обустройству дома для взрослого животного", "/homeImprovementAdult");
-        map.put("рекомендаций по обустройству дома для животного с ограниченными возможностями)", "/homeImprovementForDisabled");
+        map.put("рекомендаций по обустройству дома для животного с ограниченными возможностями", "/homeImprovementForDisabled");
         map.put("рекомендации по проверенным кинологам для дальнейшего обращения к ним. (Для собак)**", "/provenDogHandlers");  // Для собак
 
         map.put("позвать волонтера.", "/volunteer");

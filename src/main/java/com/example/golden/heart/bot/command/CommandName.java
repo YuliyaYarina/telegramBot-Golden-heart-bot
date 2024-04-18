@@ -19,11 +19,16 @@ public enum CommandName {
         SAFETYPRECAUTIONS("/safetyPrecautions"),
 
     TAKEANANIMAL("/takeAnAnimal"),
-    RULES("/rules"),
-    DOCUMENTATION("/documentation"),
-    RECOMMENDATION("/recommendation"),
-    DOGHANDLERADVICE("/dogHandlerAdvice"),
-    REASONEFORREFUSAL("/reasonsForRefusal"),
+        RULES("/rules"),
+        DOCUMENTATION("/documentation"),
+        RECOMMENDATION("/recommendation"),
+            TRANSPORTATION("/transportation"),
+            HOMEIMPROVEMENTYOUNG("/homeImprovementYoung"),
+            HOMEIMPROVEMENTABULT("/homeImprovementAdult"),
+            HOMEIMPROVEMENTFORDISABLED("/homeImprovementForDisabled"),
+            PROVENDOGHANDLERS("/provenDogHandlers"),
+        DOGHANDLERADVICE("/dogHandlerAdvice"),
+        REASONEFORREFUSAL("/reasonsForRefusal"),
 
     REPORT("/report"),
 
