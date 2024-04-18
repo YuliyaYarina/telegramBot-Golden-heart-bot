@@ -1,4 +1,4 @@
-package com.example.golden.heart.bot.command.commands;
+package com.example.golden.heart.bot.command.commands.start.takeAnAnimal;
 
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;
@@ -21,7 +21,7 @@ public class TakeAnAnimalCommand implements Command {
 
         Map<String,String> map = new HashMap<>();
         map.put("правила знакомства с животными перед усыновлением.", "/rules");
-        map.put("список документов, необходимых для того, чтобы взять животное из приюта", "/documentation");
+        map.put("список документов, необходимых для того, чтобы взять животное из приюта", "/documentationH");
         map.put("рекомендации:", "/recommendation");
 //                • transportation - рекомендации по транспортировке животного.
 //                • homeImprovementYoung - рекомендаций по обустройству дома для щенка/котенка.
@@ -31,9 +31,8 @@ public class TakeAnAnimalCommand implements Command {
 //
         map.put("советы кинолога по первичному общению с собакой.", "/dogHandlerAdvice");  //Для собак
         map.put("причины, почему могут отказать и не дать забрать животное из приюта.", "/reasonsForRefusal");
-        map.put("принять и записать контактные данные для связи.", "/contactDetails");
-        map.put("отправить отчет (3)", "/recommendation");
 
+        map.put("принять и записать контактные данные для связи.", "/contactDetails");
         map.put("позвать волонтера.", "/volunteer");
         map.put("back", "/back");
 

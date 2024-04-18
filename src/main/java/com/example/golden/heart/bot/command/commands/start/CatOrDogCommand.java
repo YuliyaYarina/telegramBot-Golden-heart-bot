@@ -1,4 +1,4 @@
-package com.example.golden.heart.bot.command.commands;
+package com.example.golden.heart.bot.command.commands.start;
 
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;

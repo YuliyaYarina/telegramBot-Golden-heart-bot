@@ -14,10 +14,21 @@ public enum CommandName {
     DOG("/dog"),
 
     STARTINFO("/startInfo"),
+        ADDRESS("/address"),
+        SECURITY("/security"),
+        SAFETYPRECAUTIONS("/safetyPrecautions"),
+
     TAKEANANIMAL("/takeAnAnimal"),
+    RULES("/rules"),
+    DOCUMENTATION("/documentation"),
+    RECOMMENDATION("/recommendation"),
+    DOGHANDLERADVICE("/dogHandlerAdvice"),
+    REASONEFORREFUSAL("/reasonsForRefusal"),
+
     REPORT("/report"),
 
     INFO("/info"),
+    CONTACTDETAILS("/contactDetails"),
     VOLUNTEER("/volonter"),
     BACK("/back");
 

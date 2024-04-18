@@ -1,4 +1,4 @@
-package com.example.golden.heart.bot.command.commands;
+package com.example.golden.heart.bot.command.commands.start.startInfo;
 
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;
@@ -23,7 +23,6 @@ public class StartInfoCommand implements Command {
         map.put("контактные данные охраны для оформления пропуска на машину", "/security");
         map.put("общие рекомендации о технике безопасности на территории приюта.", "/safetyPrecautions");
         map.put("принять и записать контактные данные для связи.", "/contactDetails");
-        map.put("отправить отчет (3)", "/report");
 
         map.put("Позвать волонтёра. Помощь", "/volunteer");
         map.put("back", "/back");
