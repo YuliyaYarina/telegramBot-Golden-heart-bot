@@ -4,18 +4,26 @@ import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.model.Update;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
-public class UnknownCommand implements Command {
+public class BackCommand implements Command {
     private TelegramBotSender telegramBotSender;
 
-    public UnknownCommand(TelegramBotSender telegramBotSender) {
+    public BackCommand(TelegramBotSender telegramBotSender) {
         this.telegramBotSender = telegramBotSender;
     }
 
     @Override
     public void execute(Update update) {
-        String message = "Я не понимаю вас. Пожалуйста нажмите /info";
-        telegramBotSender.sendMessage(message, getChatId(update));
+
+        /**
+         * Написать метод по выходу назад
+         */
+
+
+//        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
     }
 }

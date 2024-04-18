@@ -11,4 +11,5 @@ public interface Command {
      * Метод для основной логики команды
      */
     void execute(Update update);
+
 }
