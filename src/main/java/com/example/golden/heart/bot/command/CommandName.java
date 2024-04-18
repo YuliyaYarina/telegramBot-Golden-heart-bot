@@ -9,10 +9,16 @@ import javax.xml.stream.events.Comment;
 public enum CommandName {
 
     START("/start"),
-    INFO("/info"),
-    VOLUNTEER("/volonter"),
+
     CAT("/cat"),
     DOG("/dog"),
+
+    STARTINFO("/startInfo"),
+    TAKEANANIMAL("/takeAnAnimal"),
+    REPORT("/report"),
+
+    INFO("/info"),
+    VOLUNTEER("/volonter"),
     BACK("/back");
 
     private final String command;

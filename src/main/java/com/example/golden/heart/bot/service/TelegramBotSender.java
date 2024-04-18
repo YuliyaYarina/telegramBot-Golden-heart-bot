@@ -28,7 +28,6 @@ public class TelegramBotSender {
             markup.addRow(new InlineKeyboardButton(entry.getKey()).callbackData(entry.getValue()));
         }
         return markup;
-
     }
 
 }

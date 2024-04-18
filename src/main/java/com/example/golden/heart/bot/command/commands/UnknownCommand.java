@@ -7,7 +7,9 @@ import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
@@ -20,14 +22,15 @@ public class UnknownCommand implements Command {
 
     @Override
     public void execute(Update update) {
+        Map<String,String> map = new HashMap<>();
+        map.put("информация о приюте (1)", "/startInfo");
+        map.put("как взять животное из приюта (2)", "/takeAnAnimal");
+        map.put("отправить отчет (3)", "/report");
+
+        map.put("info", "/info");
+        map.put("позвать волонтера.", "/volunteer");
+
         String message = "Я не понимаю вас. Пожалуйста выберите, что-нибудь из меню:";
-        telegramBotSender.sendMessage(message, getChatId(update), setButtons());
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
     }
-
-    private InlineKeyboardMarkup setButtons() {
-        return new InlineKeyboardMarkup(
-                new InlineKeyboardButton("Информация").callbackData("Информация"),
-                new InlineKeyboardButton("Назад").callbackData("Назад"));
-    }
-
 }
