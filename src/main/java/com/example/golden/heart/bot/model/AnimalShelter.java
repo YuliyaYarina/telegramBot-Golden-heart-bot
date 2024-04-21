@@ -23,9 +23,9 @@ public class AnimalShelter {
     private Collection<Pet> shelterPets;
 
     @OneToOne
-    @JoinColumn(name = "photo_id")
+    @JoinColumn(name = "address_photo_id")
     @JsonIgnore
-    private Photo photo;
+    private Photo addressPhoto;
 
 
     public AnimalShelter() {

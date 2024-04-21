@@ -12,16 +12,23 @@ public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String nick;
 
     @ManyToOne
     @JoinColumn(name = "animalShelter_id")
+    @JsonIgnore
     private AnimalShelter animalShelter;
 
     @OneToOne
-    @JoinColumn(name = "pet_owner_id")
+    @JoinColumn(name = "owner_id")
     @JsonIgnore
-    private PetOwner petOwner;
+    private User owner;
+
+    @OneToOne
+    @JoinColumn(name = "photo_id")
+    @JsonIgnore
+    private Photo photo;
 
     public Pet() {
     }

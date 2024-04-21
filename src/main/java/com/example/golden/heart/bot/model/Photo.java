@@ -20,13 +20,21 @@ public class Photo {
 
     @OneToOne
     @JoinColumn(name = "animal_shelter_id")
+    @JsonIgnore
     private AnimalShelter animalShelter;
 
     @ManyToOne
-    @JoinColumn(name = "pet_owner_id")
-    private OwnerReport ownerReport;
+    @JoinColumn(name = "pet_report_id")
+    @JsonIgnore
+    private PetReport petReport;
+
+    @OneToOne
+    @JoinColumn(name = "pet_id")
+    @JsonIgnore
+    private Pet pet;
 
     public Photo() {
+
     }
 
 }
