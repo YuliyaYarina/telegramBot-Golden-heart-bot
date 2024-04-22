@@ -1,7 +1,7 @@
 package com.example.golden.heart.bot.controller;
 
-import com.example.golden.heart.bot.model.OwnerReport;
-import com.example.golden.heart.bot.service.OwnerReportService;
+import com.example.golden.heart.bot.model.PetReport;
+import com.example.golden.heart.bot.service.PetReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/ownerReport")
-public class OwnerReportController {
+public class PetReportController {
 
     @Autowired
-    private OwnerReportService ownerReportService;
+    private PetReportService petReportService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveOwnerReport(@RequestBody OwnerReport ownerReport,
+    public ResponseEntity<String> saveOwnerReport(@RequestBody PetReport petReport,
                                                        @RequestParam MultipartFile photoReport) {
         if (photoReport.getSize() > 1024 * 500) {
             return ResponseEntity.badRequest().body("File is too big");
@@ -25,8 +25,8 @@ public class OwnerReportController {
     }
 
     @PutMapping
-    public ResponseEntity<OwnerReport> editeOwnerReport(@RequestBody OwnerReport ownerReport) {
-        OwnerReport foundReport = ownerReportService.editeOwnerReport(ownerReport);
+    public ResponseEntity<PetReport> editeOwnerReport(@RequestBody PetReport petReport) {
+        PetReport foundReport = petReportService.editeOwnerReport(petReport);
         if (foundReport == null) {
             return ResponseEntity.notFound().build();
         }
@@ -34,20 +34,20 @@ public class OwnerReportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OwnerReport> getOwnerReport(@PathVariable Long id) {
-        OwnerReport ownerReport = ownerReportService.getOwnerReportById(id);
-        if (ownerReport == null) {
+    public ResponseEntity<PetReport> getOwnerReport(@PathVariable Long id) {
+        PetReport petReport = petReportService.getOwnerReportById(id);
+        if (petReport == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ownerReport);
+        return ResponseEntity.ok(petReport);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<OwnerReport> removeOwnerReport(@PathVariable Long id) {
-        OwnerReport ownerReport = ownerReportService.getOwnerReportById(id);
-        if (ownerReport != null) {
-            ownerReportService.removeOwnerReportById(id);
-            return ResponseEntity.ok(ownerReport);
+    public ResponseEntity<PetReport> removeOwnerReport(@PathVariable Long id) {
+        PetReport petReport = petReportService.getOwnerReportById(id);
+        if (petReport != null) {
+            petReportService.removeOwnerReportById(id);
+            return ResponseEntity.ok(petReport);
         }
         return ResponseEntity.notFound().build();
     }

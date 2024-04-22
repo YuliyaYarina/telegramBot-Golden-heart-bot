@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Entity
 @Data
-public class OwnerReport {
+public class PetReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -17,14 +17,15 @@ public class OwnerReport {
     private String behaviourChange;
 
     @ManyToOne
-    @JoinColumn(name = "pet_owner_id")
-    private PetOwner petOwner;
+    @JoinColumn(name = "pet_id")
+    @JsonIgnore
+    private Pet pet;
 
-    @OneToMany(mappedBy = "ownerReport")
+    @OneToMany(mappedBy = "petReport")
     @JsonIgnore
     private Collection<Photo> photos;
 
-    public OwnerReport() {
+    public PetReport() {
     }
 
 }

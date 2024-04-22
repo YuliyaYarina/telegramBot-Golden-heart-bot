@@ -42,7 +42,7 @@ public class AnimalShelterService {
             pet.setAnimalShelter(null);
         }
         petService.saveAll(pets);
-        photoService.removePhoto(animalShelter.getPhoto().getId());
+        photoService.removePhoto(animalShelter.getAddressPhoto().getId());
         animalShelterRepo.deleteById(id);
     }
 }
