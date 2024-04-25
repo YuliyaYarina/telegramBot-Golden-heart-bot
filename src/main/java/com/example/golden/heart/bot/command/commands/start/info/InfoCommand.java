@@ -25,7 +25,7 @@ public class InfoCommand implements Command {
         map.put("позвать волонтера.", "/volunteer");
 
         String message = "Основная информация. Помощь";
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 
 }

@@ -32,6 +32,6 @@ public class SafetyPrecautionsCommand implements Command {
                 "•\tНахождение на территории приюта детей среднего и старшего школьного возраста без сопровождения взрослых или письменной справки-разрешения от родителей или законных представителей.\n" +
                 "•\tСамостоятельно заходить в кошатник без разрешения сотрудников приюта.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

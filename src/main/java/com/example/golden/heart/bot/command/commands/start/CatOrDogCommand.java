@@ -32,6 +32,6 @@ public class CatOrDogCommand implements Command {
                 " Что хочешь выбрать?";
 
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

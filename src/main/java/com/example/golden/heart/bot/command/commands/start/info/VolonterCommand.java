@@ -26,6 +26,6 @@ public class VolonterCommand implements com.example.golden.heart.bot.command.Com
          */
 
         String message = "Уже позвал волонтёра. Скоро будет";
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

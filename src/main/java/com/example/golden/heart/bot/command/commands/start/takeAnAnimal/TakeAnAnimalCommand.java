@@ -40,6 +40,6 @@ public class TakeAnAnimalCommand implements Command {
                 " Чем помочь?";
 
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

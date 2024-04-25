@@ -22,9 +22,9 @@ public class TelegramBotSender {
         SendResponse response = telegramBot.execute(new SendMessage(chatId, messageText).replyMarkup(markupInline));
     }
 
-    public InlineKeyboardMarkup setButns(Map<String, String> butns){
+    public InlineKeyboardMarkup setButtons(Map<String, String> buttons){
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        for (Map.Entry<String, String> entry : butns.entrySet()){
+        for (Map.Entry<String, String> entry : buttons.entrySet()){
             markup.addRow(new InlineKeyboardButton(entry.getKey()).callbackData(entry.getValue()));
         }
         return markup;

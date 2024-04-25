@@ -23,6 +23,6 @@ public class ContactDetailsCommand implements Command {
 
         String message = "принять и записать контактные данные для связи.";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

@@ -49,6 +49,6 @@ public class DocumentationCommand implements Command {
                 "\t \n" +
                 "\t Помните, что процедуры и требования могут различаться в разных приютах, поэтому рекомендуется предварительно уточнить информацию в конкретном приюте, где вы планируете усыновить собаку, кошку или любое другое животное.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

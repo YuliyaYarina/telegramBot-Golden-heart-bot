@@ -37,6 +37,6 @@ public class TransportationCommand implements Command {
                 "\n" +
                 "Универсальный способ для некрупных животных. Если она исключительно для автомобильного использования, можно взять большего размера, чтобы питомцу было комфортно, и он не ощущал замкнутого пространства. Ограничивает только полезная площадь багажника или заднего дивана. Но, где бы она ни располагалась, она должна быть надежно зафиксирована – пристегнута ремнем безопасности через соответствующие прорези или зафиксирована жгутом.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

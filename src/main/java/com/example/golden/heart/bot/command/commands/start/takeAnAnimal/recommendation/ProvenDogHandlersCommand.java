@@ -38,6 +38,6 @@ public class ProvenDogHandlersCommand implements Command {
                 "5. Если кинолог рассказывает о том, что некоторые породы собак «не поддаются дрессировке», лучше поискать другого специалиста.\n" +
                 "\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

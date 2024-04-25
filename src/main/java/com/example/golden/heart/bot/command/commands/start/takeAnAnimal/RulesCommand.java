@@ -39,6 +39,6 @@ public class RulesCommand implements Command {
                 "\n" +
                 "7. Запланируй ветеринарный осмотр: Вскоре после усыновления запланируй ветеринарный осмотр, чтобы убедиться, что питомец здоров и имеет все необходимые прививки. Это также дает возможность установить отношения с надежным ветеринаром, который сможет обеспечить постоянный уход за питомцем.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }
