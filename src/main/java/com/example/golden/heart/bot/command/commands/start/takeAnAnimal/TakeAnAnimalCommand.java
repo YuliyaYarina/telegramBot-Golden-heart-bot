@@ -34,7 +34,7 @@ public class TakeAnAnimalCommand implements Command {
 
         map.put("принять и записать контактные данные для связи.", "/contactDetails");
         map.put("позвать волонтера.", "/volunteer");
-        map.put("back", "/back");
+        map.put("Назад", "/catAndDog");
 
         String message =
                 " Чем помочь?";

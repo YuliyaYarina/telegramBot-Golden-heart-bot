@@ -19,8 +19,12 @@ public class AddressCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
+        map.put("назад", "/startInfo");
 
-       String message = "расписание работы приюта и адрес, схема проезда";
+       String message = "расписание работы приюта и адрес : \n" +
+               "\tг. Астана ул.Карпинская, 125\n" +
+               "\tЕжедневно с 8-00 до 18-00,\n" +
+               "\t схема проезда: / фото / ";
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
     }

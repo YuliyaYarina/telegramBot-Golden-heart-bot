@@ -27,7 +27,6 @@ public class CatOrDogCommand implements Command {
         map.put("отправить отчет (3)", "/report");
 
         map.put("позвать волонтера.", "/volunteer");
-        map.put("back", "/back");
 
         String message =
                 " Что хочешь выбрать?";

@@ -19,13 +19,13 @@ public class StartInfoCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
-        map.put("расписание работы приюта и адрес, схема проезда", "/address");
-        map.put("контактные данные охраны для оформления пропуска на машину", "/security");
-        map.put("общие рекомендации о технике безопасности на территории приюта.", "/safetyPrecautions");
-        map.put("принять и записать контактные данные для связи.", "/contactDetails");
+        map.put("1. расписание работы приюта и адрес, схема проезда", "/address");
+        map.put("2. контактные данные охраны для оформления пропуска на машину", "/security");
+        map.put("3. общие рекомендации о технике безопасности на территории приюта.", "/safetyPrecautions");
+        map.put("4. принять и записать контактные данные для связи.", "/contactDetails");
 
         map.put("Позвать волонтёра. Помощь", "/volunteer");
-        map.put("back", "/back");
+        map.put("Назад", "/catAndDog");
 
         String message =
                 " Что хочешь узнать?";

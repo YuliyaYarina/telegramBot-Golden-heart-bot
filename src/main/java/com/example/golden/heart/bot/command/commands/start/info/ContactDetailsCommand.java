@@ -19,6 +19,7 @@ public class ContactDetailsCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
+        map.put("Назад", "/catAndDog");
 
         String message = "принять и записать контактные данные для связи.";
 

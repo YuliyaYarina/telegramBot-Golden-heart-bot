@@ -19,8 +19,10 @@ public class SecurityCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
+        map.put("назад", "/startInfo");
 
-        String message = "контактные данные охраны для оформления пропуска на машину";
+        String message = "Контактные данные охраны для оформления пропуска на машину :\n" +
+                "\t(3952) 56-04-90, (3952) 600-444";
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
     }

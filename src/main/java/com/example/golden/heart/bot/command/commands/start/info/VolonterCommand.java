@@ -19,7 +19,7 @@ public class VolonterCommand implements com.example.golden.heart.bot.command.Com
     public void execute(Update update) {
 
         Map<String,String> map = new HashMap<>();
-        map.put("back", "/back");
+        map.put("Назад", "/catAndDog");
 
         /**
          *  нужен Метод по вызову волонтёра

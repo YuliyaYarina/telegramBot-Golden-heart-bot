@@ -20,7 +20,8 @@ public class InfoCommand implements Command {
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
 
-        map.put("info", "/info");
+
+        map.put("Назад", "/catAndDog");
         map.put("позвать волонтера.", "/volunteer");
 
         String message = "Основная информация. Помощь";

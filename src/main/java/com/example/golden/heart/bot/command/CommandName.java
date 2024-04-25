@@ -10,8 +10,9 @@ public enum CommandName {
 
     START("/start"),
 
-    CAT("/cat"),
-    DOG("/dog"),
+    CATANDDOG("/catAndDog"),
+//       CAT("/cat"),
+//       DOG("/dog"),
 
     STARTINFO("/startInfo"),
         ADDRESS("/address"),
@@ -20,7 +21,7 @@ public enum CommandName {
 
     TAKEANANIMAL("/takeAnAnimal"),
         RULES("/rules"),
-        DOCUMENTATION("/documentation"),
+        DOCUMENTATION("/documentationH"),
         RECOMMENDATION("/recommendation"),
             TRANSPORTATION("/transportation"),
             HOMEIMPROVEMENTYOUNG("/homeImprovementYoung"),
@@ -34,8 +35,7 @@ public enum CommandName {
 
     INFO("/info"),
     CONTACTDETAILS("/contactDetails"),
-    VOLUNTEER("/volonter"),
-    BACK("/back");
+    VOLUNTEER("/volonter");
 
     private final String command;
 

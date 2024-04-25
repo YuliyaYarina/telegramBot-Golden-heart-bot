@@ -19,16 +19,16 @@ public class RecommendationCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
-        map.put("рекомендации по транспортировке животного", "/transportation");
-        map.put("рекомендаций по обустройству дома для щенка/котенка", "/homeImprovementYoung");
-        map.put("рекомендаций по обустройству дома для взрослого животного", "/homeImprovementAdult");
-        map.put("рекомендаций по обустройству дома для животного с ограниченными возможностями", "/homeImprovementForDisabled");
-        map.put("рекомендации по проверенным кинологам для дальнейшего обращения к ним. (Для собак)**", "/provenDogHandlers");  // Для собак
+        map.put("... транспортировке животного", "/transportation");
+        map.put("... обустройству дома для щенка/котенка", "/homeImprovementYoung");
+        map.put("... обустройству дома для взрослого животного", "/homeImprovementAdult");
+        map.put("... обустройству дома для животного с ограниченными возможностями", "/homeImprovementForDisabled");
+        map.put("... проверенным кинологам для дальнейшего обращения к ним. (Для собак)**", "/provenDogHandlers");  // Для собак
 
         map.put("позвать волонтера.", "/volunteer");
-        map.put("back", "/back");
+        map.put("Назад", "/takeAnAnimal");
 
-        String message = "Список рекомендаций:";
+        String message = "Список рекомендаций по... ";
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
     }

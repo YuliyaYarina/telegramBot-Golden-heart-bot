@@ -46,8 +46,9 @@ public class CommandContainer{
         Map<String, Command> commandMap = new HashMap<>();
         commandMap.put(START.getCommand(), new StartCommand(telegramBotSender));
 
-        commandMap.put(CAT.getCommand(), new CatOrDogCommand(telegramBotSender));
-        commandMap.put(DOG.getCommand(), new CatOrDogCommand(telegramBotSender));
+        commandMap.put(CATANDDOG.getCommand(), new CatOrDogCommand(telegramBotSender));
+//           commandMap.put(CAT.getCommand(), new CatOrDogCommand(telegramBotSender));
+//           commandMap.put(DOG.getCommand(), new CatOrDogCommand(telegramBotSender));
 
         commandMap.put(STARTINFO.getCommand(), new StartInfoCommand(telegramBotSender));
            commandMap.put(ADDRESS.getCommand(), new AddressCommand(telegramBotSender));
@@ -71,8 +72,6 @@ public class CommandContainer{
         commandMap.put(INFO.getCommand(), new InfoCommand(telegramBotSender));
         commandMap.put(CONTACTDETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender));
-        commandMap.put(BACK.getCommand(), new BackCommand(telegramBotSender));
-
 
         return commandMap;
     }
