@@ -51,3 +51,6 @@ ALTER TABLE animal_shelter ADD COLUMN address_photo_id BIGINT REFERENCES photo(i
 ALTER TABLE pet ADD COLUMN address_photo_id BIGINT REFERENCES photo(id);
 ALTER TABLE pet ADD COLUMN owner_id BIGINT REFERENCES bot_user(id);
 
+-- changeset karybekov:2
+ALTER TABLE photo DROP COLUMN data;
+
