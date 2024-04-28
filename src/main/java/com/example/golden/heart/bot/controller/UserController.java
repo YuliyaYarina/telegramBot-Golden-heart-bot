@@ -17,9 +17,9 @@ public class UserController {
         return userService.save(user);
     }
 
-    @PutMapping
-    public ResponseEntity<User> editeUser(@RequestBody User user) {
-        User foundUser = userService.edite(user);
+    @PutMapping("/{id}")
+    public ResponseEntity<User> editeUser(@PathVariable Long id, @RequestBody User user) {
+        User foundUser = userService.edit(id, user);
         if (foundUser == null) {
             return ResponseEntity.notFound().build();
         }

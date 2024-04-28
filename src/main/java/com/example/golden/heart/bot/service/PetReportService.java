@@ -15,12 +15,20 @@ public class PetReportService {
         return ownerReportRepo.save(petReport);
     }
 
-    public PetReport editeOwnerReport(PetReport petReport) {
-        return ownerReportRepo.save(petReport);
+    public PetReport editOwnerReport(Long id, PetReport petReport) {
+        return ownerReportRepo.findById(id)
+                .map(foundReport -> {
+                    foundReport.setPet(petReport.getPet());
+                    foundReport.setDiet(petReport.getDiet());
+                    foundReport.setWellBeing(petReport.getWellBeing());
+                    foundReport.setBehaviourChange(petReport.getBehaviourChange());
+                    foundReport.setPhotos(petReport.getPhotos());
+                    return ownerReportRepo.save(foundReport);
+                }).orElse(null);
     }
 
     public PetReport getOwnerReportById(Long id) {
-        return ownerReportRepo.findById(id).get();
+        return ownerReportRepo.findById(id).orElse(null);
     }
 
     public void removeOwnerReportById(Long id) {
