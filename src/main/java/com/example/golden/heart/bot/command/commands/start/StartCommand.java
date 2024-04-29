@@ -34,6 +34,6 @@ public class StartCommand implements Command {
          *  возможно нужно добавить метод, по выбору только 1 раз или кошачий приют или собачий.
          */
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

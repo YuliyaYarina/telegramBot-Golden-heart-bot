@@ -79,6 +79,6 @@ public class DogHandlerAdviceCommand implements Command {
                 "\n" +
                 "Есть стремление к контакту — есть сам контакт — и есть основа для эффективной дрессировки.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

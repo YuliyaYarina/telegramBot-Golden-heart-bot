@@ -30,6 +30,6 @@ public class RecommendationCommand implements Command {
 
         String message = "Список рекомендаций по... ";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

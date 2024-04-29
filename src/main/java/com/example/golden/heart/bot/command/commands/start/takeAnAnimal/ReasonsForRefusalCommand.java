@@ -52,6 +52,6 @@ public class ReasonsForRefusalCommand implements Command {
                     "\n" +
                     "Стать хозяином питомца — большая ответственность. Взять кошку или собаку из приюта — ответственность вдвойне: ведь они уже пережили много несчастий и нуждаются в тепле и заботе. Отказ волонтеров — всего лишь сигнал: что-то в вашем отношении к животным вызывает вопросы, надо их решить. В большинстве случаев кураторы стараются помочь, объяснить, проконсультировать претендентов.\n";
 
-            telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+            telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
         }
 }

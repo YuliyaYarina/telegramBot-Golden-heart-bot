@@ -24,6 +24,6 @@ public class SecurityCommand implements Command {
         String message = "Контактные данные охраны для оформления пропуска на машину :\n" +
                 "\t(3952) 56-04-90, (3952) 600-444";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

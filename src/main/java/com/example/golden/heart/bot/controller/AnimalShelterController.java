@@ -3,7 +3,6 @@ package com.example.golden.heart.bot.controller;
 import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.service.AnimalShelterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +17,10 @@ public class AnimalShelterController {
         return ResponseEntity.ok(animalShelterService.saveAnimalShelter(animalShelter));
     }
 
-    @PutMapping
-    public ResponseEntity<AnimalShelter> editeAnimalShelter(@RequestBody AnimalShelter animalShelter) {
-        AnimalShelter foundAnimalShelter = animalShelterService.editeAnimalShelter(animalShelter);
-        if (animalShelter == null) {
+    @PutMapping("/{id}")
+    public ResponseEntity<AnimalShelter> editeAnimalShelter(@PathVariable Long id, @RequestBody AnimalShelter animalShelter) {
+        AnimalShelter foundAnimalShelter = animalShelterService.editAnimalShelter(id, animalShelter);
+        if (foundAnimalShelter == null) {
             return ResponseEntity.notFound().build();
         }
 

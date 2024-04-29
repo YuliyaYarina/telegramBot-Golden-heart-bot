@@ -26,6 +26,6 @@ public class AddressCommand implements Command {
                "\tЕжедневно с 8-00 до 18-00,\n" +
                "\t схема проезда: / фото / ";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

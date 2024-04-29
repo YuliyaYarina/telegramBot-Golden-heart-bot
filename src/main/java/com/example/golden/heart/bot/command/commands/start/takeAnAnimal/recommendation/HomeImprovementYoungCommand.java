@@ -33,6 +33,6 @@ public class HomeImprovementYoungCommand implements Command {
                 "\n" +
                 "5.\tОтныне не стоит оставлять еду в открытом доступе: убирайте подальше шоколад, изюм, кофе, авокадо (лучше почитать заранее, какие еще продукты опасны для животных).\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

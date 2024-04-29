@@ -27,6 +27,6 @@ public class UnknownCommand implements Command {
         map.put("позвать волонтера.", "/volunteer");
 
         String message = "Я не понимаю вас. Пожалуйста выберите, что-нибудь из меню:";
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

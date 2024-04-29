@@ -44,6 +44,6 @@ public class HomeImprovementForDisabledComand implements Command {
                 "\n" +
                 "Важно! Для глухих, слепых или ограниченно подвижных животных категорически запрещен свободный выгул.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }

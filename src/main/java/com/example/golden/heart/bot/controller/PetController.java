@@ -18,10 +18,10 @@ public class PetController {
         return petService.savePet(pet);
     }
 
-    @PutMapping
-    public ResponseEntity<Pet> editePet(@RequestBody Pet pet) {
-        Pet foundPet = petService.editePet(pet);
-        if (pet == null) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Pet> editPet(@PathVariable Long id, @RequestBody Pet pet) {
+        Pet foundPet = petService.editPet(id, pet);
+        if (foundPet == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(pet);

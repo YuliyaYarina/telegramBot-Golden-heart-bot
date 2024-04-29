@@ -17,12 +17,19 @@ public class PetService {
         return petRepository.save(pet);
     }
 
-    public Pet editePet(Pet pet) {
-        return petRepository.save(pet);
+    public Pet editPet(Long id, Pet pet) {
+        return petRepository.findById(id)
+                .map(foundPet -> {
+                    foundPet.setNick(pet.getNick());
+                    foundPet.setPhoto(pet.getPhoto());
+                    foundPet.setAnimalShelter(pet.getAnimalShelter());
+                    foundPet.setOwner(pet.getOwner());
+                    return petRepository.save(foundPet);
+                }).orElse(null);
     }
 
     public Pet getPetById(Long id) {
-        return petRepository.findById(id).get();
+        return petRepository.findById(id).orElse(null);
     }
 
     public void removePetById(Long id) {

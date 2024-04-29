@@ -31,6 +31,6 @@ public class HomeImprovementAdultCommand implements Command {
                 "\n" +
                 "Одним из самых практичных материалов для дома, в котором есть животные, считается керамогранит. Он достаточно прочный и можно не боятся появления царапин от когтей. При этом лучше не использовать глянцевые варианты, так как скользящая поверхность может привести к травмам питомца, если он будет бегать и резвиться. Стоит учитывать также, что на темном материале шерсть и грязь будут более заметны.\n";
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButns(map));
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 }
