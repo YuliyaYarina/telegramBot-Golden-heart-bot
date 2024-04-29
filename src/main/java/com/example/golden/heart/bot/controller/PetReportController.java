@@ -2,11 +2,14 @@ package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.service.PetReportService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/ownerReport")
@@ -15,18 +18,14 @@ public class PetReportController {
     @Autowired
     private PetReportService petReportService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveOwnerReport(@RequestBody PetReport petReport,
-                                                       @RequestParam MultipartFile photoReport) {
-        if (photoReport.getSize() > 1024 * 500) {
-            return ResponseEntity.badRequest().body("File is too big");
-        }
-        return ResponseEntity.ok().build();
+    @PostMapping
+    public ResponseEntity<PetReport> savePetReport(@RequestBody PetReport petReport) {
+        return ResponseEntity.ok(petReportService.savePetReport(petReport));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PetReport> editeOwnerReport(@PathVariable Long id, @RequestBody PetReport petReport) {
-        PetReport foundReport = petReportService.editOwnerReport(id, petReport);
+    public ResponseEntity<PetReport> editePetReport(@PathVariable Long id, @RequestBody PetReport petReport) {
+        PetReport foundReport = petReportService.editePetReport(id, petReport);
         if (foundReport == null) {
             return ResponseEntity.notFound().build();
         }
@@ -35,7 +34,7 @@ public class PetReportController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PetReport> getOwnerReport(@PathVariable Long id) {
-        PetReport petReport = petReportService.getOwnerReportById(id);
+        PetReport petReport = petReportService.getPetReportById(id);
         if (petReport == null) {
             return ResponseEntity.notFound().build();
         }
@@ -44,12 +43,33 @@ public class PetReportController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<PetReport> removeOwnerReport(@PathVariable Long id) {
-        PetReport petReport = petReportService.getOwnerReportById(id);
+        PetReport petReport = petReportService.getPetReportById(id);
         if (petReport != null) {
-            petReportService.removeOwnerReportById(id);
+            petReportService.removePetReportById(id);
             return ResponseEntity.ok(petReport);
         }
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping(value = "/{reportId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> saveReportPhoto(@PathVariable Long reportId,
+                                                  @RequestParam MultipartFile photoReport) throws IOException {
+        if (photoReport.getSize() > 1024 * 500) {
+            return ResponseEntity.badRequest().body("File is too big");
+        }
+        petReportService.saveReportPhoto(reportId, photoReport);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/{petReportId}/photo")
+    public void downloadPhoto(@PathVariable Long petReportId,
+                              HttpServletResponse response) throws IOException {
+        petReportService.getPhoto(petReportId, response);
+    }
+
+    @DeleteMapping(value = "/{petReportId}/photo")
+    public ResponseEntity<String> removePhoto(@PathVariable Long petReportId) {
+        petReportService.removePhoto(petReportId);
+        return ResponseEntity.ok().build();
+    }
 }
