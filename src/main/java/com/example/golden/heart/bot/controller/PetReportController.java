@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/ownerReport")
 public class PetReportController {
@@ -15,18 +17,24 @@ public class PetReportController {
     @Autowired
     private PetReportService petReportService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveOwnerReport(@RequestBody PetReport petReport,
-                                                       @RequestParam MultipartFile photoReport) {
+    @PostMapping
+    public ResponseEntity<PetReport> savePetReport(@RequestBody PetReport petReport) {
+        return ResponseEntity.ok(petReportService.savePetReport(petReport));
+    }
+
+    @PostMapping(value = "/{reportId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> saveReport(@PathVariable Long reportId,
+                                             @RequestParam MultipartFile photoReport) throws IOException {
         if (photoReport.getSize() > 1024 * 500) {
             return ResponseEntity.badRequest().body("File is too big");
         }
+        petReportService.saveReportPhoto(reportId   , photoReport);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
     public ResponseEntity<PetReport> editeOwnerReport(@RequestBody PetReport petReport) {
-        PetReport foundReport = petReportService.editeOwnerReport(petReport);
+        PetReport foundReport = petReportService.editePetReport(petReport);
         if (foundReport == null) {
             return ResponseEntity.notFound().build();
         }
@@ -35,7 +43,7 @@ public class PetReportController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PetReport> getOwnerReport(@PathVariable Long id) {
-        PetReport petReport = petReportService.getOwnerReportById(id);
+        PetReport petReport = petReportService.getPetReportById(id);
         if (petReport == null) {
             return ResponseEntity.notFound().build();
         }
@@ -44,9 +52,9 @@ public class PetReportController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<PetReport> removeOwnerReport(@PathVariable Long id) {
-        PetReport petReport = petReportService.getOwnerReportById(id);
+        PetReport petReport = petReportService.getPetReportById(id);
         if (petReport != null) {
-            petReportService.removeOwnerReportById(id);
+            petReportService.removePetReportById(id);
             return ResponseEntity.ok(petReport);
         }
         return ResponseEntity.notFound().build();
