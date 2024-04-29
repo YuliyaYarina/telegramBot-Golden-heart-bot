@@ -57,12 +57,20 @@ public class AnimalShelterService {
         animalShelterRepo.deleteById(id);
     }
 
+    /**
+     * Сохраняет фото на диск и данные фото в базу данных
+     * @param animalShelterId id приюта
+     * @param file фото которую нужно сохранить
+     * @return Фотография, которая была сохранена в базе данных.
+     * @throws IOException может выбросить исключение
+     */
     public Photo saveAddressPhoto(Long animalShelterId, MultipartFile file) throws IOException {
         Path path = photoService.uploadPhoto(animalShelterId, animalShelterDir, file);
         return savePhotoToDateBase(animalShelterId, path, file);
     }
 
-    public Photo savePhotoToDateBase(Long animalShelterId, Path filePath, MultipartFile file) {
+
+    private Photo savePhotoToDateBase(Long animalShelterId, Path filePath, MultipartFile file) {
         AnimalShelter animalShelter = getAnimalShelterById(animalShelterId);
         if (animalShelter == null) {
             logger.info("animalShelter is null");
@@ -76,8 +84,10 @@ public class AnimalShelterService {
         photo.setMediaType(file.getContentType());
 
         animalShelter.setAddressPhoto(photo);
+
+        photoService.savePhoto(photo);
         saveAnimalShelter(animalShelter);
 
-        return photoService.savePhoto(photo);
+        return photo;
     }
 }

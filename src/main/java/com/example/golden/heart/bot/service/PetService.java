@@ -48,6 +48,14 @@ public class PetService {
         return petRepository.saveAll(pets);
     }
 
+
+    /**
+     * Сохраняет фото на диск и данные фото в базу данных
+     * @param petId id животного
+     * @param file фото которую нужно сохранить
+     * @return Фотография, которая была сохранена в базе данных.
+     * @throws IOException может выбросить исключение
+     */
     public Photo savePetPhoto(Long petId, MultipartFile file) throws IOException {
         Path path = photoService.uploadPhoto(petId, petPhotoDir, file);
         return savePhotoToDateBase(petId, path, file);

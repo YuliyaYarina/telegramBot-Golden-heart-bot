@@ -43,6 +43,13 @@ public class PetReportService {
         petReportRepo.deleteById(id);
     }
 
+    /**
+     * Сохраняет фото на диск и данные фото в базу данных
+     * @param petReportId id отчета
+     * @param file фото которую нужно сохранить
+     * @return Фотография, которая была сохранена в базе данных.
+     * @throws IOException может выбросить исключение
+     */
     public Photo saveReportPhoto(Long petReportId, MultipartFile file) throws IOException {
         Path filePath = photoService.uploadPhoto(petReportId, petReportDir, file);
         return savePhotoToDateBase(petReportId, filePath, file);
