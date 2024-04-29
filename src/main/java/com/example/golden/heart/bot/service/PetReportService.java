@@ -32,11 +32,6 @@ public class PetReportService {
     public PetReport savePetReport(PetReport petReport) {
         return petReportRepo.save(petReport);
     }
-
-    public PetReport editePetReport(PetReport petReport) {
-        return petReportRepo.save(petReport);
-    }
-
     public PetReport getPetReportById(Long id) {
         return petReportRepo.findById(id).get();
     }
@@ -45,7 +40,19 @@ public class PetReportService {
         petReportRepo.deleteById(id);
     }
     public PetReport getOwnerReportById(Long id) {
-        return ownerReportRepo.findById(id).orElse(null);
+        return petReportRepo.findById(id).orElse(null);
+    }
+
+    public PetReport editPetReport(Long id, PetReport petReport) {
+        return petReportRepo.findById(id)
+                .map(foundReport -> {
+                    foundReport.setPet(petReport.getPet());
+                    foundReport.setDiet(petReport.getDiet());
+                    foundReport.setWellBeing(petReport.getWellBeing());
+                    foundReport.setBehaviourChange(petReport.getBehaviourChange());
+                    foundReport.setPhotos(petReport.getPhotos());
+                    return petReportRepo.save(foundReport);
+                }).orElse(null);
     }
 
     /**
@@ -65,19 +72,6 @@ public class PetReportService {
         photoService.getPhoto(photo, response);
     }
 
-
-
-    public PetReport editOwnerReport(Long id, PetReport petReport) {
-        return ownerReportRepo.findById(id)
-                .map(foundReport -> {
-                    foundReport.setPet(petReport.getPet());
-                    foundReport.setDiet(petReport.getDiet());
-                    foundReport.setWellBeing(petReport.getWellBeing());
-                    foundReport.setBehaviourChange(petReport.getBehaviourChange());
-                    foundReport.setPhotos(petReport.getPhotos());
-                    return ownerReportRepo.save(foundReport);
-                }).orElse(null);
-    }
     /**
      * Удаляет фото из базы и из диска
      * @param petReportId id petReport

@@ -74,7 +74,6 @@ public class PhotoService {
     public Photo editPhoto(Long id, Photo photo) {
         return photoRepository.findById(id)
                 .map(foundPhoto -> {
-                    foundPhoto.setData(photo.getData());
                     foundPhoto.setPet(photo.getPet());
                     foundPhoto.setAnimalShelter(photo.getAnimalShelter());
                     foundPhoto.setFilePath(photo.getFilePath());

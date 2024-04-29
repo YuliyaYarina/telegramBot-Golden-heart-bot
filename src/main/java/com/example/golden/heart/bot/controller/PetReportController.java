@@ -25,7 +25,7 @@ public class PetReportController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PetReport> editePetReport(@PathVariable Long id, @RequestBody PetReport petReport) {
-        PetReport foundReport = petReportService.editePetReport(id, petReport);
+        PetReport foundReport = petReportService.editPetReport(id, petReport);
         if (foundReport == null) {
             return ResponseEntity.notFound().build();
         }
