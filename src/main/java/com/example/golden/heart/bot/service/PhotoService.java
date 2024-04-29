@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PhotoRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +50,26 @@ public class PhotoService {
         return filePath;
     }
 
+    public void getPhoto(Photo photo, HttpServletResponse response) throws IOException {
+        logger.info("Wos invoked method for get photo");
+
+        Path path = Path.of(photo.getFilePath());
+
+        try (
+                InputStream is = Files.newInputStream(path);
+                OutputStream os = response.getOutputStream();
+                BufferedInputStream bis = new BufferedInputStream(is, 1024);
+                BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            response.setStatus(200);
+            response.setContentType(photo.getMediaType());
+            response.setContentLength((int) photo.getFileSize());
+            bis.transferTo(bos);
+        }
+    }
+
     public Photo savePhoto(Photo photo) {
         return photoRepository.save(photo);
-    }
-
-    public Photo editePhoto(Photo photo) {
-        return photoRepository.save(photo);
-    }
-
-    public Photo getPhoto(Long id) {
-        return photoRepository.findById(id).get();
     }
 
     public void removePhoto(Long id) {

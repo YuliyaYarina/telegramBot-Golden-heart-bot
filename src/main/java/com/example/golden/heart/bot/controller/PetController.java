@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.service.PetService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,6 @@ public class PetController {
     @PostMapping
     public Pet savePet(@RequestBody Pet pet) {
         return petService.savePet(pet);
-    }
-
-    @PostMapping(value = "/{petId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> savePetPhoto(@PathVariable Long petId,
-                                               @RequestParam MultipartFile file) throws IOException {
-        if (file.getSize() > 1024 * 500) {
-            return ResponseEntity.ok("File is too big");
-        }
-        petService.savePetPhoto(petId, file);
-        return ResponseEntity.ok().build();
     }
    @PutMapping
     public ResponseEntity<Pet> editePet(@RequestBody Pet pet) {
@@ -57,5 +48,21 @@ public class PetController {
             return ResponseEntity.ok(pet);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping(value = "/{petId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> savePetPhoto(@PathVariable Long petId,
+                                               @RequestParam MultipartFile file) throws IOException {
+        if (file.getSize() > 1024 * 500) {
+            return ResponseEntity.ok("File is too big");
+        }
+        petService.savePetPhoto(petId, file);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/{petId}/photo")
+    public void downloadPhoto(@PathVariable Long petId,
+                              HttpServletResponse response) throws IOException {
+        petService.getPhoto(petId, response);
     }
 }

@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.service.AnimalShelterService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,6 @@ public class AnimalShelterController {
     @PostMapping
     public ResponseEntity<AnimalShelter> createAnimalShelter(@RequestBody AnimalShelter animalShelter) {
         return ResponseEntity.ok(animalShelterService.saveAnimalShelter(animalShelter));
-    }
-
-    @PostMapping(value = "/{animalShelterId}/address/schema/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveAddressSchema(@PathVariable Long animalShelterId,
-                                                    @RequestParam MultipartFile file) throws IOException {
-        if (file.getSize() > 1024 * 500) {
-            return ResponseEntity.badRequest().body("File is too big");
-        }
-        animalShelterService.saveAddressPhoto(animalShelterId, file);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping
@@ -59,5 +50,22 @@ public class AnimalShelterController {
             return ResponseEntity.ok(animalShelter);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping(value = "/{animalShelterId}/address/schema/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> saveAddressSchema(@PathVariable Long animalShelterId,
+                                                    @RequestParam MultipartFile file) throws IOException {
+        if (file.getSize() > 1024 * 500) {
+            return ResponseEntity.badRequest().body("File is too big");
+        }
+        animalShelterService.saveAddressPhoto(animalShelterId, file);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping(value = "/{animalShelterId}/photo")
+    public void downloadPhoto(@PathVariable Long animalShelterId,
+                              HttpServletResponse response) throws IOException {
+        animalShelterService.getPhoto(animalShelterId, response);
     }
 }

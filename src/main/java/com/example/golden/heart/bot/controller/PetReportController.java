@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.service.PetReportService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,6 @@ public class PetReportController {
     @PostMapping
     public ResponseEntity<PetReport> savePetReport(@RequestBody PetReport petReport) {
         return ResponseEntity.ok(petReportService.savePetReport(petReport));
-    }
-
-    @PostMapping(value = "/{reportId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveReportPhoto(@PathVariable Long reportId,
-                                             @RequestParam MultipartFile photoReport) throws IOException {
-        if (photoReport.getSize() > 1024 * 500) {
-            return ResponseEntity.badRequest().body("File is too big");
-        }
-        petReportService.saveReportPhoto(reportId   , photoReport);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping
@@ -58,6 +49,22 @@ public class PetReportController {
             return ResponseEntity.ok(petReport);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping(value = "/{reportId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> saveReportPhoto(@PathVariable Long reportId,
+                                                  @RequestParam MultipartFile photoReport) throws IOException {
+        if (photoReport.getSize() > 1024 * 500) {
+            return ResponseEntity.badRequest().body("File is too big");
+        }
+        petReportService.saveReportPhoto(reportId   , photoReport);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/{petReportId}/photo")
+    public void downloadPhoto(@PathVariable Long petReportId,
+                              HttpServletResponse response) throws IOException {
+        petReportService.getPhoto(petReportId, response);
     }
 
 }

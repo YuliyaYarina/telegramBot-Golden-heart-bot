@@ -3,6 +3,7 @@ package com.example.golden.heart.bot.service;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,11 @@ public class PetService {
     public Photo savePetPhoto(Long petId, MultipartFile file) throws IOException {
         Path path = photoService.uploadPhoto(petId, petPhotoDir, file);
         return savePhotoToDateBase(petId, path, file);
+    }
+
+    public void getPhoto(Long petId, HttpServletResponse response) throws IOException {
+        Photo photo = photoService.findPhotoByPetId(petId);
+        photoService.getPhoto(photo, response);
     }
 
     private Photo savePhotoToDateBase(Long petId, Path path, MultipartFile file) {
