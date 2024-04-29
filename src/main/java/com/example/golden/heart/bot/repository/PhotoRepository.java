@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     Optional<Photo> findByPetReportId(Long petReportId);
+
+    Optional<Photo> findByAnimalShelterId(Long animalShelterId);
 }

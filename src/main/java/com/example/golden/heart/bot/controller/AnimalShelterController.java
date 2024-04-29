@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/animalShelter")
@@ -18,8 +21,18 @@ public class AnimalShelterController {
         return ResponseEntity.ok(animalShelterService.saveAnimalShelter(animalShelter));
     }
 
+    @PostMapping(value = "/{animalShelterId}/address/schema/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> saveAddressSchema(@PathVariable Long animalShelterId,
+                                                    @RequestParam MultipartFile file) throws IOException {
+        if (file.getSize() > 1024 * 500) {
+            return ResponseEntity.badRequest().body("File is too big");
+        }
+        animalShelterService.saveAddressPhoto(animalShelterId, file);
+        return ResponseEntity.ok().build();
+    }
     @PutMapping
     public ResponseEntity<AnimalShelter> editeAnimalShelter(@RequestBody AnimalShelter animalShelter) {
+
         AnimalShelter foundAnimalShelter = animalShelterService.editeAnimalShelter(animalShelter);
         if (animalShelter == null) {
             return ResponseEntity.notFound().build();

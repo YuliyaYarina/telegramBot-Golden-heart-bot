@@ -23,7 +23,7 @@ public class PetReportController {
     }
 
     @PostMapping(value = "/{reportId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveReport(@PathVariable Long reportId,
+    public ResponseEntity<String> saveReportPhoto(@PathVariable Long reportId,
                                              @RequestParam MultipartFile photoReport) throws IOException {
         if (photoReport.getSize() > 1024 * 500) {
             return ResponseEntity.badRequest().body("File is too big");

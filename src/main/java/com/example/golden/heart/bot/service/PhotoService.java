@@ -74,4 +74,7 @@ public class PhotoService {
         return photoRepository.findByPetReportId(petReportId).orElse(new Photo());
     }
 
+    public Photo findPhotoByAnimalShelterId(Long animalShelterId) {
+        return photoRepository.findByAnimalShelterId(animalShelterId).orElse(new Photo());
+    }
 }
