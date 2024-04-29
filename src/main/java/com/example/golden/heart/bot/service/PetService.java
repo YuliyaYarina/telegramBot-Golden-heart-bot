@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.service;
 
+import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetRepository;
@@ -65,6 +66,20 @@ public class PetService {
     public void getPhoto(Long petId, HttpServletResponse response) throws IOException {
         Photo photo = photoService.findPhotoByPetId(petId);
         photoService.getPhoto(photo, response);
+    }
+
+    /**
+     *Удаляет фото схемы проезда и разрывет связ на стороне приюта
+     * @param petId id животного
+     */
+    public void removePhoto(Long petId) {
+        Pet pet = getPetById(petId);
+        Photo photo = photoService.findPhotoByPetId(petId);
+
+        pet.setPhoto(null);
+        savePet(pet);
+
+        photoService.removePhoto(photo);
     }
 
     private Photo savePhotoToDateBase(Long petId, Path path, MultipartFile file) {

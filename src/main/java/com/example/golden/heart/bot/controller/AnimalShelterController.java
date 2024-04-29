@@ -68,4 +68,10 @@ public class AnimalShelterController {
                               HttpServletResponse response) throws IOException {
         animalShelterService.getPhoto(animalShelterId, response);
     }
+
+    @DeleteMapping(value = "/{animalShelterId}/photo")
+    public ResponseEntity<String> removePhoto(@PathVariable Long animalShelterId) {
+        animalShelterService.removePhoto(animalShelterId);
+        return ResponseEntity.ok().build();
+    }
 }

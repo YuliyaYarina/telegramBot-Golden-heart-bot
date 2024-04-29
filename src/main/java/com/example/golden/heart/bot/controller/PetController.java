@@ -22,7 +22,8 @@ public class PetController {
     public Pet savePet(@RequestBody Pet pet) {
         return petService.savePet(pet);
     }
-   @PutMapping
+
+    @PutMapping
     public ResponseEntity<Pet> editePet(@RequestBody Pet pet) {
         Pet foundPet = petService.editePet(pet);
         if (pet == null) {
@@ -64,5 +65,11 @@ public class PetController {
     public void downloadPhoto(@PathVariable Long petId,
                               HttpServletResponse response) throws IOException {
         petService.getPhoto(petId, response);
+    }
+
+    @DeleteMapping(value = "/{petId}/photo")
+    public ResponseEntity<String> removePhoto(@PathVariable Long petId) {
+        petService.removePhoto(petId);
+        return ResponseEntity.ok().build();
     }
 }

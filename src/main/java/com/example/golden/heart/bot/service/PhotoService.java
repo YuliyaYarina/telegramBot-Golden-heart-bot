@@ -72,8 +72,20 @@ public class PhotoService {
         return photoRepository.save(photo);
     }
 
-    public void removePhoto(Long id) {
-        photoRepository.deleteById(id);
+    public void removePhoto(Photo photo) {
+        logger.info("Wos invoked methods for remove photo");
+
+        Path path = Path.of(photo.getFilePath());
+        try {
+            Files.delete(path);
+        } catch (IOException ignored) {
+
+        }
+        photoRepository.deleteById(photo.getId());
+    }
+
+    public Photo findPhoto(Long id) {
+        return photoRepository.findById(id).get();
     }
 
 

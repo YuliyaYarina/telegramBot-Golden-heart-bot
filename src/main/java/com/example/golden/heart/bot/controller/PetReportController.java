@@ -57,7 +57,7 @@ public class PetReportController {
         if (photoReport.getSize() > 1024 * 500) {
             return ResponseEntity.badRequest().body("File is too big");
         }
-        petReportService.saveReportPhoto(reportId   , photoReport);
+        petReportService.saveReportPhoto(reportId, photoReport);
         return ResponseEntity.ok().build();
     }
 
@@ -67,4 +67,9 @@ public class PetReportController {
         petReportService.getPhoto(petReportId, response);
     }
 
+    @DeleteMapping(value = "/{petReportId}/photo")
+    public ResponseEntity<String> removePhoto(@PathVariable Long petReportId) {
+        petReportService.removePhoto(petReportId);
+        return ResponseEntity.ok().build();
+    }
 }

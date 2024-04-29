@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.service;
 
+import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetReportRepository;
@@ -59,6 +60,17 @@ public class PetReportService {
     public void getPhoto(Long petReportId, HttpServletResponse response) throws IOException {
         Photo photo = photoService.findPhotoByReportId(petReportId);
         photoService.getPhoto(photo, response);
+    }
+
+    /**
+     * Удаляет фото из базы и из диска
+     * @param petReportId id petReport
+     */
+
+    public void removePhoto(Long petReportId) {
+        Photo photo = photoService.findPhotoByReportId(petReportId);
+
+        photoService.removePhoto(photo);
     }
 
     private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile file) {

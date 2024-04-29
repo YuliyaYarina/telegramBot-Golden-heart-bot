@@ -42,7 +42,7 @@ public class AnimalShelterService {
     }
 
     /**
-     * Удаляет AnimalShelter
+     * Удаляет AnimalShelter и все связенные сним данные
      * Перед удалением AnimalShelter удаляет все фото схем
      * и Вызывает setAnimalShelter(null) ко всем pets прията
      * @param id AnimalShelter
@@ -54,7 +54,7 @@ public class AnimalShelterService {
             pet.setAnimalShelter(null);
         }
         petService.saveAll(pets);
-        photoService.removePhoto(animalShelter.getAddressPhoto().getId());
+        photoService.removePhoto(photoService.findPhoto(animalShelter.getAddressPhoto().getId()));
         animalShelterRepo.deleteById(id);
     }
 
@@ -73,6 +73,20 @@ public class AnimalShelterService {
     public void getPhoto(Long animalShelterId, HttpServletResponse response) throws IOException {
         Photo photo = photoService.findPhotoByAnimalShelterId(animalShelterId);
         photoService.getPhoto(photo, response);
+    }
+
+    /**
+     *Удаляет фото схемы проезда и разрывет связ на стороне приюта
+     * @param animalShelterId id прюта
+     */
+    public void removePhoto(Long animalShelterId) {
+        AnimalShelter animalShelter = getAnimalShelterById(animalShelterId);
+        Photo photo = photoService.findPhotoByAnimalShelterId(animalShelterId);
+
+        animalShelter.setAddressPhoto(null);
+        saveAnimalShelter(animalShelter);
+
+        photoService.removePhoto(photo);
     }
 
 
