@@ -30,6 +30,7 @@ public class AnimalShelterController {
         animalShelterService.saveAddressPhoto(animalShelterId, file);
         return ResponseEntity.ok().build();
     }
+
     @PutMapping
     public ResponseEntity<AnimalShelter> editeAnimalShelter(@RequestBody AnimalShelter animalShelter) {
 

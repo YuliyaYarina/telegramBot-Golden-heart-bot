@@ -57,3 +57,8 @@ ALTER TABLE photo DROP COLUMN data;
 -- changeset karybekov:3
 ALTER TABLE pet ADD COLUMN photo_id BIGINT REFERENCES photo(id);
 
+--changeset karybekov:4
+ALTER TABLE pet DROP COLUMN address_photo_id;
+
+ALTER TABLE pet ADD COLUMN IF NOT EXISTS photo_id BIGINT REFERENCES photo(id);
+
