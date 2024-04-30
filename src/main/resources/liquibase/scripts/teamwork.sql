@@ -62,3 +62,8 @@ ALTER TABLE pet DROP COLUMN address_photo_id;
 
 ALTER TABLE pet ADD COLUMN IF NOT EXISTS photo_id BIGINT REFERENCES photo(id);
 
+--changeset vgulenkov:1
+ALTER TABLE bot_user
+ADD COLUMN user_name VARCHAR(255) NOT NULL;
+
+

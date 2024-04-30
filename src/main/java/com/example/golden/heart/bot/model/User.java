@@ -19,6 +19,7 @@ public class User {
 
     private int phone;
     private String name;
+    private String userName;
 
     @OneToOne
     @JoinColumn(name = "pet_id")
@@ -26,5 +27,11 @@ public class User {
     private Pet pet;
 
     public User() {
+    }
+    public User(Long chtId, String name, String userName) {
+        this.chtId = chtId;
+        this.name = name;
+        this.userName = userName;
+        this.role = Role.USER;
     }
 }

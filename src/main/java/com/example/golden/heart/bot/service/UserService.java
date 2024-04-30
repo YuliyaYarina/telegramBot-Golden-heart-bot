@@ -1,5 +1,7 @@
 package com.example.golden.heart.bot.service;
 
+import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
+import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,19 @@ public class UserService {
 
     public User getById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public User changeRole(String userName, Role role) throws VolunteerAlreadyAppointedException {
+        if (userRepository.findByUserName(userName) == null) {
+            throw new IllegalArgumentException("Пользователь с таким username не найден");
+        }
+        if (!userRepository.findByRole(Role.VOLUNTEER).isEmpty() && role == Role.VOLUNTEER) {
+            User volunteer = userRepository.findByRole(Role.VOLUNTEER).iterator().next();
+            throw new VolunteerAlreadyAppointedException("Ответственный волонтер уже назначен, id " + volunteer.getId() + ", username " + volunteer.getUserName());
+        }
+        User foundUser = userRepository.findByUserName(userName);
+        foundUser.setRole(role);
+        return userRepository.save(foundUser);
     }
 
     public void removeById(Long id) {
