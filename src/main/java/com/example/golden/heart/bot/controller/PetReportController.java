@@ -33,7 +33,7 @@ public class PetReportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PetReport> getOwnerReport(@PathVariable Long id) {
+    public ResponseEntity<PetReport> getPetReport(@PathVariable Long id) {
         PetReport petReport = petReportService.getPetReportById(id);
         if (petReport == null) {
             return ResponseEntity.notFound().build();
@@ -42,7 +42,7 @@ public class PetReportController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<PetReport> removeOwnerReport(@PathVariable Long id) {
+    public ResponseEntity<PetReport> removePetReport(@PathVariable Long id) {
         PetReport petReport = petReportService.getPetReportById(id);
         if (petReport != null) {
             petReportService.removePetReportById(id);
