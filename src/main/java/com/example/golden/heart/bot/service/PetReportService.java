@@ -33,14 +33,11 @@ public class PetReportService {
         return petReportRepo.save(petReport);
     }
     public PetReport getPetReportById(Long id) {
-        return petReportRepo.findById(id).get();
+        return petReportRepo.findById(id).orElse(null);
     }
 
     public void removePetReportById(Long id) {
         petReportRepo.deleteById(id);
-    }
-    public PetReport getOwnerReportById(Long id) {
-        return petReportRepo.findById(id).orElse(null);
     }
 
     public PetReport editPetReport(Long id, PetReport petReport) {
