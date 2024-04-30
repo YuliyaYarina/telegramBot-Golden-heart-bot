@@ -12,6 +12,7 @@ import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.recommendation.*;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 
+import com.example.golden.heart.bot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;
@@ -26,10 +27,11 @@ import static com.example.golden.heart.bot.command.CommandName.*;
 public class CommandContainer{
 
     private TelegramBotSender telegramBotSender;
-    private StartCommand startCommand;
+    private UserService userService;
 
-    public CommandContainer(TelegramBotSender telegramBotSender) {
+    public CommandContainer(TelegramBotSender telegramBotSender, UserService userService) {
         this.telegramBotSender = telegramBotSender;
+        this.userService = userService;
     }
 
     /**
@@ -44,7 +46,7 @@ public class CommandContainer{
 
     private Map<String, Command> getCommandMap() {
         Map<String, Command> commandMap = new HashMap<>();
-        commandMap.put(START.getCommand(), new StartCommand(telegramBotSender));
+        commandMap.put(START.getCommand(), new StartCommand(telegramBotSender, userService));
 
         commandMap.put(CATANDDOG.getCommand(), new CatOrDogCommand(telegramBotSender));
 //           commandMap.put(CAT.getCommand(), new CatOrDogCommand(telegramBotSender));
