@@ -35,11 +35,11 @@ class AnimalShelterServiceTest {
     }
 
     @Test
-    void editeAnimalShelter() {
+    void editAnimalShelter() {
         AnimalShelter animalShelter = new AnimalShelter();
         Mockito.when(animalShelterRepository.save(animalShelter)).thenReturn(animalShelter);
 
-        AnimalShelter editAnimalShelter = animalShelterService.editeAnimalShelter(animalShelter);
+        AnimalShelter editAnimalShelter = animalShelterService.editAnimalShelter(1L, animalShelter);
 
         Assertions.assertEquals(animalShelter, editAnimalShelter);
     }
