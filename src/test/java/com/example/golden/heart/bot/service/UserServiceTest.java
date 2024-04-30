@@ -40,7 +40,7 @@ class UserServiceTest {
         user.setName("Михаил");
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        User editeUser = userService.edite(user);
+        User editeUser = userService.edit(1L, user);
 
         Assertions.assertEquals(user, editeUser);
     }

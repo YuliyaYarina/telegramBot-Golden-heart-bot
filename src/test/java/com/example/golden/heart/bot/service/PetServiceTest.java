@@ -40,7 +40,7 @@ class PetServiceTest {
         pet.setNick("Бобби");
         Mockito.when(petRepository.save(pet)).thenReturn(pet);
 
-        Pet editePet = petService.editePet(pet);
+        Pet editePet = petService.editPet(1L, pet);
 
         Assertions.assertEquals(pet, editePet);
     }

@@ -1,7 +1,7 @@
 package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.PetReport;
-import com.example.golden.heart.bot.repository.OwnerReportRepository;
+import com.example.golden.heart.bot.repository.PetReportRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PetReportControllerTest {
 
     @Autowired
-    OwnerReportRepository ownerReportRepository;
+    PetReportRepository petReportRepository;
 
     @Autowired
     TestRestTemplate testRestTemplate;
@@ -35,7 +35,7 @@ class PetReportControllerTest {
         petReport.setDiet("Умеренная");
         petReport.setWellBeing("Счастлив");
         petReport.setBehaviourChange("Несчастлив");
-        PetReport save = ownerReportRepository.save(petReport);
+        PetReport save = petReportRepository.save(petReport);
         long id = save.getId();
         ResponseEntity<PetReport> forEntity = testRestTemplate.getForEntity("/petReport/" + id, PetReport.class);
         HttpStatusCode statusCode = forEntity.getStatusCode();
