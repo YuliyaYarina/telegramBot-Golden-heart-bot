@@ -46,7 +46,7 @@ public class PetService {
     }
 
     public Pet getPetById(Long id) {
-        return petRepository.findById(id).get();
+        return petRepository.findById(id).orElse(null);
     }
 
     public void removePetById(Long id) {
