@@ -152,6 +152,7 @@ class AnimalShelterControllerTest {
         AnimalShelter animalShelter = animalShelterService.saveAnimalShelter(ANIMAL_SHELTER_WITH_PHOTO);
         testSaveAddressSchema(animalShelter);
         testDownloadAddressSchema(animalShelter);
+        testDeleteAddressSchema(animalShelter.getId());
 
     }
 
@@ -167,8 +168,6 @@ class AnimalShelterControllerTest {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-//        Given
-
 //        When
         ResponseEntity<String> response = testRestTemplate.postForEntity(
                 HOST + port + "/animalShelter/" + animalShelter.getId() + "/address/schema/post",
@@ -182,6 +181,17 @@ class AnimalShelterControllerTest {
     private void testDownloadAddressSchema(AnimalShelter animalShelter) {
         ResponseEntity<String> response = testRestTemplate.getForEntity(
                 HOST + port + "/animalShelter/" + animalShelter.getId() + "/photo",
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    private void testDeleteAddressSchema(Long id) {
+        ResponseEntity<String> response = testRestTemplate.exchange(
+                HOST + port + "/animalShelter/" + id + "/photo",
+                HttpMethod.DELETE,
+                null,
                 String.class
         );
 
