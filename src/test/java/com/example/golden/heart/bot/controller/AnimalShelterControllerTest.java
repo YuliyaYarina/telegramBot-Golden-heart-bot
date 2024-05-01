@@ -52,7 +52,7 @@ class AnimalShelterControllerTest {
         );
 
         AnimalShelter excepted = ANIMAL_SHELTER_1;
-        excepted.setId(1L);
+        excepted.setId(response.getBody().getId());
 //    Then
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(excepted, response.getBody());

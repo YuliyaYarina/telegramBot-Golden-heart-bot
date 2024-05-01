@@ -33,9 +33,12 @@ public class Pet {
     public Pet() {
     }
 
-    public Pet(String nick, AnimalShelter animalShelter) {
+    /**
+     * Конструктор для создание тестовых объектов
+     */
+    public Pet(Long id, String nick) {
+        this.id = id;
         this.nick = nick;
-        this.animalShelter = animalShelter;
     }
 }
 
