@@ -148,14 +148,15 @@ class PetControllerTest {
     @Test
     public void testSaveGetDeletePhoto() {
         Pet pet = petService.savePet(PET_WITH_PHOTO);
-        testSavePhoto(pet);
-        testDownloadPhoto(pet);
-        testDeletePhoto(pet.getId());
+        Long id = pet.getId();
+        testSavePhoto(id);
+        testDownloadPhoto(id);
+        testDeletePhoto(id);
 
     }
 
 
-    private void testSavePhoto(Pet pet) {
+    private void testSavePhoto(Long petId) {
 //        Подготовка тела запроса
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new ClassPathResource("test-photo/1.png"));
@@ -168,7 +169,7 @@ class PetControllerTest {
 
 //        When
         ResponseEntity<String> response = testRestTemplate.postForEntity(
-                HOST + port + "/pet/" + pet.getId() + "/photo/post",
+                HOST + port + "/pet/" + petId + "/photo/post",
                 requestEntity,
                 String.class
         );
@@ -176,9 +177,9 @@ class PetControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    private void testDownloadPhoto(Pet pet) {
+    private void testDownloadPhoto(Long petId) {
         ResponseEntity<String> response = testRestTemplate.getForEntity(
-                HOST + port + "/pet/" + pet.getId() + "/photo",
+                HOST + port + "/pet/" + petId + "/photo",
                 String.class
         );
 

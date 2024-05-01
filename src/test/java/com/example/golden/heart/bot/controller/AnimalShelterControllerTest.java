@@ -13,9 +13,6 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Objects;
 
 import static com.example.golden.heart.bot.constants.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -150,14 +147,15 @@ class AnimalShelterControllerTest {
     @Test
     public void testSaveGetDeleteAddressScheme() {
         AnimalShelter animalShelter = animalShelterService.saveAnimalShelter(ANIMAL_SHELTER_WITH_PHOTO);
-        testSaveAddressSchema(animalShelter);
-        testDownloadAddressSchema(animalShelter);
-        testDeleteAddressSchema(animalShelter.getId());
+        Long id = animalShelter.getId();
+        testSaveAddressSchema(id);
+        testDownloadAddressSchema(id);
+        testDeleteAddressSchema(id);
 
     }
 
 
-    private void testSaveAddressSchema(AnimalShelter animalShelter) {
+    private void testSaveAddressSchema(Long animalShelterId) {
 //        Подготовка тела запроса
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new ClassPathResource("test-photo/1.png"));
@@ -170,7 +168,7 @@ class AnimalShelterControllerTest {
 
 //        When
         ResponseEntity<String> response = testRestTemplate.postForEntity(
-                HOST + port + "/animalShelter/" + animalShelter.getId() + "/address/schema/post",
+                HOST + port + "/animalShelter/" + animalShelterId + "/address/schema/post",
                 requestEntity,
                 String.class
         );
@@ -178,9 +176,9 @@ class AnimalShelterControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    private void testDownloadAddressSchema(AnimalShelter animalShelter) {
+    private void testDownloadAddressSchema(Long animalShelterId) {
         ResponseEntity<String> response = testRestTemplate.getForEntity(
-                HOST + port + "/animalShelter/" + animalShelter.getId() + "/photo",
+                HOST + port + "/animalShelter/" + animalShelterId + "/photo",
                 String.class
         );
 

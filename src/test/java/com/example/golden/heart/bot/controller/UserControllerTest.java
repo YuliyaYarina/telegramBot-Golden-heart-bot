@@ -1,9 +1,7 @@
 package com.example.golden.heart.bot.controller;
 
-import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.model.User;
-import com.example.golden.heart.bot.service.AnimalShelterService;
 import com.example.golden.heart.bot.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
