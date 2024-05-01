@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.constants;
 
 import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.Pet;
+import com.example.golden.heart.bot.model.PetReport;
 
 public class Constants {
     public static final String HOST = "http://localhost:";
@@ -11,4 +12,7 @@ public class Constants {
 
     public static Pet PET_1 = new Pet(0L, "Test");
     public static Pet PET_WITH_PHOTO = new Pet(0L, "Test photo");
+
+    public static PetReport PET_REPORT_1 = new PetReport(0L, "Test", "Test", "Test");
+    public static PetReport PET_REPORT_WITH_PHOTO = new PetReport(0L, "Test", "With", "Photo");
 }
