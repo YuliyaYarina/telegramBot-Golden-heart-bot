@@ -1,7 +1,9 @@
 package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.AnimalShelter;
+import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.service.AnimalShelterService;
+import com.example.golden.heart.bot.service.PhotoService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,6 +18,9 @@ import java.io.IOException;
 public class AnimalShelterController {
     @Autowired
     private AnimalShelterService animalShelterService;
+
+    @Autowired
+    private PhotoService photoService;
 
     @PostMapping
     public ResponseEntity<AnimalShelter> createAnimalShelter(@RequestBody AnimalShelter animalShelter) {
@@ -63,9 +68,16 @@ public class AnimalShelterController {
 
 
     @GetMapping(value = "/{animalShelterId}/photo")
-    public void downloadPhoto(@PathVariable Long animalShelterId,
+    public ResponseEntity<String> downloadPhoto(@PathVariable Long animalShelterId,
                               HttpServletResponse response) throws IOException {
-        animalShelterService.getPhoto(animalShelterId, response);
+        if (animalShelterService.getAnimalShelterById(animalShelterId) == null) {
+            ResponseEntity.notFound().build();
+        }
+        if (photoService.findPhotoByAnimalShelterId(animalShelterId) == null) {
+            return ResponseEntity.notFound().build();
+        }
+       animalShelterService.getPhoto(animalShelterId, response);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{animalShelterId}/photo")
