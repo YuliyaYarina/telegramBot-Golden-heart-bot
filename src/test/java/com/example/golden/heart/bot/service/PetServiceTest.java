@@ -1,83 +1,135 @@
 package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.model.Pet;
+import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.io.IOException;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 class PetServiceTest {
 
-   @Mock
-   PetRepository petRepository;
-   @InjectMocks
-   PetService petService;
+    @Mock
+    PetRepository petRepository;
+
+    @InjectMocks
+    PetService petService;
 
     @Test
     void savePet() {
+
         Pet pet = new Pet();
-        pet.setNick("Бобби");
-        Mockito.when(petRepository.save(pet)).thenReturn(pet);
 
-        Pet savePet = petService.savePet(pet);
+        when(petRepository.save(pet)).thenReturn(pet);
 
-        Assertions.assertEquals(pet, savePet);
+        Pet petSave = petService.savePet(pet);
+        assertEquals(pet, petSave);
+
+        verify(petRepository).save(pet);
     }
 
     @Test
-    void editePet() {
-        Pet pet = new Pet();
-        pet.setNick("Бобби");
-        Mockito.when(petRepository.save(pet)).thenReturn(pet);
+    void editPet() {
 
-        Pet editePet = petService.editPet(1L, pet);
+        Long id = 1L;
+        Pet existingPet = new Pet();
+        existingPet.setNick("Барсик");
+        Photo existingPhoto = new Photo();
+        existingPhoto.setFilePath("photoUrl");
+        existingPet.setPhoto(existingPhoto);
 
-        Assertions.assertEquals(pet, editePet);
+        Pet updatedPet = new Pet();
+        updatedPet.setNick("Кузя");
+        Photo updatedPhoto = new Photo();
+        updatedPhoto.setFilePath("newPhotoUrl");
+        updatedPet.setPhoto(updatedPhoto);
+
+        when(petRepository.findById(id)).thenReturn(Optional.of(existingPet));
+        when(petRepository.save(any(Pet.class))).thenReturn(updatedPet);
+
+        Pet result = petService.editPet(id, updatedPet);
+
+        assertNotNull(result);
+        assertEquals("Кузя", result.getNick());
+        assertEquals(updatedPhoto, result.getPhoto());
+
+        verify(petRepository).save(any(Pet.class));
     }
 
-    @Test
-    void getPetById() {
-        Pet pet = new Pet();
-        pet.setNick("Бобби");
-        Mockito.when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
+    @ParameterizedTest
+    @MethodSource("providePetForTesting")
+    void getById(Long id, Pet expectedPet) {
 
-        Pet petById = petService.getPetById(1L);
+        when(petRepository.findById(id)).thenReturn(Optional.ofNullable(expectedPet));
 
-        Assertions.assertEquals(pet.getNick(), petById.getNick());
+        Pet actualPet = petService.getPetById(id);
+
+        assertEquals(expectedPet, actualPet, "Возвращаемое значение не равно ожидаемому");
+
+        verify(petRepository).findById(id);
+    }
+
+    static Stream<Arguments> providePetForTesting() {
+        Pet existingPet = new Pet(1L, "Барсик");
+        return Stream.of(
+                Arguments.of(1L, existingPet),
+                Arguments.of(2L, null)
+        );
     }
 
     @Test
     void removePetById() {
+        Long petId = 1L;
 
+        assertDoesNotThrow(() -> petService.removePetById(petId));
+
+        verify(petRepository, times(1)).deleteById(petId);
     }
 
     @Test
     void saveAll() {
-        Pet pet = new Pet();
-        pet.setNick("Бобби");
-        pet.setId(1L);
 
-        Pet pet1 = new Pet();
-        pet.setNick("Алекс");
-        pet.setId(2L);
+        Pet pet1 = new Pet(1L, "Барсик");
+        Pet pet2 = new Pet(2L, "Кузя");
+        List<Pet> pets = Arrays.asList(pet1, pet2);
 
-        List<Pet> pets = new ArrayList<>();
-        pets.add(pet);
-        pets.add(pet1);
+        when(petRepository.saveAll(pets)).thenReturn(pets);
 
-        Mockito.when(petRepository.saveAll(pets)).thenReturn(pets);
 
-        List<Pet> saveAll = petService.saveAll(pets);
-        Assertions.assertEquals(pets, saveAll);
+        List<Pet> savedPets = petService.saveAll(pets);
+
+        assertEquals(pets, savedPets);
+        verify(petRepository).saveAll(pets);
+
+    }
+    @Test
+    void savePetPhoto() throws IOException {
+
+   }
+   @Test
+   void getPhoto() throws IOException {
+
+   }
+
+   @Test
+   void removePhoto() {
+
     }
 }
