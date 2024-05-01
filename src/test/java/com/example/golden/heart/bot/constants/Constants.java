@@ -1,8 +1,6 @@
 package com.example.golden.heart.bot.constants;
 
-import com.example.golden.heart.bot.model.AnimalShelter;
-import com.example.golden.heart.bot.model.Pet;
-import com.example.golden.heart.bot.model.PetReport;
+import com.example.golden.heart.bot.model.*;
 
 public class Constants {
     public static final String HOST = "http://localhost:";
@@ -15,4 +13,6 @@ public class Constants {
 
     public static PetReport PET_REPORT_1 = new PetReport(0L, "Test", "Test", "Test");
     public static PetReport PET_REPORT_WITH_PHOTO = new PetReport(0L, "Test", "With", "Photo");
+
+    public static User USER_1 = new User(0L, 1111L, Role.USER, 111, "Test", "Test");
 }
