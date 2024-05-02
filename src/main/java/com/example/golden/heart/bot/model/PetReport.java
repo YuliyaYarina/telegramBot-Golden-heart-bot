@@ -28,6 +28,15 @@ public class PetReport {
     public PetReport() {
     }
 
+    /**
+     * Конструктор для создания тестовых объектов
+     */
+    public PetReport(long id, String diet, String wellBeing, String behaviourChange) {
+        this.id = id;
+        this.diet = diet;
+        this.wellBeing = wellBeing;
+        this.behaviourChange = behaviourChange;
+    }
 }
 
 

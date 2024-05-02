@@ -30,4 +30,14 @@ public class AnimalShelter {
 
     public AnimalShelter() {
     }
+
+    /**
+     * Конструктор, для создания тестовых объектов. Не удалят
+     */
+    public AnimalShelter(long id, String address, String workSchedule, String name) {
+        this.id = id;
+        this.address = address;
+        this.workSchedule = workSchedule;
+        this.name = name;
+    }
 }

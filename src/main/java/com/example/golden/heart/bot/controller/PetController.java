@@ -19,8 +19,12 @@ public class PetController {
     private PetService petService;
 
     @PostMapping
-    public Pet savePet(@RequestBody Pet pet) {
-        return petService.savePet(pet);
+    public ResponseEntity<Pet> savePet(@RequestBody Pet pet) {
+        Pet pet1 = petService.savePet(pet);
+        if (pet1 == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(pet1);
     }
 
     @PutMapping("/{id}")

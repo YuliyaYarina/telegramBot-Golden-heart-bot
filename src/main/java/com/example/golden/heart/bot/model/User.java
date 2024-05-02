@@ -34,4 +34,16 @@ public class User {
         this.userName = userName;
         this.role = Role.USER;
     }
+
+    /**
+     * Конструктор для создания объектов для тестирования
+     */
+    public User(Long id, Long chtId, Role role, int phone, String name, String userName) {
+        this.id = id;
+        this.chtId = chtId;
+        this.role = role;
+        this.phone = phone;
+        this.name = name;
+        this.userName = userName;
+    }
 }
