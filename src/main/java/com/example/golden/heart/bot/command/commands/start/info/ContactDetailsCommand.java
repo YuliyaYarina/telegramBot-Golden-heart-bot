@@ -20,7 +20,9 @@ public class ContactDetailsCommand implements Command {
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
         map.put("Назад", "/catAndDog");
-
+/**
+ * доработать метод
+ */
         String message = "принять и записать контактные данные для связи.";
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));

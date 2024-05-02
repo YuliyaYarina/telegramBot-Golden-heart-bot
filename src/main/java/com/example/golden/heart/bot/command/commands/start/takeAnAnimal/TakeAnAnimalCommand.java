@@ -20,20 +20,15 @@ public class TakeAnAnimalCommand implements Command {
     public void execute(Update update) {
 
         Map<String,String> map = new HashMap<>();
-        map.put("правила знакомства с животными перед усыновлением.", "/rules");
-        map.put("список документов, необходимых для того, чтобы взять животное из приюта", "/documentationH");
-        map.put("рекомендации:", "/recommendation");
-//                • transportation - рекомендации по транспортировке животного.
-//                • homeImprovementYoung - рекомендаций по обустройству дома для щенка/котенка.
-//                • homeImprovementAdult- рекомендаций по обустройству дома для взрослого животного.
-//                • homeImprovementForDisabled - рекомендаций по обустройству дома для животного с ограниченными возможностями (зрение, передвижение).
-//                • provenDogHandlers - рекомендации по проверенным кинологам для дальнейшего обращения к ним. (Для собак)**
-//
-        map.put("советы кинолога по первичному общению с собакой.", "/dogHandlerAdvice");  //Для собак
-        map.put("причины, почему могут отказать и не дать забрать животное из приюта.", "/reasonsForRefusal");
+        map.put("Правила знакомства с животными перед усыновлением.", "/rules");
+        map.put("Список документов, необходимых для того, чтобы взять животное из приюта", "/documentationH");
+        map.put("Советы кинолога по первичному общению с собакой.", "/dogHandlerAdvice");  //Для собак
+        map.put("Причины, почему могут отказать и не дать забрать животное из приюта.", "/reasonsForRefusal");
 
-        map.put("принять и записать контактные данные для связи.", "/contactDetails");
-        map.put("позвать волонтера.", "/volunteer");
+        map.put("Рекомендации:", "/recommendation");
+
+        map.put("Принять и записать контактные данные для связи.", "/contactDetails");
+        map.put("Позвать волонтера.", "/volunteer");
         map.put("Назад", "/catAndDog");
 
         String message =

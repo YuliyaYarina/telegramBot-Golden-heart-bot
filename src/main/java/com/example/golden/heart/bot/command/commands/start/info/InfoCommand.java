@@ -22,7 +22,11 @@ public class InfoCommand implements Command {
 
 
         map.put("Назад", "/catAndDog");
-        map.put("позвать волонтера.", "/volunteer");
+        map.put("Позвать волонтера.", "/volunteer");
+
+        /**
+         * доработать метод
+         */
 
         String message = "Основная информация. Помощь";
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));

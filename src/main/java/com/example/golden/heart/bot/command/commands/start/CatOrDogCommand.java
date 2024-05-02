@@ -6,6 +6,8 @@ import com.pengrad.telegrambot.model.Update;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
@@ -21,12 +23,12 @@ public class CatOrDogCommand implements Command {
     @Override
     public void execute(Update update) {
 
-        Map<String,String> map = new HashMap<>();
-        map.put("информация о приюте (1)", "/startInfo");
-        map.put("как взять животное из приюта (2)", "/takeAnAnimal");
-        map.put("отправить отчет (3)", "/report");
+        Map<String,String> map = new LinkedHashMap<>();
+        map.put("Информация о приюте", "/startInfo");
+        map.put("Как взять животное из приюта", "/takeAnAnimal");
+        map.put("Отправить отчет", "/report");
 
-        map.put("позвать волонтера.", "/volunteer");
+        map.put("Позвать волонтера.", "/volunteer");
 
         String message =
                 " Что хочешь выбрать?";

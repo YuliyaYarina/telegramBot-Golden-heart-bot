@@ -31,9 +31,11 @@ public class StartCommand implements Command {
     public void execute(Update update) {
 
         Map<String, String> map = new HashMap<>();
-        map.put("приют для кошек", "/catAndDog");
-        map.put("приют для собак", "/catAndDog");
+        map.put("Приют для кошек", "/catAndDog");
+        map.put("Приют для собак", "/catAndDog");
+
         String message = EmojiParser.parseToUnicode("Привет " + update.message().from().firstName() + " какой приют хочешь выбрать?" + " :blush:");
+
         if (userService.getById(update.message().from().id()) == null)
             userService.save(new User(update.message().from().id(), update.message().from().firstName(), update.message().from().username()));
 

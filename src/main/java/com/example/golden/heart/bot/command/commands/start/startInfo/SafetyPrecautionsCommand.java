@@ -19,9 +19,9 @@ public class SafetyPrecautionsCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
-        map.put("назад", "/startInfo");
+        map.put("Назад", "/startInfo");
 
-        String message = "общие рекомендации о технике безопасности на территории приюта.\n" +
+        String message = "Общие рекомендации о технике безопасности на территории приюта.\n" +
                 "\tЗапрещается: \n" +
                 "•\tСамостоятельно открывать выгулы и вольеры без разрешения работника приюта.\n" +
                 "•\tКормить животных. Этим Вы можете спровоцировать драку. Угощения разрешены только постоянным опекунам и волонтерам, во время прогулок с животными на поводке.\n" +

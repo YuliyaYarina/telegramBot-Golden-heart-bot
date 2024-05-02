@@ -22,7 +22,7 @@ public class VolonterCommand implements com.example.golden.heart.bot.command.Com
         map.put("Назад", "/catAndDog");
 
         /**
-         *  нужен Метод по вызову волонтёра
+         *  нужен Метод по вызову волонтёра, нужна доработка
          */
 
         String message = "Уже позвал волонтёра. Скоро будет";

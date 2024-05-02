@@ -5,6 +5,7 @@ import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.model.Update;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
@@ -18,7 +19,7 @@ public class RecommendationCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new LinkedHashMap<>();
         map.put("... транспортировке животного", "/transportation");
         map.put("... обустройству дома для щенка/котенка", "/homeImprovementYoung");
         map.put("... обустройству дома для взрослого животного", "/homeImprovementAdult");

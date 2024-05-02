@@ -21,7 +21,7 @@ public class HomeImprovementYoungCommand implements Command {
         Map<String,String> map = new HashMap<>();
         map.put("Назад", "/recommendation");
 
-        String message = "рекомендаций по обустройству дома для щенка/котенка\n" +
+        String message = "Рекомендаций по обустройству дома для щенка/котенка\n" +
                 "\n" +
                 "1.\tНеобходимо обезопасить провода: велика вероятность, что тут сработает принцип «кто не спрятался — я не виноват»:\n" +
                 "\n" +

@@ -24,6 +24,9 @@ public class DogHandlerAdviceCommand implements Command {
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
         map.put("Назад", "/takeAnAnimal");
+        /**
+         * доработать метод, по фильтрации только для собачьего приюта
+         */
 
         String message = "Советы кинолога по первичному общению с собакой.\n" +
                 "\n" +
