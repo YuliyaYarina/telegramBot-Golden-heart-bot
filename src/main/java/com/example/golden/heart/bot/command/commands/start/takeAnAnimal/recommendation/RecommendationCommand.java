@@ -24,8 +24,6 @@ public class RecommendationCommand implements Command {
         map.put("... обустройству дома для щенка/котенка", "/homeImprovementYoung");
         map.put("... обустройству дома для взрослого животного", "/homeImprovementAdult");
         map.put("... обустройству дома для животного с ограниченными возможностями", "/homeImprovementForDisabled");
-        map.put("... проверенным кинологам для дальнейшего обращения к ним. (Для собак)**", "/provenDogHandlers");  // Для собак
-
         map.put("позвать волонтера.", "/volunteer");
         map.put("Назад", "/takeAnAnimal");
 

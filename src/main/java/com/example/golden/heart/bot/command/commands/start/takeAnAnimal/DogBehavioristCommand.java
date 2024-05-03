@@ -1,34 +1,51 @@
 package com.example.golden.heart.bot.command.commands.start.takeAnAnimal;
 
 import com.example.golden.heart.bot.command.Command;
+import com.example.golden.heart.bot.model.DogBehaviorist;
+import com.example.golden.heart.bot.service.DogBehavioristService;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.model.Update;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-/**
- * Для собак
- */
 
+
+import static com.example.golden.heart.bot.command.CommandName.DOG_BEHAVIORIST_ADVICE;
+import static com.example.golden.heart.bot.command.CommandName.GET_DOG_BEHAVIORIST;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
+import static com.example.golden.heart.bot.command.commands.CommandUtils.getData;
 
-public class DogHandlerAdviceCommand implements Command {
+public class DogBehavioristCommand implements Command {
+
+    private String message = " ";
 
     private TelegramBotSender telegramBotSender;
+    public DogBehavioristService dogBehavioristService;
 
-    public DogHandlerAdviceCommand(TelegramBotSender telegramBotSender) {
+    public DogBehavioristCommand(TelegramBotSender telegramBotSender, DogBehavioristService dogBehavioristService) {
         this.telegramBotSender = telegramBotSender;
+        this.dogBehavioristService = dogBehavioristService;
     }
 
     @Override
     public void execute(Update update) {
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new LinkedHashMap<>();
         map.put("Назад", "/takeAnAnimal");
-        /**
-         * доработать метод, по фильтрации только для собачьего приюта
-         */
 
-        String message = "Советы кинолога по первичному общению с собакой.\n" +
+        if (getData(update).equals(DOG_BEHAVIORIST_ADVICE.getCommand())) {
+            message = dogBehavioristAdviceMessage();
+        } else if (getData(update).equals(GET_DOG_BEHAVIORIST.getCommand())) {
+            message = geDogBehaviorist();
+        }
+
+        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
+
+    }
+
+
+    private String dogBehavioristAdviceMessage() {
+         return  "Советы кинолога по первичному общению с собакой.\n" +
                 "\n" +
                 " На дрессировочной площадке можно увидеть собак двух типов: \n" +
                 "а)\t большинство — которым интересно все вокруг, кроме владельца. Собака готова бегать, нюхать метки, общаться с другими собаками и т.п., с владельцем связь только через поводок,\n" +
@@ -81,7 +98,25 @@ public class DogHandlerAdviceCommand implements Command {
                 "Когда мы научимся понятно выражать свои эмоции и желания этими способами, нам будет гораздо проще донести до собаки необходимую информацию.\n" +
                 "\n" +
                 "Есть стремление к контакту — есть сам контакт — и есть основа для эффективной дрессировки.\n";
+    }
 
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
+    private String geDogBehaviorist() {
+        List<DogBehaviorist> dogBehaviorists = dogBehavioristService.findAll();
+
+        if (dogBehaviorists.isEmpty()) {
+            return "У нас пока нет кинологов для рекомендации";
+        }
+        return  "Вот список рекомендованных кинологов\n" + collectDogBehaviorist(dogBehaviorists);
+    }
+
+    private String collectDogBehaviorist(List<DogBehaviorist> dogBehaviorists) {
+        StringBuilder message = new StringBuilder(" ");
+        for (DogBehaviorist element : dogBehaviorists) {
+            message.append(element.getName());
+            message.append(" Номер телефона: ");
+            message.append(element.getPhone());
+            message.append("\n");
+        }
+        return message.toString();
     }
 }

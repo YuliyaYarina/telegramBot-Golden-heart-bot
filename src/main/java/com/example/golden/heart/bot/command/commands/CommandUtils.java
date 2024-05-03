@@ -41,4 +41,11 @@ public class CommandUtils {
             throw new UnknownUpdateException();
         }
     }
+
+    public static String getData(Update update) {
+        if (update.callbackQuery() != null) {
+            return update.callbackQuery().data();
+        }
+        throw new UnknownUpdateException();
+    }
 }
