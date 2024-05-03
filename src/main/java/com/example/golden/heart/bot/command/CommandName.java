@@ -1,7 +1,5 @@
 package com.example.golden.heart.bot.command;
 
-import javax.xml.stream.events.Comment;
-
 /**
  * enum для хранение имена всех команд
  * Имя команды должен быть уникальным
@@ -13,28 +11,28 @@ public enum CommandName {
        CAT("/cat"),
        DOG("/dog"),
 
-    STARTINFO("/startInfo"),
+    START_INFO("/startInfo"),
         ADDRESS("/address"),
         SECURITY("/security"),
-        SAFETYPRECAUTIONS("/safetyPrecautions"),
+        SAFETY_PRECAUTIONS("/safetyPrecautions"),
 
-    TAKEANANIMAL("/takeAnAnimal"),
+    TAKE_AN_ANIMAL("/takeAnAnimal"),
         RULES("/rules"),
         DOCUMENTATION("/documentationH"),
         RECOMMENDATION("/recommendation"),
             TRANSPORTATION("/transportation"),
-            HOMEIMPROVEMENTYOUNG("/homeImprovementYoung"),
-            HOMEIMPROVEMENTABULT("/homeImprovementAdult"),
-            HOMEIMPROVEMENTFORDISABLED("/homeImprovementForDisabled"),
-            PROVENDOGHANDLERS("/provenDogHandlers"),
-        DOGHANDLERADVICE("/dogHandlerAdvice"),
-        REASONEFORREFUSAL("/reasonsForRefusal"),
+            HOME_IMPROVEMENT_YOUNG("/homeImprovementYoung"),
+            HOME_IMPROVEMENT_ADULT("/homeImprovementAdult"),
+            HOME_IMPROVEMENT_FOR_DISABLED("/homeImprovementForDisabled"),
+        DOG_BEHAVIORIST_ADVICE("/dogHandlerAdvice"),
+        GET_DOG_BEHAVIORIST("/getDogHandlers"),
+        REASONS_FOR_REFUSAL("/reasonsForRefusal"),
 
     REPORT("/report"),
 
     INFO("/info"),
-    CONTACTDETAILS("/contactDetails"),
-    VOLUNTEER("/volonter");
+    CONTACT_DETAILS("/contactDetails"),
+    VOLUNTEER("/volunteer");
 
     private final String command;
 

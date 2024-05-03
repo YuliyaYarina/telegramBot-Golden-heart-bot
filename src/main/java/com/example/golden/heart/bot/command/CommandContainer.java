@@ -1,6 +1,5 @@
 package com.example.golden.heart.bot.command;
 
-import com.example.golden.heart.bot.command.commands.*;
 import com.example.golden.heart.bot.command.commands.start.*;
 import com.example.golden.heart.bot.command.commands.start.info.ContactDetailsCommand;
 import com.example.golden.heart.bot.command.commands.start.info.InfoCommand;
@@ -10,6 +9,7 @@ import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
 import com.example.golden.heart.bot.command.commands.start.startInfo.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.recommendation.*;
+import com.example.golden.heart.bot.service.DogBehavioristService;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 
 import com.example.golden.heart.bot.service.UserService;
@@ -28,8 +28,10 @@ public class CommandContainer{
 
     private TelegramBotSender telegramBotSender;
     private UserService userService;
+    private DogBehavioristService dogBehavioristService;
 
-    public CommandContainer(TelegramBotSender telegramBotSender, UserService userService) {
+    public CommandContainer(TelegramBotSender telegramBotSender, UserService userService, DogBehavioristService dogBehavioristService) {
+        this.dogBehavioristService = dogBehavioristService;
         this.telegramBotSender = telegramBotSender;
         this.userService = userService;
     }
@@ -51,26 +53,27 @@ public class CommandContainer{
            commandMap.put(CAT.getCommand(), new CatOrDogCommand(telegramBotSender, userService));
            commandMap.put(DOG.getCommand(), new CatOrDogCommand(telegramBotSender, userService));
 
-        commandMap.put(STARTINFO.getCommand(), new StartInfoCommand(telegramBotSender));
+        commandMap.put(START_INFO.getCommand(), new StartInfoCommand(telegramBotSender));
            commandMap.put(ADDRESS.getCommand(), new AddressCommand(telegramBotSender));
            commandMap.put(SECURITY.getCommand(), new SecurityCommand(telegramBotSender));
-           commandMap.put(SAFETYPRECAUTIONS.getCommand(), new SafetyPrecautionsCommand(telegramBotSender));
+           commandMap.put(SAFETY_PRECAUTIONS.getCommand(), new SafetyPrecautionsCommand(telegramBotSender));
 
-        commandMap.put(TAKEANANIMAL.getCommand(), new TakeAnAnimalCommand(telegramBotSender));
+        commandMap.put(TAKE_AN_ANIMAL.getCommand(), new TakeAnAnimalCommand(telegramBotSender, userService));
            commandMap.put(RULES.getCommand(), new RulesCommand(telegramBotSender));
            commandMap.put(DOCUMENTATION.getCommand(), new DocumentationCommand(telegramBotSender));
            commandMap.put(RECOMMENDATION.getCommand(), new RecommendationCommand(telegramBotSender));
               commandMap.put(TRANSPORTATION.getCommand(), new TransportationCommand(telegramBotSender));
-              commandMap.put(HOMEIMPROVEMENTYOUNG.getCommand(), new HomeImprovementYoungCommand(telegramBotSender, userService));
-              commandMap.put(HOMEIMPROVEMENTFORDISABLED.getCommand(), new HomeImprovementForDisabledComand(telegramBotSender));
-              commandMap.put(PROVENDOGHANDLERS.getCommand(), new ProvenDogHandlersCommand(telegramBotSender));
-           commandMap.put(DOGHANDLERADVICE.getCommand(), new DogHandlerAdviceCommand(telegramBotSender));
-           commandMap.put(REASONEFORREFUSAL.getCommand(), new ReasonsForRefusalCommand(telegramBotSender));
+              commandMap.put(HOME_IMPROVEMENT_YOUNG.getCommand(), new HomeImprovementYoungCommand(telegramBotSender, userService));
+              commandMap.put(HOME_IMPROVEMENT_FOR_DISABLED.getCommand(), new HomeImprovementForDisabledComand(telegramBotSender));
+              commandMap.put(HOME_IMPROVEMENT_ADULT.getCommand(), new HomeImprovementAdultCommand(telegramBotSender));
+           commandMap.put(DOG_BEHAVIORIST_ADVICE.getCommand(), new DogBehavioristCommand(telegramBotSender, dogBehavioristService));
+           commandMap.put(GET_DOG_BEHAVIORIST.getCommand(), new DogBehavioristCommand(telegramBotSender, dogBehavioristService));
+           commandMap.put(REASONS_FOR_REFUSAL.getCommand(), new ReasonsForRefusalCommand(telegramBotSender));
 
         commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender));
 
         commandMap.put(INFO.getCommand(), new InfoCommand(telegramBotSender));
-        commandMap.put(CONTACTDETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
+        commandMap.put(CONTACT_DETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender));
 
         return commandMap;
