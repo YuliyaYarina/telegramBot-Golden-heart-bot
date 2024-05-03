@@ -2,22 +2,25 @@ package com.example.golden.heart.bot.command.commands.start;
 
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;
+import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.model.Update;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
-@Slf4j
 public class CatOrDogCommand implements Command {
     private TelegramBotSender telegramBotSender;
 
-    public CatOrDogCommand(TelegramBotSender telegramBotSender) {
+    private UserService userService;
+
+    public CatOrDogCommand(TelegramBotSender telegramBotSender, UserService userService) {
         this.telegramBotSender = telegramBotSender;
+        this.userService = userService;
     }
 
     @Override
@@ -35,5 +38,11 @@ public class CatOrDogCommand implements Command {
 
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
+        setChoice(update);
+    }
+
+    private void setChoice(Update update) {
+        String choice = update.callbackQuery().data();
+        userService.setChoiceCatOrDogCommand(getChatId(update), choice);
     }
 }

@@ -13,13 +13,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long chtId;
+    private Long chatId;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     private int phone;
     private String name;
     private String userName;
+
+    @JsonIgnore
+    private String chosenPetType;
 
     @OneToOne
     @JoinColumn(name = "pet_id")
@@ -28,8 +32,8 @@ public class User {
 
     public User() {
     }
-    public User(Long chtId, String name, String userName) {
-        this.chtId = chtId;
+    public User(Long chatId, String name, String userName) {
+        this.chatId = chatId;
         this.name = name;
         this.userName = userName;
         this.role = Role.USER;
@@ -38,9 +42,9 @@ public class User {
     /**
      * Конструктор для создания объектов для тестирования
      */
-    public User(Long id, Long chtId, Role role, int phone, String name, String userName) {
+    public User(Long id, Long chatId, Role role, int phone, String name, String userName) {
         this.id = id;
-        this.chtId = chtId;
+        this.chatId = chatId;
         this.role = role;
         this.phone = phone;
         this.name = name;

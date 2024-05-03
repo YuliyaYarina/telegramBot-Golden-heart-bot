@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
+import static com.example.golden.heart.bot.command.commands.CommandUtils.*;
 
 /**
  * Базавая команда старт.
  */
-//@Slf4j
+@Slf4j
 public class StartCommand implements Command {
     private TelegramBotSender telegramBotSender;
     private UserService userService;
@@ -31,17 +31,20 @@ public class StartCommand implements Command {
     public void execute(Update update) {
 
         Map<String, String> map = new HashMap<>();
-        map.put("Приют для кошек", "/catAndDog");
-        map.put("Приют для собак", "/catAndDog");
+        map.put("Приют для кошек", "/cat");
+        map.put("Приют для собак", "/dog");
 
         String message = EmojiParser.parseToUnicode("Привет " + update.message().from().firstName() + " какой приют хочешь выбрать?" + " :blush:");
 
-        if (userService.getById(update.message().from().id()) == null)
-            userService.save(new User(update.message().from().id(), update.message().from().firstName(), update.message().from().username()));
+        if (userService.findByChatId(getChatId(update)) == null) {
+            User user = new User();
+            user.setName(getFirstName(update));
+            user.setUserName(getUserName(update));
+            user.setChatId(getChatId(update));
+            userService.save(user);
+            log.info("User сохранен в базу данных");
+        }
 
-        /**
-         *  возможно нужно добавить метод, по выбору только 1 раз или кошачий приют или собачий.
-         */
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }

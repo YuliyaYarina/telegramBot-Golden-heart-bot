@@ -48,9 +48,8 @@ public class CommandContainer{
         Map<String, Command> commandMap = new HashMap<>();
         commandMap.put(START.getCommand(), new StartCommand(telegramBotSender, userService));
 
-        commandMap.put(CATANDDOG.getCommand(), new CatOrDogCommand(telegramBotSender));
-//           commandMap.put(CAT.getCommand(), new CatOrDogCommand(telegramBotSender));
-//           commandMap.put(DOG.getCommand(), new CatOrDogCommand(telegramBotSender));
+           commandMap.put(CAT.getCommand(), new CatOrDogCommand(telegramBotSender, userService));
+           commandMap.put(DOG.getCommand(), new CatOrDogCommand(telegramBotSender, userService));
 
         commandMap.put(STARTINFO.getCommand(), new StartInfoCommand(telegramBotSender));
            commandMap.put(ADDRESS.getCommand(), new AddressCommand(telegramBotSender));
@@ -62,8 +61,7 @@ public class CommandContainer{
            commandMap.put(DOCUMENTATION.getCommand(), new DocumentationCommand(telegramBotSender));
            commandMap.put(RECOMMENDATION.getCommand(), new RecommendationCommand(telegramBotSender));
               commandMap.put(TRANSPORTATION.getCommand(), new TransportationCommand(telegramBotSender));
-              commandMap.put(HOMEIMPROVEMENTYOUNG.getCommand(), new HomeImprovementYoungCommand(telegramBotSender));
-              commandMap.put(HOMEIMPROVEMENTABULT.getCommand(), new HomeImprovementAdultCommand(telegramBotSender));
+              commandMap.put(HOMEIMPROVEMENTYOUNG.getCommand(), new HomeImprovementYoungCommand(telegramBotSender, userService));
               commandMap.put(HOMEIMPROVEMENTFORDISABLED.getCommand(), new HomeImprovementForDisabledComand(telegramBotSender));
               commandMap.put(PROVENDOGHANDLERS.getCommand(), new ProvenDogHandlersCommand(telegramBotSender));
            commandMap.put(DOGHANDLERADVICE.getCommand(), new DogHandlerAdviceCommand(telegramBotSender));

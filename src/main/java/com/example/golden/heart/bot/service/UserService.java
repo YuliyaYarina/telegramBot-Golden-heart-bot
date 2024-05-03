@@ -1,6 +1,7 @@
 package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
+import com.example.golden.heart.bot.exceptions.NullUserException;
 import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.UserRepository;
@@ -22,7 +23,7 @@ public class UserService {
         return userRepository.findById(id)
                 .map(foundUser -> {
                     foundUser.setName(user.getName());
-                    foundUser.setChtId(user.getChtId());
+                    foundUser.setChatId(user.getChatId());
                     foundUser.setPet(user.getPet());
                     foundUser.setRole(user.getRole());
                     foundUser.setPhone(user.getPhone());
@@ -45,6 +46,27 @@ public class UserService {
         User foundUser = userRepository.findByUserName(userName);
         foundUser.setRole(role);
         return userRepository.save(foundUser);
+    }
+
+    public User findByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId).orElse(null);
+    }
+
+    /**
+     * Сохроняет выбор собаки или кошки
+     * Вызывается в классе CatOrDogCommand
+     * @param chatId chatId пользователя
+     * @param chosenPet выбор пользователя
+     */
+    public void setChoiceCatOrDogCommand(Long chatId, String chosenPet) {
+        User user = findByChatId(chatId);
+
+        if (user == null) {
+            throw new  NullUserException();
+        }
+
+        user.setChosenPetType(chosenPet);
+        userRepository.save(user);
     }
 
     public void removeById(Long id) {

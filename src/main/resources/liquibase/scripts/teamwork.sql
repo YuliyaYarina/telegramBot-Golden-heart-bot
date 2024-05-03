@@ -66,4 +66,14 @@ ALTER TABLE pet ADD COLUMN IF NOT EXISTS photo_id BIGINT REFERENCES photo(id);
 ALTER TABLE bot_user
 ADD COLUMN user_name VARCHAR(255) NOT NULL;
 
+-- changeset karybekov:5
+ALTER TABLE bot_user
+ADD COLUMN chosen_pet VARCHAR(50);
+
+-- changeset karybekov:6
+ALTER TABLE bot_user
+DROP COLUMN IF EXISTS cht_id;
+ALTER TABLE bot_user
+ADD COLUMN IF NOT EXISTS chat_id BIGINT;
+
 

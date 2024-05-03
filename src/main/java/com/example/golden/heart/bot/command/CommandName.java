@@ -10,9 +10,8 @@ public enum CommandName {
 
     START("/start"),
 
-    CATANDDOG("/catAndDog"),
-//       CAT("/cat"),
-//       DOG("/dog"),
+       CAT("/cat"),
+       DOG("/dog"),
 
     STARTINFO("/startInfo"),
         ADDRESS("/address"),
