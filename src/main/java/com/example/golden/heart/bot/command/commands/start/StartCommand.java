@@ -38,6 +38,7 @@ public class StartCommand implements Command {
 
         if (userService.findByChatId(getChatId(update)) == null) {
             userService.save(new User(getChatId(update), getFirstName(update), getUserName(update)));
+            log.info("Пользователь сохранен");
         }
 
 
