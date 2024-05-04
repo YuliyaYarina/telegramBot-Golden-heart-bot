@@ -37,12 +37,8 @@ public class StartCommand implements Command {
         String message = EmojiParser.parseToUnicode("Привет " + update.message().from().firstName() + " какой приют хочешь выбрать?" + " :blush:");
 
         if (userService.findByChatId(getChatId(update)) == null) {
-            User user = new User();
-            user.setName(getFirstName(update));
-            user.setUserName(getUserName(update));
-            user.setChatId(getChatId(update));
-            userService.save(user);
-            log.info("User сохранен в базу данных");
+            userService.save(new User(getChatId(update), getFirstName(update), getUserName(update)));
+            log.info("Пользователь сохранен");
         }
 
 
