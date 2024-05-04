@@ -29,4 +29,6 @@ telegram.bot.token= "API-ключ бота"
 
 spring.liquibase.change-log=classpath:liquibase/changelog-master.yml
 
-6. Запустите бота 
+6. Запустите бота
+
+   Обращаю внимание, что приложение рассчитано на работу с двумя приютами (кошачьим и собачьим) и одним ответственным волонтером
