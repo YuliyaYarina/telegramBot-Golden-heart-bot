@@ -1,7 +1,6 @@
 package com.example.golden.heart.bot.listener;
 
 import com.example.golden.heart.bot.command.CommandContainer;
-import com.example.golden.heart.bot.command.commands.CommandUtils;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
@@ -54,7 +53,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 }
             }
             if (update.message() != null && update.message().text().startsWith(startsPhone)) {
-                userService.addedPhone(update);
+
+                userService.addedPhone(update, update.message().text(), update.message().text());                 //!
                 logger.info("Сообщение отправлено: " + update.message().text());
             }
         });

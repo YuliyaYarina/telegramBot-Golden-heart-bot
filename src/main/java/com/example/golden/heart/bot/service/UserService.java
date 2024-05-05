@@ -27,7 +27,7 @@ public class UserService {
     private TelegramBotSender telegramBotSender;
 
     private CommandUtils commandUtils;
-    
+
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -37,7 +37,6 @@ public class UserService {
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_SPACE = Pattern.compile("\\+\\d{1} \\d{3} \\d{3} \\d{2} \\d{2}");
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_DASH = Pattern.compile("\\+\\d{1}-\\d{3}-\\d{3}-\\d{2}-\\d{2}");
     private final String PHONE_ADDED = "Ваш номер успешно принят. Спасибо)";
-
 
     public User edit(Long id, User user) {
         return userRepository.findById(id)
@@ -93,7 +92,11 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void addedPhone(Update update) {
+
+
+
+
+    public void addedPhone(Update update, String phone, String name) {
 
         Long chatId = update.message().chat().id();
 
@@ -108,7 +111,8 @@ public class UserService {
             logger.info("Приняло новое сообщение: " + update.message().text());
             User user = new User(
                     chatId,
-                    phoneNumber
+                    phone,
+                    name
             );
             userRepository.save(user);
 
