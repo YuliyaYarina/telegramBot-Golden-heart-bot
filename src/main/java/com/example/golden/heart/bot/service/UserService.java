@@ -105,10 +105,18 @@ public class UserService {
 
         if (matcherSpace.find()) {
             String phoneNumber = matcherSpace.group().replaceAll(" ", "-");
-
             logger.info("Приняло новое сообщение: " + update.message().text());
+            User user = new User(
+                    chatId,
+                    phoneNumber
+            );
+            userRepository.save(user);
+
             telegramBotSender.send(chatId, PHONE_ADDED);
         } else if (matcherDash.find()){
+            logger.info("Приняло новое сообщение: " + update.message().text());
+
+//            userRepository.save(matcherDash.find());
 
             telegramBotSender.send(chatId, PHONE_ADDED);
         }
