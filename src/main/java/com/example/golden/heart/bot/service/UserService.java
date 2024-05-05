@@ -72,4 +72,12 @@ public class UserService {
     public void removeById(Long id) {
         userRepository.deleteById(id);
     }
+
+    public User findVolunteerByRole(Role role) {
+        if (role == Role.VOLUNTEER) {
+            return userRepository.findByRole(role).get(0);
+        } else {
+            return null;
+        }
+    }
 }

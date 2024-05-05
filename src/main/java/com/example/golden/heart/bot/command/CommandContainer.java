@@ -74,7 +74,7 @@ public class CommandContainer{
 
         commandMap.put(INFO.getCommand(), new InfoCommand(telegramBotSender));
         commandMap.put(CONTACT_DETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
-        commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender));
+        commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender, userService));
 
         return commandMap;
     }
