@@ -82,5 +82,7 @@ CREATE TABLE IF NOT EXISTS dog_behaviorist (
     name VARCHAR(255) NOT NULL,
     phone INT NOT NULL
 );
-
+-- changeset vgulenkov:2
+ALTER TABLE pet_report
+ADD COLUMN date DATE NOT NULL;
 

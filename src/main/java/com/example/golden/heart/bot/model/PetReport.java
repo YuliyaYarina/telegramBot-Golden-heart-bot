@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Entity
@@ -24,6 +25,8 @@ public class PetReport {
     @OneToMany(mappedBy = "petReport")
     @JsonIgnore
     private Collection<Photo> photos;
+
+    private LocalDate date;
 
     public PetReport() {
     }
