@@ -8,10 +8,8 @@ import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
 import com.example.golden.heart.bot.command.commands.start.startInfo.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.recommendation.*;
-import com.example.golden.heart.bot.service.DogBehavioristService;
-import com.example.golden.heart.bot.service.TelegramBotSender;
+import com.example.golden.heart.bot.service.*;
 
-import com.example.golden.heart.bot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;
@@ -29,7 +27,15 @@ public class CommandContainer{
     private UserService userService;
     private DogBehavioristService dogBehavioristService;
 
-    public CommandContainer(TelegramBotSender telegramBotSender, UserService userService, DogBehavioristService dogBehavioristService) {
+    private AnimalShelterService animalShelterService;
+
+    private PhotoService photoService;
+
+    public CommandContainer(TelegramBotSender telegramBotSender, UserService userService,
+                            DogBehavioristService dogBehavioristService, AnimalShelterService animalShelterService,
+                            PhotoService photoService) {
+        this.photoService = photoService;
+        this.animalShelterService = animalShelterService;
         this.dogBehavioristService = dogBehavioristService;
         this.telegramBotSender = telegramBotSender;
         this.userService = userService;
@@ -53,7 +59,7 @@ public class CommandContainer{
            commandMap.put(DOG.getCommand(), new CatOrDogCommand(telegramBotSender, userService));
 
         commandMap.put(START_INFO.getCommand(), new StartInfoCommand(telegramBotSender));
-           commandMap.put(ADDRESS.getCommand(), new AddressCommand(telegramBotSender));
+           commandMap.put(ADDRESS.getCommand(), new AddressCommand(telegramBotSender, animalShelterService, photoService));
            commandMap.put(SECURITY.getCommand(), new SecurityCommand(telegramBotSender));
            commandMap.put(SAFETY_PRECAUTIONS.getCommand(), new SafetyPrecautionsCommand(telegramBotSender));
 
