@@ -83,7 +83,6 @@ public class UserService {
         if (user == null) {
             throw new  NullUserException();
         }
-
         user.setChosenPetType(chosenPet);
         userRepository.save(user);
     }
@@ -92,13 +91,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
-
-
-
-    public void addedPhone(Update update, String phone, String name) {
-
-        Long chatId = update.message().chat().id();
+    public void addedPhone(Update update) {
 
         Pattern patternsSpace = INCOMING_MESSAGE_PATTERN_PHONE_WITH_SPACE ;
         Matcher matcherSpace = patternsSpace.matcher(update.message().text());
@@ -109,22 +102,26 @@ public class UserService {
         if (matcherSpace.find()) {
             String phoneNumber = matcherSpace.group().replaceAll(" ", "-");
             logger.info("Приняло новое сообщение: " + update.message().text());
-            User user = new User(
-                    chatId,
-                    phone,
-                    name
-            );
-            userRepository.save(user);
 
-            telegramBotSender.send(chatId, PHONE_ADDED);
+            savePhone(update, phoneNumber);
+
         } else if (matcherDash.find()){
+            String phoneNumber = matcherSpace.group();
             logger.info("Приняло новое сообщение: " + update.message().text());
 
-//            userRepository.save(matcherDash.find());
-
-            telegramBotSender.send(chatId, PHONE_ADDED);
+            savePhone(update, phoneNumber);
         }
-
     }
+
+    private void savePhone(Update update, String phoneNumber){
+        Long chatId = update.message().chat().id();
+        User user = userRepository.findByChatId(chatId)
+                .orElseThrow();
+        user.setPhone(phoneNumber);
+        userRepository.save(user);
+
+        telegramBotSender.send(chatId, PHONE_ADDED);
+    }
+
     
 }
