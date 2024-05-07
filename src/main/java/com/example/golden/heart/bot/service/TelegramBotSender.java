@@ -4,12 +4,14 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Map;
 
 @Service
@@ -45,5 +47,9 @@ public class TelegramBotSender {
             logger.error("Ошибка при отправке сообщения: {}", response.errorCode());
         }
 
+    }
+
+    public void sendPhoto(Long chatId, File photo) {
+        SendResponse sendResponse = telegramBot.execute(new SendPhoto(chatId, photo));
     }
 }
