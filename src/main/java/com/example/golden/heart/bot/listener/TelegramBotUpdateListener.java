@@ -53,9 +53,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 }
             }
             if (update.message() != null && update.message().text().startsWith(startsPhone)) {
-
-                userService.addedPhone(update);
                 logger.info("Сообщение отправлено: " + update.message().text());
+                userService.addedPhone(update);
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

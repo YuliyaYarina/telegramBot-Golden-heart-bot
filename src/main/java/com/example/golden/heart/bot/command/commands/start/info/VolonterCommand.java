@@ -33,12 +33,10 @@ public class VolonterCommand implements com.example.golden.heart.bot.command.Com
 
         if (collectVolunteerUrl() != null) {
             markup.addRow(new InlineKeyboardButton("Перейти к чату").url(collectVolunteerUrl()));
-            message = "Нажмите кнопку 'Перейти к чату' чтобы связатся ч волонтером";
+            message = "Нажмите кнопку 'Перейти к чату' чтобы связатся c волонтером";
         }
 
-
-        String message = "Уже позвал волонтёра. Скоро будет";
-        telegramBotSender.sendMessage(message, getChatId(update), markup);
+ telegramBotSender.sendMessage(message, getChatId(update), markup);
     }
 
     private String collectVolunteerUrl() {

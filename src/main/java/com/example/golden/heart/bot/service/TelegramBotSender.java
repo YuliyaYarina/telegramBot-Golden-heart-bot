@@ -42,7 +42,7 @@ public class TelegramBotSender {
         if(response.isOk()) {
             logger.info("Сooбщение успешно отправлено: {}", message);
         } else {
-            logger.error("Оштбка при отправке сообщения: {}", response.errorCode());
+            logger.error("Ошибка при отправке сообщения: {}", response.errorCode());
         }
 
     }

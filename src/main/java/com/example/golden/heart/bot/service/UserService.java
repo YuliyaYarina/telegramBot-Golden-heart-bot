@@ -106,7 +106,7 @@ public class UserService {
             savePhone(update, phoneNumber);
 
         } else if (matcherDash.find()){
-            String phoneNumber = matcherSpace.group();
+            String phoneNumber = matcherDash.group();
             logger.info("Приняло новое сообщение: " + update.message().text());
 
             savePhone(update, phoneNumber);
@@ -122,8 +122,6 @@ public class UserService {
 
         telegramBotSender.send(chatId, PHONE_ADDED);
     }
-
-
 
     public User findVolunteerByRole(Role role) {
         if (role == Role.VOLUNTEER) {
