@@ -29,8 +29,6 @@ public enum CommandName {
         REASONS_FOR_REFUSAL("/reasonsForRefusal"),
 
     REPORT("/report"),
-
-    INFO("/info"),
     CONTACT_DETAILS("/contactDetails"),
     VOLUNTEER("/volunteer");
 

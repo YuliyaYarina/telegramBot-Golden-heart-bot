@@ -24,7 +24,6 @@ public class UnknownCommand implements Command {
         map.put("Как взять животное из приюта", "/takeAnAnimal");
         map.put("Отправить отчет", "/report");
 
-        map.put("info", "/info");
         map.put("Позвать волонтера.", "/volunteer");
 
         String message = "Я не понимаю вас. Пожалуйста выберите, что-нибудь из меню:";

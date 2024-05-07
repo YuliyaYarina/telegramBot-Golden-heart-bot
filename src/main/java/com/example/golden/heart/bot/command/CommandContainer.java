@@ -2,7 +2,6 @@ package com.example.golden.heart.bot.command;
 
 import com.example.golden.heart.bot.command.commands.start.*;
 import com.example.golden.heart.bot.command.commands.start.info.ContactDetailsCommand;
-import com.example.golden.heart.bot.command.commands.start.info.InfoCommand;
 import com.example.golden.heart.bot.command.commands.start.info.UnknownCommand;
 import com.example.golden.heart.bot.command.commands.start.info.VolonterCommand;
 import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
@@ -61,7 +60,7 @@ public class CommandContainer{
         commandMap.put(TAKE_AN_ANIMAL.getCommand(), new TakeAnAnimalCommand(telegramBotSender, userService));
            commandMap.put(RULES.getCommand(), new RulesCommand(telegramBotSender));
            commandMap.put(DOCUMENTATION.getCommand(), new DocumentationCommand(telegramBotSender));
-           commandMap.put(RECOMMENDATION.getCommand(), new RecommendationCommand(telegramBotSender));
+           commandMap.put(RECOMMENDATION.getCommand(), new RecommendationCommand(telegramBotSender, userService));
               commandMap.put(TRANSPORTATION.getCommand(), new TransportationCommand(telegramBotSender));
               commandMap.put(HOME_IMPROVEMENT_YOUNG.getCommand(), new HomeImprovementYoungCommand(telegramBotSender, userService));
               commandMap.put(HOME_IMPROVEMENT_FOR_DISABLED.getCommand(), new HomeImprovementForDisabledComand(telegramBotSender));
@@ -72,7 +71,6 @@ public class CommandContainer{
 
         commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender));
 
-        commandMap.put(INFO.getCommand(), new InfoCommand(telegramBotSender));
         commandMap.put(CONTACT_DETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender, userService));
 

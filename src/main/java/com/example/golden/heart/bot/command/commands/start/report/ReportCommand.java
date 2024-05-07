@@ -24,7 +24,7 @@ public class ReportCommand implements Command {
 
         Map<String,String> map = new HashMap<>();
         map.put("Позвать волонтера", "/volunteer");
-        map.put("Назад", "/CatOrDog");
+        map.put("Назад", "/cat");
 
         String message =
                 " Жду фото-отчет";

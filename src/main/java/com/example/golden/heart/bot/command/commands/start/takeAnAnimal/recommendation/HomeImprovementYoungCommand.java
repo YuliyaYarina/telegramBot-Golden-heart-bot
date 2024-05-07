@@ -50,7 +50,6 @@ public class HomeImprovementYoungCommand implements Command {
         Map<String,String> map = new HashMap<>();
         map.put("Назад", "/recommendation");
 
-
         telegramBotSender.sendMessage(collectMessage(update), getChatId(update), telegramBotSender.setButtons(map));
     }
 
