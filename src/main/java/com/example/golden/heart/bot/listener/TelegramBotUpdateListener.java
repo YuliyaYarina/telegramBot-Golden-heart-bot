@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.listener;
 
 import com.example.golden.heart.bot.command.CommandContainer;
 import com.example.golden.heart.bot.service.TelegramBotSender;
+import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -29,7 +30,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     @Autowired
     CommandContainer commandContainer;
 
+    @Autowired
+    UserService userService;
+
     private final String commandPrefix = "/";
+    private final String startsPhone = "+7";
 
     @PostConstruct
     public void init() {
@@ -46,6 +51,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 if (update.callbackQuery() != null) {
                     commandContainer.findCommand(update.callbackQuery().data()).execute(update);
                 }
+            }
+            if (update.message() != null && update.message().text().startsWith(startsPhone)) {
+
+                userService.addedPhone(update);
+                logger.info("Сообщение отправлено: " + update.message().text());
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.command.commands.start.info;
 
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.service.TelegramBotSender;
+import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.model.Update;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import static com.example.golden.heart.bot.command.commands.CommandUtils.getChat
 
 public class ContactDetailsCommand implements Command {
     private TelegramBotSender telegramBotSender;
+    private UserService userService;
 
     public ContactDetailsCommand(TelegramBotSender telegramBotSender) {
         this.telegramBotSender = telegramBotSender;
@@ -23,7 +25,7 @@ public class ContactDetailsCommand implements Command {
 /**
  * доработать метод
  */
-        String message = "принять и записать контактные данные для связи.";
+        String message = "Отправьте ваши контактные данные для связи по форме: +7-9**-***-**-**";
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }

@@ -86,3 +86,7 @@ CREATE TABLE IF NOT EXISTS dog_behaviorist (
 ALTER TABLE pet_report
 ADD COLUMN date DATE NOT NULL;
 
+-- changeset Yuliya:1
+ALTER TABLE bot_user
+    ALTER COLUMN phone TYPE varchar(20);
+
