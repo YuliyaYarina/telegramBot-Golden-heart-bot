@@ -21,7 +21,7 @@ public class ContactDetailsCommand implements Command {
     @Override
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
-        map.put("Назад", "/catAndDog");
+        map.put("Назад", "/cat");
 /**
  * доработать метод
  */

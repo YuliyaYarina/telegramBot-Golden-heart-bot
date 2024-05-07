@@ -28,8 +28,7 @@ public class VolonterCommand implements com.example.golden.heart.bot.command.Com
     @Override
     public void execute(Update update) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        markup.addRow(new InlineKeyboardButton("Назад").callbackData("/catAndDog"));
-
+        markup.addRow(new InlineKeyboardButton("Назад").callbackData("/cat"));
 
         if (collectVolunteerUrl() != null) {
             markup.addRow(new InlineKeyboardButton("Перейти к чату").url(collectVolunteerUrl()));
