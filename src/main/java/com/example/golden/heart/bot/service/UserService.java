@@ -4,7 +4,7 @@ import com.example.golden.heart.bot.command.commands.CommandUtils;
 import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.exceptions.NullUserException;
 import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
-import com.example.golden.heart.bot.model.Role;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.UserRepository;
 import com.pengrad.telegrambot.model.Update;
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 import java.util.regex.Matcher;

@@ -2,7 +2,7 @@ package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.PetReport;
-import com.example.golden.heart.bot.model.Role;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.PetReportRepository;
 import com.example.golden.heart.bot.repository.PetRepository;

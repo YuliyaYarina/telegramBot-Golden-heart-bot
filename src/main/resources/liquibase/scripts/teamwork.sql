@@ -90,3 +90,6 @@ ADD COLUMN date DATE NOT NULL;
 ALTER TABLE bot_user
     ALTER COLUMN phone TYPE varchar(20);
 
+-- changeset karybekov:8
+ALTER TABLE bot_user ADD COLUMN IF NOT EXISTS report_state VARCHAR(100);
+

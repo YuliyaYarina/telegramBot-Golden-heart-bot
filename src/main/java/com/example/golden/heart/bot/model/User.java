@@ -1,5 +1,7 @@
 package com.example.golden.heart.bot.model;
 
+import com.example.golden.heart.bot.command.enums.ReportState;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,6 +26,10 @@ public class User {
 
     @JsonIgnore
     private String chosenPetType;
+
+    @Enumerated(EnumType.STRING)
+    @JsonIgnore
+    private ReportState reportState;
 
     @OneToOne
     @JoinColumn(name = "pet_id")

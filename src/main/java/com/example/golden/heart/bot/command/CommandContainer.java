@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.golden.heart.bot.command.CommandName.*;
+import static com.example.golden.heart.bot.command.enums.CommandName.*;
 
 @Slf4j
 @Component
@@ -29,11 +29,14 @@ public class CommandContainer{
 
     private AnimalShelterService animalShelterService;
 
+    private PetReportService petReportService;
+
     private PhotoService photoService;
 
     public CommandContainer(TelegramBotSender telegramBotSender, UserService userService,
                             DogBehavioristService dogBehavioristService, AnimalShelterService animalShelterService,
-                            PhotoService photoService) {
+                            PhotoService photoService, PetReportService petReportService) {
+        this.petReportService = petReportService;
         this.photoService = photoService;
         this.animalShelterService = animalShelterService;
         this.dogBehavioristService = dogBehavioristService;
@@ -75,7 +78,7 @@ public class CommandContainer{
            commandMap.put(GET_DOG_BEHAVIORIST.getCommand(), new DogBehavioristCommand(telegramBotSender, dogBehavioristService));
            commandMap.put(REASONS_FOR_REFUSAL.getCommand(), new ReasonsForRefusalCommand(telegramBotSender));
 
-        commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender));
+        commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender, petReportService, userService));
 
         commandMap.put(CONTACT_DETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender, userService));

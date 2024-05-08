@@ -1,6 +1,7 @@
 package com.example.golden.heart.bot.constants;
 
 import com.example.golden.heart.bot.model.*;
+import com.example.golden.heart.bot.model.enums.Role;
 
 public class Constants {
     public static final String HOST = "http://localhost:";

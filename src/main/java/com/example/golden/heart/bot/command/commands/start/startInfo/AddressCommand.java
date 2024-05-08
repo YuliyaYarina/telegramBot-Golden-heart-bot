@@ -9,11 +9,10 @@ import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.pengrad.telegrambot.model.Update;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.example.golden.heart.bot.command.CommandName.START_INFO;
+import static com.example.golden.heart.bot.command.enums.CommandName.START_INFO;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
 public class AddressCommand implements Command {

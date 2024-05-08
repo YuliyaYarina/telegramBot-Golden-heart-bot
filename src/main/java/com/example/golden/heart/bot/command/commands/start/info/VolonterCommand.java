@@ -7,12 +7,9 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
-import static com.example.golden.heart.bot.model.Role.VOLUNTEER;
+import static com.example.golden.heart.bot.model.enums.Role.VOLUNTEER;
 
 public class VolonterCommand implements com.example.golden.heart.bot.command.Command {
     String message;

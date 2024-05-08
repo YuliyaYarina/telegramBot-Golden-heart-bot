@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
 
 @Service
 public class PetReportService {
@@ -78,6 +79,16 @@ public class PetReportService {
         Photo photo = photoService.findPhotoByReportId(petReportId);
 
         photoService.removePhoto(photo);
+    }
+
+    /**
+     * Ишет отчет по id животного и по дате если не надено возврощяет новый отчет
+     * @param petId id питомца
+     * @param date дата для которого нужен отчет
+     * @return найденный отчет или новый отчет если не найдено
+     */
+    public PetReport findByPetIdAndData(Long petId, LocalDate date) {
+        return petReportRepo.findByPetIdAndData(petId, date).orElse(new PetReport());
     }
 
     private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile file) {
