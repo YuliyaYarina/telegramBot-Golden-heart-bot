@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 public class PetReportService {
@@ -96,4 +97,7 @@ public class PetReportService {
         return photoService.savePhoto(photo);
     }
 
+//    public List<PetReport> getAllPetReports() {
+//        return petReportRepo.findAll();
+//    }
 }

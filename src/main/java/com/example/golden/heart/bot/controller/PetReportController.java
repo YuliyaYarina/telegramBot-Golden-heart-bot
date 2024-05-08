@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/petReport")
@@ -39,6 +40,28 @@ public class PetReportController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(petReport);
+    }
+
+    @GetMapping("getAllPetReports")
+    public List<PetReport>  getAllPetReports(){
+        List<PetReport> reports = petReportService.getAllPetReports();
+
+        for (PetReport petReport : reports) {
+            petReport.setViewed(false);
+        }
+        return reports;
+    }
+
+    @PutMapping("/{id}/viewed")
+    public ResponseEntity<?> markReportAsViewed(@PathVariable Long id){
+        PetReport petReport = petReportService.getPetReportById(id);
+        if (petReport == null) {
+            return ResponseEntity.notFound().build();
+        }
+        petReport.setViewed(true);
+        petReportService.savePetReport(petReport);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
