@@ -16,6 +16,7 @@ public class PetReport {
     private String diet;
     private String wellBeing;
     private String behaviourChange;
+    private boolean isViewed;
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
@@ -34,11 +35,12 @@ public class PetReport {
     /**
      * Конструктор для создания тестовых объектов
      */
-    public PetReport(long id, String diet, String wellBeing, String behaviourChange) {
+    public PetReport(long id, String diet, String wellBeing, String behaviourChange, boolean isViewed) {
         this.id = id;
         this.diet = diet;
         this.wellBeing = wellBeing;
         this.behaviourChange = behaviourChange;
+        this.isViewed = isViewed;
     }
 }
 
