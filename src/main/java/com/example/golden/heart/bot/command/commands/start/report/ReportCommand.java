@@ -18,7 +18,7 @@ import java.util.Objects;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
 public class ReportCommand implements Command {
-    private static HashMap<Long, ReportState> reportState = new HashMap<>();
+    public static HashMap<Long, ReportState> reportState = new HashMap<>();
 
     String message;
     private TelegramBotSender telegramBotSender;
@@ -51,9 +51,9 @@ public class ReportCommand implements Command {
 
         switch (Objects.requireNonNull(state)) {
             case DIET -> dietReport(chatId, update);
-            case PHOTO -> photoReport();
-            case BEHAVIOR -> behaviorReport();
-            case WELL_BEING -> wellBeingReport();
+            case PHOTO -> photoReport(chatId, update);
+            case BEHAVIOR -> behaviorReport(chatId, update);
+            case WELL_BEING -> wellBeingReport(chatId, update);
         }
 
 
@@ -82,29 +82,51 @@ public class ReportCommand implements Command {
                         отказ от старых привычек и приобретение новых
                         """;
 
+        PetReport petReport = findReport(chatId);
+        petReport.setDiet(update.message().text());
 
-
-
+        reportState.replace(chatId, ReportState.BEHAVIOR);
     }
 
-    private void behaviorReport() {
+    private void behaviorReport(Long chatId, Update update) {
+        message =
+                """
+                        Я принял изменение привычек
+                        А теперь расскажите о Общее самочувствие и привыкание к новому месту
+                        """;
 
+        PetReport petReport = findReport(chatId);
+        petReport.setBehaviourChange(update.message().text());
+
+        reportState.replace(chatId, ReportState.WELL_BEING);
     }
 
-    private void photoReport() {
 
+    private void wellBeingReport(Long chatId, Update update) {
+        message =
+                """
+                        Я Принял отчет о самочувствие.
+                        А Теперь отправьте фото питомца
+                        """;
+
+        PetReport petReport = findReport(chatId);
+        petReport.setWellBeing(update.message().text());
+
+        reportState.replace(chatId, ReportState.PHOTO);
     }
 
-    private void wellBeingReport() {
+    private void photoReport(Long chatID, Update update) {
+        message =
+                """
+                        Я принял ваш отчет. Хорошого дня.\s
+                        Если будут проблемы с отчетом то наш волонтер свяжется с вами
+                        """;
 
+        reportState.remove(chatID);
     }
 
     private PetReport findReport(Long chatId) {
         User user = userService.findByChatId(chatId);
-        PetReport petReport = petReportService.findByPetIdAndData(user.getPet().getId(), LocalDate.now());
-
-        if (petReport == null) {
-
-        }
+        return petReportService.findByPetIdAndData(user.getPet().getId(), LocalDate.now());
     }
 }

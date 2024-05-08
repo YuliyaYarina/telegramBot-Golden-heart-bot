@@ -1,6 +1,7 @@
 package com.example.golden.heart.bot.listener;
 
 import com.example.golden.heart.bot.command.CommandContainer;
+import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
+import static com.example.golden.heart.bot.command.enums.CommandName.REPORT;
 
 
 @Service
@@ -45,6 +49,9 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
+            if (ReportCommand.reportState.get(getChatId(update)) != null) {
+                commandContainer.findCommand(REPORT.getCommand()).execute(update);
+            }
             if (update.message() != null && update.message().text().startsWith(commandPrefix)) {
                 commandContainer.findCommand(update.message().text().toLowerCase()).execute(update);
             }else {

@@ -53,7 +53,7 @@ class UserControllerTest {
     public void testEditeUser() {
 //        Given
         User user = userService.save(USER_1);
-        User editeUser = new User(user.getId(), 222L, Role.USER, 2222, "Edited", "Edited");
+        User editeUser = new User(user.getId(), 222L, Role.USER, "2222", "Edited", "Edited");
         HttpEntity<User> requestEntity = new HttpEntity<>(editeUser);
 
 //        When
@@ -109,7 +109,7 @@ class UserControllerTest {
 
     @Test
     public void testWhenUserNotFound() {
-        User user = new User(444L, 1L, Role.USER, 22, "TEST", "TEST");
+        User user = new User(444L, 1L, Role.USER, "22", "TEST", "TEST");
         HttpEntity<User> requestEntity = new HttpEntity<>(user);
 //        When
         ResponseEntity<User> editeResponse = testRestTemplate.exchange(

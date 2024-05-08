@@ -15,5 +15,5 @@ public class Constants {
     public static PetReport PET_REPORT_1 = new PetReport(0L, "Test", "Test", "Test");
     public static PetReport PET_REPORT_WITH_PHOTO = new PetReport(0L, "Test", "With", "Photo");
 
-    public static User USER_1 = new User(0L, 1111L, Role.USER, 111, "Test", "Test");
+    public static User USER_1 = new User(0L, 1111L, Role.USER, "111", "Test", "Test");
 }
