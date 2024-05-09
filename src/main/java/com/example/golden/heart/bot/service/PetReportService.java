@@ -1,6 +1,5 @@
 package com.example.golden.heart.bot.service;
 
-import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetReportRepository;
@@ -82,13 +81,13 @@ public class PetReportService {
     }
 
     /**
-     * Ишет отчет по id животного и по дате если не надено возврощяет новый отчет
+     * Ишет отчет по id животного и по дате если не  сохроняет новый отчет с id питомца и сегоднешной датой
      * @param petId id питомца
      * @param date дата для которого нужен отчет
      * @return найденный отчет или новый отчет если не найдено
      */
-    public PetReport findByPetIdAndData(Long petId, LocalDate date) {
-        return petReportRepo.findByPetIdAndData(petId, date).orElse(new PetReport());
+    public PetReport findByPetIdAndDate(Long petId, LocalDate date) {
+        return petReportRepo.findByPetIdAndDate(petId, date).orElse(null);
     }
 
     private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile file) {

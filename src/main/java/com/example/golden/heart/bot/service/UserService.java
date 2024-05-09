@@ -3,7 +3,6 @@ package com.example.golden.heart.bot.service;
 import com.example.golden.heart.bot.command.commands.CommandUtils;
 import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.exceptions.NullUserException;
-import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.UserRepository;
@@ -33,7 +32,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_SPACE = Pattern.compile("\\+\\d{1} \\d{3} \\d{3} \\d{2} \\d{2}");
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_DASH = Pattern.compile("\\+\\d{1}-\\d{3}-\\d{3}-\\d{2}-\\d{2}");

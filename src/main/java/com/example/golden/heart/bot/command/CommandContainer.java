@@ -5,13 +5,16 @@ import com.example.golden.heart.bot.command.commands.start.info.ContactDetailsCo
 import com.example.golden.heart.bot.command.commands.start.info.UnknownCommand;
 import com.example.golden.heart.bot.command.commands.start.info.VolonterCommand;
 import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
+import com.example.golden.heart.bot.command.commands.start.report.ReportStateStorage;
 import com.example.golden.heart.bot.command.commands.start.startInfo.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.*;
 import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.recommendation.*;
+import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
 import com.example.golden.heart.bot.service.*;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -33,9 +36,14 @@ public class CommandContainer{
 
     private PhotoService photoService;
 
+    private ReportStateStorage reportStateStorage;
+
+    @Autowired
     public CommandContainer(TelegramBotSender telegramBotSender, UserService userService,
                             DogBehavioristService dogBehavioristService, AnimalShelterService animalShelterService,
-                            PhotoService photoService, PetReportService petReportService) {
+                            PhotoService photoService, PetReportService petReportService,
+                            ReportStateStorage reportStateStorage) {
+        this.reportStateStorage = reportStateStorage;
         this.petReportService = petReportService;
         this.photoService = photoService;
         this.animalShelterService = animalShelterService;
@@ -78,7 +86,7 @@ public class CommandContainer{
            commandMap.put(GET_DOG_BEHAVIORIST.getCommand(), new DogBehavioristCommand(telegramBotSender, dogBehavioristService));
            commandMap.put(REASONS_FOR_REFUSAL.getCommand(), new ReasonsForRefusalCommand(telegramBotSender));
 
-        commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender, petReportService, userService));
+        commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender, petReportService, userService, reportStateStorage));
 
         commandMap.put(CONTACT_DETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender, userService));

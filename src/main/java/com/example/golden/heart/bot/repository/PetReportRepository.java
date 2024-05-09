@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface PetReportRepository extends JpaRepository<PetReport, Long> {
     List<PetReport> findAllByDateAndPet(LocalDate date, Pet pet);
 
-    Optional<PetReport> findByPetIdAndData(Long petId, LocalDate date);
+    Optional<PetReport> findByPetIdAndDate(Long petId, LocalDate date);
 }
