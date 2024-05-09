@@ -39,7 +39,7 @@ public class VolonterCommand implements com.example.golden.heart.bot.command.Com
     }
 
     private String collectVolunteerUrl() {
-        User user = userService.findVolunteerByRole(VOLUNTEER);
+        User user = userService.findVolunteer();
         if (user == null) {
             message = "Извините я не смог найти волонтера";
             return null;

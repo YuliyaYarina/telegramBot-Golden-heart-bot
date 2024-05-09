@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -53,19 +55,40 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping
-    public ResponseEntity<String> changeRole(@RequestParam String userName, @RequestParam Role role) {
+    @PutMapping("/change-role")
+    public ResponseEntity<String> changeRole(@RequestParam Long id, @RequestParam Role role) {
+        User user;
         try {
-            User user = userService.changeRole(userName, role);
+            user = userService.changeRole(id, role);
         } catch (IllegalArgumentException e) {
             logger.error("Exception: ", e);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
         } catch (VolunteerAlreadyAppointedException e) {
             logger.error("Exception: ", e);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(e.getMessage());
         }
-        return ResponseEntity.ok("Роль пользователя " + userName + " успешно изменена");
+        return ResponseEntity.ok("Роль пользователя " + user.getUserName() + " успешно изменена");
+    }
+
+    @PutMapping("/set-pet")
+    public ResponseEntity<String> setPet(@RequestParam Long userId, @RequestParam Long petId) {
+        User user;
+        try {
+            user = userService.setPet(userId, petId);
+        } catch (IllegalArgumentException e) {
+            logger.error("Exception: ", e);
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+        return ResponseEntity.ok("Пользователь " + user.getUserName() + " теперь является владельцем питомца");
+    }
+    @GetMapping
+    public ResponseEntity<List<User>> findByRole(Role role){
+        return ResponseEntity.ok(userService.findByRole(role));
     }
 }
