@@ -4,15 +4,16 @@ import com.example.golden.heart.bot.command.commands.CommandUtils;
 import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.exceptions.NullUserException;
 import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
+import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.model.User;
+import com.example.golden.heart.bot.repository.PetRepository;
 import com.example.golden.heart.bot.repository.UserRepository;
 import com.pengrad.telegrambot.model.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,11 +25,15 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PetService petService;
 
     @Autowired
     private TelegramBotSender telegramBotSender;
 
     private CommandUtils commandUtils;
+    private final String NO_SUCH_USER = "Пользователь с таким id не найден";
+    private final String NO_SUCH_PET = "Питомец с таким id не найден";
 
     public User save(User user) {
         return userRepository.save(user);
@@ -56,17 +61,35 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User changeRole(String userName, Role role) throws VolunteerAlreadyAppointedException {
-        if (userRepository.findByUserName(userName) == null) {
-            throw new IllegalArgumentException("Пользователь с таким username не найден");
+    public User changeRole(Long id, Role role) throws VolunteerAlreadyAppointedException {
+        User foundUser = getById(id);
+        if (foundUser == null) {
+            throw new IllegalArgumentException(NO_SUCH_USER);
         }
-        if (!userRepository.findByRole(Role.VOLUNTEER).isEmpty() && role == Role.VOLUNTEER) {
-            User volunteer = userRepository.findByRole(Role.VOLUNTEER).iterator().next();
-            throw new VolunteerAlreadyAppointedException("Ответственный волонтер уже назначен, id " + volunteer.getId() + ", username " + volunteer.getUserName());
+        if (role == Role.VOLUNTEER) {
+            User volunteer = findVolunteer();
+            if (volunteer != null) {
+                throw new VolunteerAlreadyAppointedException("Ответственный волонтер уже назначен, id " + volunteer.getId() + ", username " + volunteer.getUserName());
+            }
         }
-        User foundUser = userRepository.findByUserName(userName);
         foundUser.setRole(role);
         return userRepository.save(foundUser);
+    }
+
+    public User setPet(Long userId, Long petId) {
+        User user = getById(userId);
+        Pet pet = petService.getPetById(petId);
+        if (user == null) {
+            throw new IllegalArgumentException(NO_SUCH_USER);
+        }
+        if (pet == null){
+            throw new IllegalArgumentException(NO_SUCH_PET);
+        }
+        user.setPet(pet);
+        user.setRole(Role.PET_OWNER);
+        pet.setOwner(user);
+        petService.savePet(pet);
+        return userRepository.save(user);
     }
 
     public User findByChatId(Long chatId) {
@@ -125,12 +148,14 @@ public class UserService {
         telegramBotSender.send(chatId, PHONE_ADDED);
     }
 
-    public User findVolunteerByRole(Role role) {
-        List<User> volunteers = userRepository.findByRole(role);
-        if (role == Role.VOLUNTEER && !volunteers.isEmpty()) {
-            return userRepository.findByRole(role).get(0);
-        } else {
-            return null;
+    public User findVolunteer() {
+        List<User> volunteers = userRepository.findByRole(Role.VOLUNTEER);
+        if (!volunteers.isEmpty()) {
+            return volunteers.get(0);
         }
+            return null;
+    }
+    public List<User> findByRole(Role role){
+        return userRepository.findByRole(role);
     }
 }

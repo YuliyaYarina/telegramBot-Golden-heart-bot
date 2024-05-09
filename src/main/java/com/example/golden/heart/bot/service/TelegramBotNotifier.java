@@ -7,8 +7,6 @@ import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.PetReportRepository;
 import com.example.golden.heart.bot.repository.PetRepository;
 import com.example.golden.heart.bot.repository.UserRepository;
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +19,7 @@ import java.util.List;
 @EnableScheduling
 public class TelegramBotNotifier {
     @Autowired
-    TelegramBot telegramBot;
+    TelegramBotSender telegramBotSender;
     @Autowired
     PetReportRepository petReportRepository;
     @Autowired
@@ -38,14 +36,14 @@ public class TelegramBotNotifier {
             List<PetReport> reports = petReportRepository.findAllByDateAndPet(LocalDate.now(), pet);
             if (reports.isEmpty()) {
                 User owner = pet.getOwner();
-                telegramBot.execute(new SendMessage(pet.getOwner().getChatId(), "Сегодня от Вас не поступил отчет о состоянии питомца.\n" +
-                        "\t Просьба срочно отправить"));
+                telegramBotSender.sendMessage("Сегодня от Вас не поступил отчет о состоянии питомца.\n" +
+                        "\t Просьба срочно отправить", pet.getOwner().getChatId());
                 reports = petReportRepository.findAllByDateAndPet(LocalDate.now().minusDays(2), pet);
                 if (reports.isEmpty()) {
                     User user = userRepository.findByRole(Role.VOLUNTEER).iterator().next();
                     if (user != null)
-                        telegramBot.execute(new SendMessage(user.getChatId(), "Владелец питомца " +
-                                pet.getNick() + " с username " + owner.getUserName() + " не отправлял отчет уже более 2 дней"));
+                        telegramBotSender.sendMessage("Владелец питомца " +
+                                pet.getNick() + " с username " + owner.getUserName() + " не отправлял отчет уже более 2 дней", user.getChatId());
                 }
             }
         });
