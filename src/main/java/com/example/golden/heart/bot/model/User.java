@@ -33,7 +33,6 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "pet_id")
-    @JsonIgnore
     private Pet pet;
 
     public User(Long chatId, String phone) {
