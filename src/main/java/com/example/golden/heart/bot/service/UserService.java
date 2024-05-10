@@ -55,7 +55,7 @@ public class UserService {
                 .map(foundUser -> {
                     foundUser.setName(user.getName());
                     foundUser.setChatId(user.getChatId());
-                    foundUser.setPets(user.getPets());
+                    foundUser.setPet(user.getPet());
                     foundUser.setRole(user.getRole());
                     foundUser.setPhone(user.getPhone());
                     return userRepository.save(foundUser);
@@ -87,10 +87,8 @@ public class UserService {
         if (pet == null){
             throw new IllegalArgumentException(NO_SUCH_PET);
         }
-        user.getPets().add(pet);
-        if (user.getRole() != Role.VOLUNTEER) {
-            user.setRole(Role.PET_OWNER);
-        }
+        user.setPet(pet);
+        user.setRole(Role.PET_OWNER);
         pet.setOwner(user);
         petService.savePet(pet);
         return userRepository.save(user);
