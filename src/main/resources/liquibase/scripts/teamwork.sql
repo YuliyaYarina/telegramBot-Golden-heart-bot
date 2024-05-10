@@ -89,7 +89,3 @@ ADD COLUMN date DATE NOT NULL;
 -- changeset Yuliya:1
 ALTER TABLE bot_user
     ALTER COLUMN phone TYPE varchar(20);
-
--- changeset vgulenkov:3
-ALTER TABLE bot_user
-DROP COLUMN IF EXISTS pet_id;
