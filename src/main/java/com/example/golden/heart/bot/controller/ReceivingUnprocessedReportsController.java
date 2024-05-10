@@ -1,9 +1,9 @@
 package com.example.golden.heart.bot.controller;
 
-import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.PetReport;
-import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.ReceivingUnprocessedReportsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("unprocessedReports")
 public class ReceivingUnprocessedReportsController {
+
+    private Logger logger = LoggerFactory.getLogger(ReceivingUnprocessedReportsController.class);
 
     @Autowired
     private ReceivingUnprocessedReportsService ruReportService;
@@ -39,8 +41,9 @@ public class ReceivingUnprocessedReportsController {
         return ResponseEntity.ok(ruReportService.markReportAsViewed(id));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}")   // отправляет сообщение по id отчета что отчет заполнен плохо
     public ResponseEntity<ResponseEntity<PetReport>> messageReport(@PathVariable Long id) {
+        logger.info(" отправка сообщения пользователю по id:" + id);
         return ResponseEntity.ok(ruReportService.messageReport(id));
     }
 

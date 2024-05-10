@@ -97,7 +97,7 @@ public class PetReportService {
         return photoService.savePhoto(photo);
     }
 
-//    public List<PetReport> getAllPetReports() {
-//        return petReportRepo.findAll();
-//    }
+    public List<PetReport> getAllPetReports() {
+        return petReportRepo.findAll();
+    }
 }
