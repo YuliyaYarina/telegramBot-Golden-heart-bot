@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "bot_user")
@@ -25,9 +27,9 @@ public class User {
     @JsonIgnore
     private String chosenPetType;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "pet_id")
-    private Pet pet;
+    private List<Pet> pets;
 
     public User(Long chatId, String phone) {
         this.chatId = chatId;
