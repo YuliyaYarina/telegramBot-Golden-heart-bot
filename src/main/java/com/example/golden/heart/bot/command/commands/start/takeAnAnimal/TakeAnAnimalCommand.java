@@ -9,7 +9,7 @@ import com.pengrad.telegrambot.model.Update;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.example.golden.heart.bot.command.CommandName.*;
+import static com.example.golden.heart.bot.command.enums.CommandName.*;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
 public class TakeAnAnimalCommand implements Command {

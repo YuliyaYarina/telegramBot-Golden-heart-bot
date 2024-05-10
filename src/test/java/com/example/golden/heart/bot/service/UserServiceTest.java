@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.service;
 
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.UserRepository;
@@ -24,7 +25,7 @@ class UserServiceTest {
     UserService userService;
 
     @Test
-    void save() {
+    void save() throws VolunteerAlreadyAppointedException {
         User user = new User();
         user.setName("Михаил");
         Mockito.when(userRepository.save(user)).thenReturn(user);
@@ -35,7 +36,7 @@ class UserServiceTest {
     }
 
     @Test
-    void edite() {
+    void edite() throws VolunteerAlreadyAppointedException {
         User user = new User();
         user.setName("Михаил");
         Mockito.when(userRepository.save(user)).thenReturn(user);

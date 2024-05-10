@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 
-import static com.example.golden.heart.bot.command.CommandName.DOG_BEHAVIORIST_ADVICE;
-import static com.example.golden.heart.bot.command.CommandName.GET_DOG_BEHAVIORIST;
+import static com.example.golden.heart.bot.command.enums.CommandName.DOG_BEHAVIORIST_ADVICE;
+import static com.example.golden.heart.bot.command.enums.CommandName.GET_DOG_BEHAVIORIST;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getData;
 
