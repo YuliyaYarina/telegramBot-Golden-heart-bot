@@ -1,4 +1,4 @@
-package com.example.golden.heart.bot.command;
+package com.example.golden.heart.bot.command.enums;
 
 /**
  * enum для хранение имена всех команд

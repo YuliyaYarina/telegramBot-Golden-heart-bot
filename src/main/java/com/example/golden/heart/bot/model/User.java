@@ -1,5 +1,7 @@
 package com.example.golden.heart.bot.model;
 
+import com.example.golden.heart.bot.command.enums.ReportState;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;

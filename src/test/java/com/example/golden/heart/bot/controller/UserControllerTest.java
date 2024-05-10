@@ -1,6 +1,6 @@
 package com.example.golden.heart.bot.controller;
 
-import com.example.golden.heart.bot.model.Role;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.UserService;
 import org.junit.jupiter.api.Test;

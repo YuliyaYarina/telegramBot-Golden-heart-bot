@@ -1,6 +1,5 @@
 package com.example.golden.heart.bot.service;
 
-import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetReportRepository;
@@ -15,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.time.LocalDate;
 
 @Service
 public class PetReportService {
@@ -80,6 +80,16 @@ public class PetReportService {
         Photo photo = photoService.findPhotoByReportId(petReportId);
 
         photoService.removePhoto(photo);
+    }
+
+    /**
+     * Ишет отчет по id животного и по дате если не  сохроняет новый отчет с id питомца и сегоднешной датой
+     * @param petId id питомца
+     * @param date дата для которого нужен отчет
+     * @return найденный отчет или новый отчет если не найдено
+     */
+    public PetReport findByPetIdAndDate(Long petId, LocalDate date) {
+        return petReportRepo.findByPetIdAndDate(petId, date).orElse(null);
     }
 
     private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile file) {

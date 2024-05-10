@@ -1,7 +1,7 @@
 package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
-import com.example.golden.heart.bot.model.Role;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.UserService;
 import org.slf4j.Logger;

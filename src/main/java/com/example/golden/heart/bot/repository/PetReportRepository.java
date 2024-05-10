@@ -8,10 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface PetReportRepository extends JpaRepository<PetReport, Long> {
     List<PetReport> findAllByDateAndPet(LocalDate date, Pet pet);
 
     List<PetReport> findByIsViewed (boolean viewed);
 
+
+    Optional<PetReport> findByPetIdAndDate(Long petId, LocalDate date);
 }
