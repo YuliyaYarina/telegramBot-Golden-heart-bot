@@ -20,7 +20,7 @@ public class Pet {
     @JsonIgnore
     private AnimalShelter animalShelter;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "owner_id")
     @JsonIgnore
     private User owner;
