@@ -48,6 +48,7 @@ public class PetReportService {
                     foundReport.setWellBeing(petReport.getWellBeing());
                     foundReport.setBehaviourChange(petReport.getBehaviourChange());
                     foundReport.setPhotos(petReport.getPhotos());
+                    foundReport.setDate(petReport.getDate());
                     return petReportRepo.save(foundReport);
                 }).orElse(null);
     }

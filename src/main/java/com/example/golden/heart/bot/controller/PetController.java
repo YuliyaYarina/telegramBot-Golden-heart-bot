@@ -77,13 +77,4 @@ public class PetController {
         petService.removePhoto(petId);
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/pets-by-owner")
-    public ResponseEntity<List<Pet>> getPetsByOwnerId(Long id) {
-        List<Pet> pets = petService.findByOwnerId(id);
-        if (pets.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(pets);
-    }
 }
