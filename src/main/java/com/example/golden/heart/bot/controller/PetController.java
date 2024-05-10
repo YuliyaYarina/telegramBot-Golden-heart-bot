@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/pet")
@@ -75,5 +76,14 @@ public class PetController {
     public ResponseEntity<String> removePhoto(@PathVariable Long petId) {
         petService.removePhoto(petId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/pets-by-owner")
+    public ResponseEntity<List<Pet>> getPetsByOwnerId(Long id) {
+        List<Pet> pets = petService.findByOwnerId(id);
+        if (pets.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(pets);
     }
 }

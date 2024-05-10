@@ -1,13 +1,12 @@
 package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.command.commands.CommandUtils;
-import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.exceptions.NullUserException;
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.model.User;
-import com.example.golden.heart.bot.repository.PetRepository;
 import com.example.golden.heart.bot.repository.UserRepository;
 import com.pengrad.telegrambot.model.Update;
 import org.slf4j.Logger;
@@ -23,6 +22,8 @@ import java.util.regex.Pattern;
 @Service
 public class UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -35,22 +36,26 @@ public class UserService {
     private final String NO_SUCH_USER = "Пользователь с таким id не найден";
     private final String NO_SUCH_PET = "Питомец с таким id не найден";
 
-    public User save(User user) {
+    public User save(User user) throws VolunteerAlreadyAppointedException {
+        if (user.getRole() == Role.VOLUNTEER){
+            checkVolunteer();
+        }
         return userRepository.save(user);
     }
-
-    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdateListener.class);
 
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_SPACE = Pattern.compile("\\+\\d{1} \\d{3} \\d{3} \\d{2} \\d{2}");
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_DASH = Pattern.compile("\\+\\d{1}-\\d{3}-\\d{3}-\\d{2}-\\d{2}");
     private final String PHONE_ADDED = "Ваш номер успешно принят. Спасибо)";
 
-    public User edit(Long id, User user) {
+    public User edit(Long id, User user) throws VolunteerAlreadyAppointedException {
+        if (user.getRole() == Role.VOLUNTEER){
+        checkVolunteer();
+        }
         return userRepository.findById(id)
                 .map(foundUser -> {
                     foundUser.setName(user.getName());
                     foundUser.setChatId(user.getChatId());
-                    foundUser.setPet(user.getPet());
+                    foundUser.setPets(user.getPets());
                     foundUser.setRole(user.getRole());
                     foundUser.setPhone(user.getPhone());
                     return userRepository.save(foundUser);
@@ -67,10 +72,7 @@ public class UserService {
             throw new IllegalArgumentException(NO_SUCH_USER);
         }
         if (role == Role.VOLUNTEER) {
-            User volunteer = findVolunteer();
-            if (volunteer != null) {
-                throw new VolunteerAlreadyAppointedException("Ответственный волонтер уже назначен, id " + volunteer.getId() + ", username " + volunteer.getUserName());
-            }
+            checkVolunteer();
         }
         foundUser.setRole(role);
         return userRepository.save(foundUser);
@@ -85,8 +87,10 @@ public class UserService {
         if (pet == null){
             throw new IllegalArgumentException(NO_SUCH_PET);
         }
-        user.setPet(pet);
-        user.setRole(Role.PET_OWNER);
+        user.getPets().add(pet);
+        if (user.getRole() != Role.VOLUNTEER) {
+            user.setRole(Role.PET_OWNER);
+        }
         pet.setOwner(user);
         petService.savePet(pet);
         return userRepository.save(user);
@@ -157,5 +161,11 @@ public class UserService {
     }
     public List<User> findByRole(Role role){
         return userRepository.findByRole(role);
+    }
+
+    private void checkVolunteer() throws VolunteerAlreadyAppointedException {
+        if (findVolunteer() != null) {
+            throw new VolunteerAlreadyAppointedException();
+        }
     }
 }

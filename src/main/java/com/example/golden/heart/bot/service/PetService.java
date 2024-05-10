@@ -107,4 +107,8 @@ public class PetService {
 
         return photo;
     }
+
+    public List<Pet> findByOwnerId(Long id) {
+        return petRepository.findByOwnerId(id);
+    }
 }

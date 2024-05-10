@@ -1,6 +1,6 @@
 package com.example.golden.heart.bot.controller;
 
-import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.UserService;
@@ -23,17 +23,33 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User saveUser(@RequestBody User user) {
-        return userService.save(user);
+    public ResponseEntity<String> saveUser(@RequestBody User user) {
+        try {
+            user = userService.save(user);
+        } catch (VolunteerAlreadyAppointedException e) {
+            logger.error("Exception: ", e);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(e.getMessage());
+        }
+        return ResponseEntity.ok(user.toString());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> editeUser(@PathVariable Long id, @RequestBody User user) {
-        User foundUser = userService.edit(id, user);
+    public ResponseEntity<String> editUser(@PathVariable Long id, @RequestBody User user) {
+        User foundUser;
+        try {
+            foundUser = userService.edit(id, user);
+
+        } catch (VolunteerAlreadyAppointedException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(e.getMessage());
+        }
         if (foundUser == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(foundUser.toString());
     }
 
     @GetMapping("/{id}")
@@ -87,8 +103,13 @@ public class UserController {
         }
         return ResponseEntity.ok("Пользователь " + user.getUserName() + " теперь является владельцем питомца");
     }
+
     @GetMapping
-    public ResponseEntity<List<User>> findByRole(Role role){
-        return ResponseEntity.ok(userService.findByRole(role));
+        public ResponseEntity<List<User>> findByRole (@RequestParam Role role){
+            List<User> users = userService.findByRole(role);
+            if (users.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(users);
     }
 }
