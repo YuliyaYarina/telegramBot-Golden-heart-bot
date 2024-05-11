@@ -57,7 +57,7 @@ public class ReceivingUnprocessedReportsService {
         User user = userRepository.findById(petReport.getPet().getId()).orElse(null);
 
         log.info(" user = {}" + user);
-        telegramBot.execute(new SendMessage(user.getChatId(), " Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного."));
+        telegramBot.execute(new SendMessage(user.getChatId(), "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного."));
 
         log.info(" отправляет уже сообщение пользователю {}", user.getChatId());
         return ResponseEntity.ok().build();
