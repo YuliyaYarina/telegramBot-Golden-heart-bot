@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class PetReportService {
@@ -110,5 +110,9 @@ public class PetReportService {
 
     public List<PetReport> getAllPetReports() {
         return petReportRepo.findAll();
+    }
+
+    public List<PetReport> findAllByPetId(Long petId) {
+        return petReportRepo.findAllByPetId(petId);
     }
 }

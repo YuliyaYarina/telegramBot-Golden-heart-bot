@@ -30,7 +30,7 @@ public class User {
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    private int probationPeriod;
+    private Integer probationPeriod;
 
     public User(Long chatId, String phone) {
         this.chatId = chatId;
