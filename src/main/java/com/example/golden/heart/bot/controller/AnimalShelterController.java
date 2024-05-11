@@ -4,6 +4,7 @@ import com.example.golden.heart.bot.model.AnimalShelter;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.service.AnimalShelterService;
 import com.example.golden.heart.bot.service.PhotoService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,21 +23,29 @@ public class AnimalShelterController {
     @Autowired
     private PhotoService photoService;
 
+    @Operation(
+            summary = "Добавить приют"
+    )
     @PostMapping
     public ResponseEntity<AnimalShelter> createAnimalShelter(@RequestBody AnimalShelter animalShelter) {
         return ResponseEntity.ok(animalShelterService.saveAnimalShelter(animalShelter));
     }
 
+    @Operation(
+            summary = "Изменить информацию о приюте"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<AnimalShelter> editeAnimalShelter(@PathVariable Long id, @RequestBody AnimalShelter animalShelter) {
         AnimalShelter foundAnimalShelter = animalShelterService.editAnimalShelter(id, animalShelter);
         if (foundAnimalShelter == null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(foundAnimalShelter);
     }
 
+    @Operation(
+            summary = "Показать информацию о приюте"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<AnimalShelter> getAnimalShelter(@PathVariable Long id) {
         AnimalShelter animalShelter = animalShelterService.getAnimalShelterById(id);
@@ -46,6 +55,9 @@ public class AnimalShelterController {
         return ResponseEntity.ok(animalShelter);
     }
 
+    @Operation(
+            summary = "Удалить приют"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<AnimalShelter> removeAnimalShelter(@PathVariable Long id) {
         AnimalShelter animalShelter = animalShelterService.getAnimalShelterById(id);
@@ -56,6 +68,9 @@ public class AnimalShelterController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(
+            summary = "Добавить фото проезда к приюту"
+    )
     @PostMapping(value = "/{animalShelterId}/address/schema/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> saveAddressSchema(@PathVariable Long animalShelterId,
                                                     @RequestParam MultipartFile file) throws IOException {
@@ -67,6 +82,9 @@ public class AnimalShelterController {
     }
 
 
+    @Operation(
+            summary = "Показать фото проезда к приюту"
+    )
     @GetMapping(value = "/{animalShelterId}/photo")
     public ResponseEntity<String> downloadPhoto(@PathVariable Long animalShelterId,
                               HttpServletResponse response) throws IOException {
@@ -80,6 +98,9 @@ public class AnimalShelterController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(
+            summary = "Удалить фото проезда"
+    )
     @DeleteMapping(value = "/{animalShelterId}/photo")
     public ResponseEntity<String> removePhoto(@PathVariable Long animalShelterId) {
         animalShelterService.removePhoto(animalShelterId);
