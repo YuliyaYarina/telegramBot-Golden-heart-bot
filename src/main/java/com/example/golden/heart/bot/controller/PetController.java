@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.service.PetService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,6 +20,9 @@ public class PetController {
     @Autowired
     private PetService petService;
 
+    @Operation(
+            summary = "Добавить питомца"
+    )
     @PostMapping
     public ResponseEntity<Pet> savePet(@RequestBody Pet pet) {
         Pet pet1 = petService.savePet(pet);
@@ -28,6 +32,9 @@ public class PetController {
         return ResponseEntity.ok(pet1);
     }
 
+    @Operation(
+            summary = "Изменить данные питомца"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<Pet> editPet(@PathVariable Long id, @RequestBody Pet pet) {
         Pet foundPet = petService.editPet(id, pet);
@@ -37,6 +44,9 @@ public class PetController {
         return ResponseEntity.ok(pet);
     }
 
+    @Operation(
+            summary = "Показать данные питомца"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<Pet> getPet(@PathVariable Long id) {
         Pet pet = petService.getPetById(id);
@@ -46,6 +56,9 @@ public class PetController {
         return ResponseEntity.ok(pet);
     }
 
+    @Operation(
+            summary = "Удалить питомца"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Pet> removePet(@PathVariable Long id) {
         Pet pet = petService.getPetById(id);
@@ -56,6 +69,9 @@ public class PetController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(
+            summary = "Добавить фото питомцу"
+    )
     @PostMapping(value = "/{petId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> savePetPhoto(@PathVariable Long petId,
                                                @RequestParam MultipartFile file) throws IOException {
@@ -66,12 +82,18 @@ public class PetController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(
+            summary = "Фото питомца"
+    )
     @GetMapping(value = "/{petId}/photo")
     public void downloadPhoto(@PathVariable Long petId,
                               HttpServletResponse response) throws IOException {
         petService.getPhoto(petId, response);
     }
 
+    @Operation(
+            summary = "Удалить фото у питомца"
+    )
     @DeleteMapping(value = "/{petId}/photo")
     public ResponseEntity<String> removePhoto(@PathVariable Long petId) {
         petService.removePhoto(petId);
