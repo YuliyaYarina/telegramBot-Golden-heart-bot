@@ -34,20 +34,23 @@ public class TelegramBotNotifier {
         pets.forEach(pet -> {
             List<PetReport> reports = petReportRepository.findAllByDateAndPet(date, pet);
             User owner = pet.getOwner();
-            int probationPeriod = owner.getProbationPeriod();
-            if (probationPeriod > 0) {
+            if (owner.getProbationPeriod() == null) {
+                owner.setProbationPeriod(0);
+            }
+            Integer probationPeriod = owner.getProbationPeriod();
+            if (owner.getProbationPeriod() > 0) {
                 owner.setProbationPeriod(probationPeriod - 1);
                 if (reports.isEmpty()) {
-                    telegramBotSender.sendMessage("Сегодня от Вас не поступил отчет о состоянии питомца.\n" +
-                            "\t Просьба срочно отправить", owner.getChatId());
+                    telegramBotSender.send(owner.getChatId(), "Сегодня от Вас не поступил отчет о состоянии питомца.\n" +
+                            "\t Просьба срочно отправить");
                     reports = petReportRepository.findAllByDateAndPet(date.minusDays(1), pet);
                     if (reports.isEmpty()) {
                         reports = petReportRepository.findAllByDateAndPet(date.minusDays(2), pet);
                         if (reports.isEmpty()) {
                             User volunteer = userService.findVolunteer();
                             if (volunteer != null)
-                                telegramBotSender.sendMessage("Владелец питомца " +
-                                        pet.getNick() + " с username " + owner.getUserName() + " не отправлял отчет уже более 2 дней", volunteer.getChatId());
+                                telegramBotSender.send(volunteer.getChatId(), "Владелец питомца " +
+                                        pet.getNick() + " с username " + owner.getUserName() + " не отправлял отчет уже более 2 дней");
                         }
                     }
                 }

@@ -175,4 +175,7 @@ public class UserService {
             throw new VolunteerAlreadyAppointedException();
         }
     }
+    List<User> findByProbationPeriod(Integer probationPeriod) {
+        return userRepository.findByProbationPeriod(probationPeriod);
+    }
 }

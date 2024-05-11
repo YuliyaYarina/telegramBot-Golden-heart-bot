@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByRole(Role role);
 
     Optional<User> findByChatId(Long chatId);
+    List<User> findByProbationPeriod(Integer probationPeriod);
 }
