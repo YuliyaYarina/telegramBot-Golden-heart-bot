@@ -55,14 +55,25 @@ public class PetReportController {
     @Operation(
             summary = "Показать все отчеты"
     )
-    @GetMapping("getAllPetReports")     // нужен?
-    public List<PetReport>  getAllPetReports(){
+    @GetMapping("get-all-pet-reports")
+    public ResponseEntity<List<PetReport>>  getAllPetReports(){
         List<PetReport> reports = petReportService.getAllPetReports();
-
-        for (PetReport petReport : reports) {
-            petReport.setViewed(false);
+        if (reports.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return reports;
+        return ResponseEntity.ok(reports);
+    }
+
+    @Operation(
+            summary = "Показать все отчеты по питомцу"
+    )
+    @GetMapping("all-reports-for-pet")
+    public ResponseEntity<List<PetReport>> findAllByPetId (@RequestParam Long petId){
+        List<PetReport> petReports = petReportService.findAllByPetId(petId);
+        if (petReports.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(petReports);
     }
 
     @Operation(
