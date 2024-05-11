@@ -4,6 +4,7 @@ import com.example.golden.heart.bot.command.CommandContainer;
 import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
 import com.example.golden.heart.bot.command.commands.start.report.ReportStateStorage;
 import com.example.golden.heart.bot.command.enums.ReportState;
+import com.example.golden.heart.bot.service.PetReportService;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -31,6 +32,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     private CommandContainer commandContainer;
 
     private UserService userService;
+    private PetReportService petReportService;
+
+    public TelegramBotUpdateListener(PetReportService petReportService) {
+        this.petReportService = petReportService;
+    }
 
     @Autowired
     public TelegramBotUpdateListener(TelegramBot telegramBot, ReportStateStorage reportStateStorage, CommandContainer commandContainer, UserService userService) {
@@ -68,6 +74,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 logger.info("Сообщение отправлено: " + update.message().text());
                 userService.addedPhone(update);
             }
+            if (update.message().photo() != null) {
+                String fileId = update.message().photo()[0].fileId();
+                petReportService.getFile(fileId);
+            }
+
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }

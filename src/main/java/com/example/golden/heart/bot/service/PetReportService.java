@@ -3,6 +3,9 @@ package com.example.golden.heart.bot.service;
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetReportRepository;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.request.GetFile;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -26,6 +30,8 @@ public class PetReportService {
 
     @Autowired
     private PhotoService photoService;
+    @Autowired
+    private TelegramBot telegramBot;
 
     Logger logger = LoggerFactory.getLogger(PetReportService.class);
 
@@ -106,5 +112,15 @@ public class PetReportService {
 
         return photoService.savePhoto(photo);
     }
+    public byte[] getFile (String fileId) {
+        GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
+        try {
+            byte[] pic = telegramBot.getFileContent(getFileResponse.file());
+            return pic;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
