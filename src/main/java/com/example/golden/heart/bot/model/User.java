@@ -1,6 +1,5 @@
 package com.example.golden.heart.bot.model;
 
-import com.example.golden.heart.bot.command.enums.ReportState;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -30,6 +29,8 @@ public class User {
     @OneToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
+
+    private int probationPeriod;
 
     public User(Long chatId, String phone) {
         this.chatId = chatId;
