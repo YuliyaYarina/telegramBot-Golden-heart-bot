@@ -26,7 +26,7 @@ public class StartInfoCommand implements Command {
         map.put("Принять и записать контактные данные для связи.", "/contactDetails");
 
         map.put("Позвать волонтёра. Помощь", "/volunteer");
-        map.put("Назад", "/catAndDog");
+        map.put("Назад", "/cat");
 
         String message =
                 " Что хочешь узнать?";

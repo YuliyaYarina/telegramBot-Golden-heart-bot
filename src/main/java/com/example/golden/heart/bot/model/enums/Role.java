@@ -1,4 +1,4 @@
-package com.example.golden.heart.bot.model;
+package com.example.golden.heart.bot.model.enums;
 
 import lombok.Getter;
 

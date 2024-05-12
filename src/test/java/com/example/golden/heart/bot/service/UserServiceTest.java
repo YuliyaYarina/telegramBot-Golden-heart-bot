@@ -4,6 +4,8 @@ import com.example.golden.heart.bot.constants.Constants;
 import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.exceptions.NullUserException;
 import com.example.golden.heart.bot.model.Role;
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
+import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -36,7 +38,7 @@ class UserServiceTest {
     UserService userService;
 
     @Test
-    void save() {
+    void save() throws VolunteerAlreadyAppointedException {
         User user = new User();
 
         when(userRepository.save(user)).thenReturn(user);
@@ -101,6 +103,10 @@ class UserServiceTest {
         Role role = Role.VOLUNTEER;
 
         when(userRepository.findByUserName(userName)).thenReturn(null);
+    void edite() throws VolunteerAlreadyAppointedException {
+        User user = new User();
+        user.setName("Михаил");
+        Mockito.when(userRepository.save(user)).thenReturn(user);
 
         assertThrows(IllegalArgumentException.class, () -> {
             userService.changeRole(userName, role);

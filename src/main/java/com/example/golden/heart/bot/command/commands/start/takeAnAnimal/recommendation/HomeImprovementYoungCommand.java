@@ -5,13 +5,11 @@ import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.model.Update;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.golden.heart.bot.command.CommandName.CAT;
+import static com.example.golden.heart.bot.command.enums.CommandName.CAT;
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
 public class HomeImprovementYoungCommand implements Command {
@@ -49,7 +47,6 @@ public class HomeImprovementYoungCommand implements Command {
     public void execute(Update update) {
         Map<String,String> map = new HashMap<>();
         map.put("Назад", "/recommendation");
-
 
         telegramBotSender.sendMessage(collectMessage(update), getChatId(update), telegramBotSender.setButtons(map));
     }

@@ -1,4 +1,4 @@
-package com.example.golden.heart.bot.command;
+package com.example.golden.heart.bot.command.enums;
 
 /**
  * enum для хранение имена всех команд
@@ -29,8 +29,6 @@ public enum CommandName {
         REASONS_FOR_REFUSAL("/reasonsForRefusal"),
 
     REPORT("/report"),
-
-    INFO("/info"),
     CONTACT_DETAILS("/contactDetails"),
     VOLUNTEER("/volunteer");
 

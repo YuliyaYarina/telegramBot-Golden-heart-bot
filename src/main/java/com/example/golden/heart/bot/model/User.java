@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.model;
 
+import com.example.golden.heart.bot.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private int phone;
+    private String phone;
     private String name;
     private String userName;
 
@@ -27,9 +28,14 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "pet_id")
-    @JsonIgnore
     private Pet pet;
 
+    private Integer probationPeriod;
+
+    public User(Long chatId, String phone) {
+        this.chatId = chatId;
+        this.phone = phone;
+    }
     public User() {
     }
     public User(Long chatId, String name, String userName) {
@@ -42,7 +48,7 @@ public class User {
     /**
      * Конструктор для создания объектов для тестирования
      */
-    public User(Long id, Long chatId, Role role, int phone, String name, String userName) {
+    public User(Long id, Long chatId, Role role, String phone, String name, String userName) {
         this.id = id;
         this.chatId = chatId;
         this.role = role;

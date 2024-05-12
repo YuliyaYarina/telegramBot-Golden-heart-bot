@@ -1,12 +1,14 @@
 package com.example.golden.heart.bot.command.commands.start;
 
 import com.example.golden.heart.bot.command.Command;
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.vdurmont.emoji.EmojiParser;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -27,6 +29,7 @@ public class StartCommand implements Command {
         this.userService = userService;
     }
 
+    @SneakyThrows
     @Override
     public void execute(Update update) {
 
