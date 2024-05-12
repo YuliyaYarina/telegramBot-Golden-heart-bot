@@ -48,20 +48,25 @@ public class ReportCommand implements Command {
             map.put("Позвать волонтера", "/volunteer");
         }
 
-        ReportState state = reportStateStorage.getValue(chatId);
+        if (checkUserRoleAndPet(chatId)) {
 
-        if (state == null) {
-            reportStateStorage.setValue(chatId, ReportState.START);
-            state = reportStateStorage.getValue(chatId);
+            ReportState state = reportStateStorage.getValue(chatId);
+
+            if (state == null) {
+                reportStateStorage.setValue(chatId, ReportState.START);
+                state = reportStateStorage.getValue(chatId);
+            }
+
+            switch (state) {
+                case START -> startReport(chatId);
+                case DIET -> dietReport(chatId, update);
+                case PHOTO -> photoReport(chatId, update);
+                case BEHAVIOR -> behaviorReport(chatId, update);
+                case WELL_BEING -> wellBeingReport(chatId, update);
+            }
+
         }
 
-        switch (state) {
-            case START -> startReport(chatId);
-            case DIET -> dietReport(chatId, update);
-            case PHOTO -> photoReport(chatId, update);
-            case BEHAVIOR -> behaviorReport(chatId, update);
-            case WELL_BEING -> wellBeingReport(chatId, update);
-        }
 
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
@@ -91,6 +96,7 @@ public class ReportCommand implements Command {
 
         PetReport petReport = findReport(chatId);
         petReport.setDiet(update.message().text());
+        petReport.setViewed(false);
         petReportService.editPetReport(petReport.getId(), petReport);
 
         reportStateStorage.replaceValue(chatId, ReportState.BEHAVIOR);
@@ -137,7 +143,7 @@ public class ReportCommand implements Command {
 
     private Boolean checkUserRoleAndPet(Long chatId) {
         User user = userService.findByChatId(chatId);
-        return !user.getRole().equals(Role.VOLUNTEER) && user.getPet() != null;
+        return user.getRole().equals(Role.VOLUNTEER) && user.getPet() != null;
     }
 
 
