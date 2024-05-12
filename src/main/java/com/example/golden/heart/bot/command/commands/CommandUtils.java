@@ -22,6 +22,11 @@ public class CommandUtils {
         }
 }
 
+    /**
+     * Возвращает имя Текущего пользователя
+     * @param update
+     * @return
+     */
     public static String getFirstName(Update update) {
         if (update.message() != null) {
             return update.message().from().firstName();
@@ -42,6 +47,10 @@ public class CommandUtils {
         }
     }
 
+    /**
+     * @param update
+     * @return Возвращает отправленную команду
+     */
     public static String getData(Update update) {
         if (update.callbackQuery() != null) {
             return update.callbackQuery().data();

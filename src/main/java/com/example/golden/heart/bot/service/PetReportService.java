@@ -30,17 +30,38 @@ public class PetReportService {
 
     Logger logger = LoggerFactory.getLogger(PetReportService.class);
 
+    /**
+     * Сохраняет отчет в БД
+     * @param petReport - отчет
+     * @return сохраненный отчет
+     */
     public PetReport savePetReport(PetReport petReport) {
         return petReportRepo.save(petReport);
     }
+
+    /**
+     * Находит отчет в БД по id
+     * @param id- id отчета
+     * @return найденный отчет
+     */
     public PetReport getPetReportById(Long id) {
         return petReportRepo.findById(id).orElse(null);
     }
 
+    /**
+     * Удаляет отчет по id
+     * @param id - id отчета
+     */
     public void removePetReportById(Long id) {
         petReportRepo.deleteById(id);
     }
 
+    /**
+     * Редактирует отчет
+     * @param id - id отчета
+     * @param petReport - изменненый отчет
+     * @return измененный отчет
+     */
     public PetReport editPetReport(Long id, PetReport petReport) {
         return petReportRepo.findById(id)
                 .map(foundReport -> {
@@ -66,6 +87,12 @@ public class PetReportService {
         return savePhotoToDateBase(petReportId, filePath, file);
     }
 
+    /**
+     * Ищет фото в БД
+     * @param petReportId - id отчета
+     * @param response - тело запроса
+     * @throws IOException может выдать ошибку
+     */
     public void getPhoto(Long petReportId, HttpServletResponse response) throws IOException {
         Photo photo = photoService.findPhotoByReportId(petReportId);
         photoService.getPhoto(photo, response);
@@ -92,6 +119,13 @@ public class PetReportService {
         return petReportRepo.findByPetIdAndDate(petId, date).orElse(null);
     }
 
+    /**
+     * Сохраняет фото отчета
+     * @param petReportId id отчета
+     * @param filePath путь фаила, где гранится фото
+     * @param file фото
+     * @return сохранненая информация о фото
+     */
     private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile file) {
         PetReport petReport = getPetReportById(petReportId);
         if (petReport == null) {
@@ -108,10 +142,19 @@ public class PetReportService {
         return photoService.savePhoto(photo);
     }
 
+    /**
+     *
+     * @return все отчеты
+     */
     public List<PetReport> getAllPetReports() {
         return petReportRepo.findAll();
     }
 
+    /**
+     *
+     * @param petId- id питомца
+     * @return все отчеты у конкретного питомца
+     */
     public List<PetReport> findAllByPetId(Long petId) {
         return petReportRepo.findAllByPetId(petId);
     }

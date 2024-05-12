@@ -29,10 +29,21 @@ public class AnimalShelterService {
 
     Logger logger = LoggerFactory.getLogger(AnimalShelterService.class);
 
+    /**
+     * Сохраняет в БД приют
+     * @param animalShelter
+     * @return возвращает сохранненый приют
+     */
     public AnimalShelter saveAnimalShelter(AnimalShelter animalShelter) {
         return animalShelterRepo.save(animalShelter);
     }
 
+    /**
+     * Меняет приют в БД
+     * @param id
+     * @param animalShelter
+     * @return Возвращает изменненый приют
+     */
     public AnimalShelter editAnimalShelter(Long id, AnimalShelter animalShelter) {
         return animalShelterRepo.findById(id)
                 .map(foundShelter -> {
@@ -45,6 +56,10 @@ public class AnimalShelterService {
                 }).orElse(null);
     }
 
+    /**
+     * @param id
+     * @return Возвращает приют из БД по id
+     */
     public AnimalShelter getAnimalShelterById(Long id) {
         return animalShelterRepo.findById(id).orElse(null);
     }
@@ -81,6 +96,12 @@ public class AnimalShelterService {
         return savePhotoToDateBase(animalShelterId, path, file);
     }
 
+    /**
+     * Возвращает фото проезда к приюту
+     * @param animalShelterId id приюта
+     * @param response тело запроса
+     * @throws IOException
+     */
     public void getPhoto(Long animalShelterId, HttpServletResponse response) throws IOException {
         Photo photo = photoService.findPhotoByAnimalShelterId(animalShelterId);
         photoService.getPhoto(photo, response);
@@ -100,7 +121,13 @@ public class AnimalShelterService {
         photoService.removePhoto(photo);
     }
 
-
+    /**
+     * Сохраняет фото в БД
+     * @param animalShelterId
+     * @param filePath
+     * @param file
+     * @return возвращает сохранненое фото
+     */
     private Photo savePhotoToDateBase(Long animalShelterId, Path filePath, MultipartFile file) {
         AnimalShelter animalShelter = getAnimalShelterById(animalShelterId);
         if (animalShelter == null) {

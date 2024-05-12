@@ -50,6 +50,12 @@ public class PhotoService {
         return filePath;
     }
 
+    /**
+     * Возвращает фото с диска
+     * @param photo информация о фото
+     * @param response тело ответа
+     * @throws IOException может выбросить ошибку
+     */
     public void getPhoto(Photo photo, HttpServletResponse response) throws IOException {
         logger.info("Wos invoked method for get photo");
 
@@ -68,6 +74,11 @@ public class PhotoService {
         }
     }
 
+    /**
+     * Сохраняет инофрмацию о фото в БД
+     * @param photo информация о фото
+     * @return сохранненая информация о фото
+     */
     public Photo savePhoto(Photo photo) {
         return photoRepository.save(photo);
     }
@@ -84,6 +95,10 @@ public class PhotoService {
                 }).orElse(null);
     }
 
+    /**
+     * Удаляет фото с диска и из БД
+     * @param photo информация о фото
+     */
     public void removePhoto(Photo photo) {
         logger.info("Wos invoked methods for remove photo");
 
@@ -96,23 +111,47 @@ public class PhotoService {
         photoRepository.deleteById(photo.getId());
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public Photo getPhoto(Long id) {
         return photoRepository.findById(id).orElse(null);
     }
 
-
+    /**
+     *
+     * @param fileName  полное имя фото
+     * @return тип файла
+     */
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
+    /**
+     * Находит Photo по id отчету
+     * @param petReportId id отчета
+     * @return найденные Photo
+     */
     public Photo findPhotoByReportId(Long petReportId) {
         return photoRepository.findByPetReportId(petReportId).orElse(new Photo());
     }
 
+    /**
+     * Находит Photo по id приюта
+     * @param animalShelterId id приюта
+     * @return возвращает найденные Photo
+     */
     public Photo findPhotoByAnimalShelterId(Long animalShelterId) {
         return photoRepository.findByAnimalShelterId(animalShelterId).orElse(new Photo());
     }
 
+    /**
+     * Находит Photo по id питомца
+     * @param petId id питомца
+     * @return возвращает найденные Photo
+     */
     public Photo findPhotoByPetId(Long petId) {
         return photoRepository.findByPetId(petId).orElse(new Photo());
     }

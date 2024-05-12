@@ -21,14 +21,18 @@ public class TelegramBotSender {
 
     private Logger logger = LoggerFactory.getLogger(TelegramBotSender.class);
 
-
     /**
-     *  Отправляет сообщения к указанному chatId
+     *  Отправляет сообщения к указанному chatId, с InlineKeyboardMarkup
      */
     public void sendMessage(String messageText, Long chatId, InlineKeyboardMarkup markupInline) {
         SendResponse response = telegramBot.execute(new SendMessage(chatId, messageText).replyMarkup(markupInline));
     }
 
+    /**
+     * Собирает кнопки для отправки
+     * @param buttons кнопки которые нужно собрать
+     * @return готовый InlineKeyboardMarkup для отправки
+     */
     public InlineKeyboardMarkup setButtons(Map<String, String> buttons){
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         for (Map.Entry<String, String> entry : buttons.entrySet()){
@@ -37,6 +41,11 @@ public class TelegramBotSender {
         return markup;
     }
 
+    /**
+     * Отправляет сообщения к указанному chatId
+     * @param chatId chatId пользователя
+     * @param message передаваемое соощение
+     */
     public void send(Long chatId, String message) {
         SendMessage sendMessage = new SendMessage(chatId, message);
         SendResponse response = telegramBot.execute(sendMessage);
@@ -49,6 +58,11 @@ public class TelegramBotSender {
 
     }
 
+    /**
+     * отправляет фото к указаному пользователю
+     * @param chatId chatId пользователя
+     * @param photo отправляемое фото
+     */
     public void sendPhoto(Long chatId, File photo) {
         SendResponse sendResponse = telegramBot.execute(new SendPhoto(chatId, photo));
     }

@@ -46,6 +46,9 @@ public class TakeAnAnimalCommand implements Command {
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 
+    /**
+     * Возвращает выбранный тип животного
+     */
     private String getChosenPetType(Update update) {
         User user = userService.findByChatId(getChatId(update));
         return user.getChosenPetType();

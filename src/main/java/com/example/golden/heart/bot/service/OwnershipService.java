@@ -24,10 +24,19 @@ public class OwnershipService {
     private final String NO_SUCH_PET = "Питомец с таким id не найден";
     private final String NO_OWNER = "У питомца нет владельца";
 
+    /**
+     *
+     * @return Возвращает всех усыновителей, у которых закончился испытательный срок
+     */
     public List<User> findAllOwnersWithEndedProbation() {
         return userService.findByProbationPeriod(0);
     }
 
+    /**
+     * Добавляет дополнительные дни к испытательному сроку
+     * @param petId id животного
+     * @param increase кол-во доп. дней
+     */
     public void increaseProbationPeriod(Long petId, Increase increase) {
         Pet pet = petService.getPetById(petId);
         checkPet(pet);
@@ -48,6 +57,12 @@ public class OwnershipService {
         telegramBotSender.send(owner.getChatId(), "Ваш испытательный срок продлен на " + increase.getTitle());
     }
 
+    /**
+     * При не прохождении испытательного срока, питомеца отвязывает от владельца
+     * Меняет роль на USER.
+     * Отправляет сообщение пользователю уведомляя его.
+     * @param petId id животного
+     */
     public void revokeOwnership(Long petId) {
         Pet pet = petService.getPetById(petId);
         checkPet(pet);
@@ -58,6 +73,11 @@ public class OwnershipService {
         telegramBotSender.send(owner.getChatId(), "Вы не прошли испытательный срок. Скоро с Вами свяжется волонтер по вопросу возвращения питомца в приют. Ожидайте");
     }
 
+    /**
+     * При прохождении испытательного срока, удаляет питомеца из приюта
+     * Отправляет сообщение пользователю уведомляя его об этом.
+     * @param petId id животного
+     */
     public void confirmOwnership(Long petId) {
         Pet pet = petService.getPetById(petId);
         checkPet(pet);
@@ -68,12 +88,22 @@ public class OwnershipService {
         telegramBotSender.send(owner.getChatId(), "Поздравляем! Вы прошли испытательный срок и теперь является полноценным владельцем питомца");
     }
 
+    /**
+     * Проверяет наличие питомца,
+     * если pet == null вызывает IllegalArgumentException
+     * @param pet id животного
+     */
     private void checkPet(Pet pet) {
         if (pet == null) {
             throw new IllegalArgumentException(NO_SUCH_PET);
         }
     }
 
+    /**
+     * Проверяет наличие владельца,
+     * если owner == null вызывает NullUserException
+     * @param owner -  пользователь
+     */
     private void checkOwner(User owner) {
         if (owner == null) {
             throw new NullUserException(NO_OWNER);

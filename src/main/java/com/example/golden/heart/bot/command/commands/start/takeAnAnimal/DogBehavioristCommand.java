@@ -100,6 +100,10 @@ public class DogBehavioristCommand implements Command {
                 "Есть стремление к контакту — есть сам контакт — и есть основа для эффективной дрессировки.\n";
     }
 
+    /**
+     * Метод для отправки сообщений,
+     * который отправляет информацию о кинологах
+     */
     private String geDogBehaviorist() {
         List<DogBehaviorist> dogBehaviorists = dogBehavioristService.findAll();
 
@@ -109,6 +113,9 @@ public class DogBehavioristCommand implements Command {
         return  "Вот список рекомендованных кинологов\n" + collectDogBehaviorist(dogBehaviorists);
     }
 
+    /**
+     * Из БД информацию о кинологах преобразовывает с сообщение в ТГ
+     */
     private String collectDogBehaviorist(List<DogBehaviorist> dogBehaviorists) {
         StringBuilder message = new StringBuilder(" ");
         for (DogBehaviorist element : dogBehaviorists) {
