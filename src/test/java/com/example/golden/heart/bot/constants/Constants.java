@@ -24,7 +24,7 @@ public class Constants {
 
     public static Photo PHOTO_1 = new Photo(0L, "Test", 111, "Test");
 
-    public static Path TEST_PATH = Path.of("TEST/PATH");
+    public static Path TEST_PATH = Path.of("TEST/PATH.jpg");
 
 
 }

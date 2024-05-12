@@ -50,7 +50,7 @@ class UserServiceTest {
         User excepted = new User(USER_1.getId(),111L, Role.USER, "111", "Edited", "Edited");
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(USER_1));
-        when(userRepository.save(excepted)).thenReturn(excepted);
+        when(userRepository.save(any())).thenReturn(excepted);
 
         User result = userService.edit(USER_1.getId(), excepted);
 

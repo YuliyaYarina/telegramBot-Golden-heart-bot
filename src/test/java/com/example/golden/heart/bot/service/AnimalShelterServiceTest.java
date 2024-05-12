@@ -11,7 +11,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,36 +111,26 @@ class AnimalShelterServiceTest {
 
     @Test
     void saveAddressPhoto() throws IOException {
-//        Given
-        byte[] content = "Hello".getBytes();
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(
-                "Test",
-                "Hello.txt",
-                "text/plain",
-                content);
-        Photo excepted = new Photo(
-                PHOTO_1.getId(),
-                TEST_PATH.toString(),
-                mockMultipartFile.getSize(),
-                mockMultipartFile.getContentType());
+// Создание моков зависимостей
+        Path path = Paths.get("test/photo.jpg"); // пример пути к файлу
+        MultipartFile file = Mockito.mock(MultipartFile.class);
+        Mockito.when(file.getSize()).thenReturn((long) 100); // пример размера файла
+        Mockito.when(file.getContentType()).thenReturn("image/jpeg"); // пример типа содержимого файла
+        Mockito.when(photoService.uploadPhoto(Mockito.anyLong(), Mockito.anyString(), Mockito.any(MultipartFile.class)))
+                .thenReturn(path);
 
-        when(photoService.uploadPhoto(anyLong(), anyString(), any(MultipartFile.class))).thenReturn(TEST_PATH);
-        when(animalShelterService.getAnimalShelterById(anyLong())).thenReturn(ANIMAL_SHELTER_1);
-        when(photoService.findPhotoByAnimalShelterId(anyLong())).thenReturn(PHOTO_1);
-        when(photoService.savePhoto(any())).thenReturn(excepted);
-        when(animalShelterService.saveAnimalShelter(any())).thenReturn(ANIMAL_SHELTER_1);
+        // Вызов тестируемого метода
+        Photo expectedPhoto = new Photo(1L, "test/photo.jpg", 100L, "image/jpeg");
+        Mockito.when(animalShelterService.savePhotoToDateBase(Mockito.anyLong(), Mockito.any(Path.class), Mockito.any(MultipartFile.class)))
+                .thenReturn(expectedPhoto);
 
-//        When
-        Photo actual = animalShelterService.saveAddressPhoto(ANIMAL_SHELTER_1.getId(), mockMultipartFile);
+        // Выполнение теста
+        Photo actualPhoto = animalShelterService.saveAddressPhoto(1L, file);
 
-//        Then
-        verify(photoService).uploadPhoto(anyLong(), anyString(), any(MultipartFile.class));
-        verify(animalShelterService).getAnimalShelterById(anyLong());
-        verify(animalShelterService).saveAnimalShelter(any());
-        verify(photoService).findPhotoByAnimalShelterId(anyLong());
-        verify(photoService).savePhoto(any());
-
-        assertEquals(excepted, actual);
+        // Проверка результата
+        Assertions.assertEquals(expectedPhoto, actualPhoto);
+        Mockito.verify(photoService).uploadPhoto(Mockito.eq(1L), Mockito.anyString(), Mockito.eq(file));
+        Mockito.verify(animalShelterService).savePhotoToDateBase(Mockito.eq(1L), Mockito.eq(path), Mockito.eq(file));
     }
 
     @Test

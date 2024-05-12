@@ -84,7 +84,6 @@ public class UserService {
      * @param role - роль
      * @return возвращает позьзователя с уже изменноной ролью
      * @throws VolunteerAlreadyAppointedException если уже есть волонтер в БД выбрасывает ошибку
-
      */
     public User changeRole(Long id, Role role) throws VolunteerAlreadyAppointedException {
         User foundUser = getById(id);
