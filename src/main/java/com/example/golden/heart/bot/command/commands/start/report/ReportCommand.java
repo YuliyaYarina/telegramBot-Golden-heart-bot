@@ -44,7 +44,7 @@ public class ReportCommand implements Command {
 
         Long chatId = getChatId(update);
 
-        if (!checkUserRoleAndPet(chatId)) {
+        if (checkUserRoleAndPet(chatId)) {
             message = "Извините у вас нет питомца. Или возникла кокая та ошибка.\n" +
                     "Если вы приобретали питомца, попробуйте связатся с волонтером";
             map.put("Позвать волонтера", "/volunteer");
@@ -139,7 +139,7 @@ public class ReportCommand implements Command {
 
     private Boolean checkUserRoleAndPet(Long chatId) {
         User user = userService.findByChatId(chatId);
-        return !user.getRole().equals(Role.VOLUNTEER) && user.getPet() != null;
+        return user.getRole().equals(Role.VOLUNTEER) && user.getPet() != null;
     }
 
 
