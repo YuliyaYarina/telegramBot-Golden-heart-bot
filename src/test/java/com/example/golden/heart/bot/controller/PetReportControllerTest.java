@@ -60,7 +60,7 @@ class PetReportControllerTest {
     public void testEditePetReport() {
 //        Given
         PetReport petReport = petReportService.savePetReport(PET_REPORT_1);
-        PetReport editePetReport = new PetReport(petReport.getId(), "EDITED", "Edited", "Edited");
+        PetReport editePetReport = new PetReport(petReport.getId(), "EDITED", "Edited", "Edited", true);
         HttpEntity<PetReport> requestEntity = new HttpEntity<>(editePetReport);
 
 //        When
@@ -116,7 +116,7 @@ class PetReportControllerTest {
 
     @Test
     public void testWhenPetReportNotFound() {
-        PetReport petReport = new PetReport(444L, "TEST", "TEST", "TEST");
+        PetReport petReport = new PetReport(444L, "TEST", "TEST", "TEST", true);
         HttpEntity<PetReport> requestEntity = new HttpEntity<>(petReport);
 //        When
         ResponseEntity<PetReport> editeResponse = testRestTemplate.exchange(
