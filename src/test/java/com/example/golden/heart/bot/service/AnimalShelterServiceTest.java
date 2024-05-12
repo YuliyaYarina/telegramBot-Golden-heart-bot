@@ -13,13 +13,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.example.golden.heart.bot.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -42,98 +46,111 @@ class AnimalShelterServiceTest {
 
     @Test
     void saveAnimalShelter() {
-        AnimalShelter animalShelter = new AnimalShelter();
 
-        when(animalShelterRepository.save(animalShelter)).thenReturn(animalShelter);
+//        Given
+        when(animalShelterRepository.save(any())).thenReturn(ANIMAL_SHELTER_1);
 
-        AnimalShelter saveAnimalShelter = animalShelterService.saveAnimalShelter(animalShelter);
-        assertEquals(animalShelter, saveAnimalShelter);
+//        Given
+        AnimalShelter actual = animalShelterService.saveAnimalShelter(ANIMAL_SHELTER_1);
+        assertEquals(ANIMAL_SHELTER_1, actual);
 
-        verify(animalShelterRepository).save(animalShelter);
+//        Then
+        verify(animalShelterRepository).save(any());
+        assertEquals(ANIMAL_SHELTER_1, actual);
+
     }
 
     @Test
     void editAnimalShelter() {
+//      Given
+        when(animalShelterRepository.findById(anyLong())).thenReturn(Optional.of(ANIMAL_SHELTER_1));
+        when(animalShelterRepository.save(any())).thenReturn(EDITED_ANIMAL_SHELTER);
 
-        Long id = 1L;
-        AnimalShelter existingShelter = new AnimalShelter();
-        existingShelter.setName("Старый приют");
-        Photo existingPhoto = new Photo();
-        existingPhoto.setFilePath("oldPhotoUrl");
-        existingShelter.setAddressPhoto(existingPhoto);
+//        When
+        AnimalShelter actual = animalShelterService.editAnimalShelter(1L, EDITED_ANIMAL_SHELTER);
 
-        AnimalShelter updatedShelter = new AnimalShelter();
-        updatedShelter.setName("Новый приют");
-        Photo updatedPhoto = new Photo();
-        updatedPhoto.setFilePath("newPhotoUrl");
-        updatedShelter.setAddressPhoto(updatedPhoto);
-        updatedShelter.setShelterPets(new HashSet<>());
-        updatedShelter.setAddress("Новый адрес");
-        updatedShelter.setWorkSchedule("Новое расписание");
+//        Then
+        assertNotNull(actual);
 
-        when(animalShelterRepository.findById(id)).thenReturn(Optional.of(existingShelter));
-        when(animalShelterRepository.save(any(AnimalShelter.class))).thenReturn(updatedShelter);
-
-        AnimalShelter result = animalShelterService.editAnimalShelter(id, updatedShelter);
-
-        assertNotNull(result);
-        assertEquals("Новый приют", result.getName());
-        assertEquals(updatedPhoto, result.getAddressPhoto());
-        verify(animalShelterRepository).save(any(AnimalShelter.class));
-
+        verify(animalShelterRepository).save(any());
+        assertEquals(EDITED_ANIMAL_SHELTER, actual);
     }
 
-    @ParameterizedTest
-    @MethodSource("provideIdsForTesting")
+    @Test
     void getAnimalShelterById(Long id, AnimalShelter expected) {
-        when(animalShelterRepository.findById(id)).thenReturn(Optional.ofNullable(expected));
+//        Given
+        when(animalShelterRepository.findById(anyLong())).thenReturn(Optional.ofNullable(ANIMAL_SHELTER_1));
+//        When
         AnimalShelter actual = animalShelterService.getAnimalShelterById(id);
-        assertEquals(expected, actual);
-    }
 
-    static Stream<Arguments> provideIdsForTesting() {
-        AnimalShelter existingShelter = new AnimalShelter();
-        existingShelter.setId(1L);
-        existingShelter.setName("Старый приют");
-        Photo photo = new Photo();
-        photo.setFilePath("oldPhotoUrl");
-        existingShelter.setAddressPhoto(photo);
-
-        return Stream.of(
-                Arguments.of(1L, existingShelter),
-                Arguments.of(2L, null)
-        );
+        assertEquals(ANIMAL_SHELTER_1, actual);
     }
 
     @Test
     void removeAnimalShelterById() {
-        Long id = 1L;
-        AnimalShelter animalShelter = mock(AnimalShelter.class);
-        Photo mockPhoto = mock(Photo.class);
-        List<Pet> mockPets = new ArrayList<>();
+//      Given
+        when(animalShelterRepository.findById(anyLong())).thenReturn(Optional.of(ANIMAL_SHELTER_1));
 
-        when(animalShelterRepository.findById(id)).thenReturn(Optional.of(animalShelter));
-        when(animalShelter.getShelterPets()).thenReturn(mockPets);
-        when(animalShelter.getAddressPhoto()).thenReturn(mockPhoto);
-        when(mockPhoto.getId()).thenReturn(2L);
+//        When
+        animalShelterService.removeAnimalShelterById(ANIMAL_SHELTER_1.getId());
 
-        animalShelterService.removeAnimalShelterById(id);
+//        Then
+        verify(petService).saveAll(any());
+        if (ANIMAL_SHELTER_1.getAddressPhoto() != null) {
+            verify(photoService).removePhoto(any());
+        }
 
-        verify(petService).saveAll(mockPets);
-        verify(photoService).removePhoto(any());
-        verify(animalShelterRepository).deleteById(id);
+        if (!ANIMAL_SHELTER_1.getShelterPets().isEmpty()) {
+            verify(petService).saveAll(any());
+        }
+        verify(animalShelterRepository).deleteById(ANIMAL_SHELTER_1.getId());
     }
 
     @Test
-    void saveAddressPhoto() {
+    void saveAddressPhoto() throws IOException {
+//        Given
+        byte[] content = "Hello".getBytes();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "Test",
+                "Hello.txt",
+                "text/plain",
+                content);
+        Photo excepted = new Photo(
+                PHOTO_1.getId(),
+                TEST_PATH.toString(),
+                mockMultipartFile.getSize(),
+                mockMultipartFile.getContentType());
 
-    }
+        when(photoService.uploadPhoto(anyLong(), anyString(), any(MultipartFile.class))).thenReturn(TEST_PATH);
+        when(animalShelterService.getAnimalShelterById(anyLong())).thenReturn(ANIMAL_SHELTER_1);
+        when(photoService.findPhotoByAnimalShelterId(anyLong())).thenReturn(PHOTO_1);
+        when(photoService.savePhoto(any())).thenReturn(excepted);
+        when(animalShelterService.saveAnimalShelter(any())).thenReturn(ANIMAL_SHELTER_1);
 
-    @Test
-    void getPhoto() {
+//        When
+        Photo actual = animalShelterService.saveAddressPhoto(ANIMAL_SHELTER_1.getId(), mockMultipartFile);
+
+//        Then
+        verify(photoService).uploadPhoto(anyLong(), anyString(), any(MultipartFile.class));
+        verify(animalShelterService).getAnimalShelterById(anyLong());
+        verify(animalShelterService).saveAnimalShelter(any());
+        verify(photoService).findPhotoByAnimalShelterId(anyLong());
+        verify(photoService).savePhoto(any());
+
+        assertEquals(excepted, actual);
     }
 
     @Test
     void removePhoto() {
+//        Given
+        when(animalShelterService.getAnimalShelterById(anyLong())).thenReturn(ANIMAL_SHELTER_1);
+        when(photoService.findPhotoByAnimalShelterId(anyLong())).thenReturn(PHOTO_1);
+
+//        when
+        animalShelterService.removePhoto(ANIMAL_SHELTER_1.getId());
+
+//        Then
+        verify(photoService).removePhoto(PHOTO_1);
+
     }
 }

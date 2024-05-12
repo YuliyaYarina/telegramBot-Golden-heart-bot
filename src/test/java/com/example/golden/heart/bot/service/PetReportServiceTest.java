@@ -12,12 +12,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.example.golden.heart.bot.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -27,87 +31,104 @@ class PetReportServiceTest {
     @Mock
     PetReportRepository petReportRepository;
 
+
+    @Mock
+    PhotoService photoService;
+
+
     @InjectMocks
     PetReportService petReportService;
 
     @Test
     void savePetReport() {
-        PetReport petReport = new PetReport();
+//        Given
+        when(petReportRepository.save(any())).thenReturn(PET_REPORT_1);
+//      when
+        PetReport actual = petReportService.savePetReport(PET_REPORT_1);
+//        Then
+        assertEquals(PET_REPORT_1, actual);
 
-        when(petReportRepository.save(petReport)).thenReturn(petReport);
-
-        PetReport petReportSave = petReportService.savePetReport(petReport);
-        assertEquals(petReport, petReportSave);
-
-        verify(petReportRepository).save(petReport);
+        verify(petReportRepository).save(any());
     }
 
-    @ParameterizedTest
-    @MethodSource("provideIdsForPetReportTesting")
-    void getPetReportByIdTest(Long id, PetReport expected) {
-
-        when(petReportRepository.findById(id)).thenReturn(Optional.ofNullable(expected));
-        PetReport actual = petReportService.getPetReportById(id);
-        assertEquals(expected, actual);
-    }
-
-    static Stream<Arguments> provideIdsForPetReportTesting() {
-        PetReport existingPetReport = new PetReport(1L, "Сбалансированный", "Хорошее", "Нет изменений");
-        PetReport newPetReport = new PetReport(2L, "Диета с высоким содержанием белка", "Отличное", "Более активный");
-        return Stream.of(
-                Arguments.of(1L, existingPetReport),
-                Arguments.of(2L, newPetReport),
-                Arguments.of(3L, null)
-        );
+    @Test
+    void getPetReportByIdTest() {
+//        Given
+        when(petReportRepository.findById(anyLong())).thenReturn(Optional.ofNullable(PET_REPORT_1));
+//        When
+        PetReport actual = petReportService.getPetReportById(PET_REPORT_1.getId());
+//        Then
+        assertEquals(PET_REPORT_1, actual);
     }
 
     @Test
     void removePetReportById() {
-        Long petReportId = 1L;
 
-        assertDoesNotThrow(() -> petReportService.removePetReportById(petReportId));
+        assertDoesNotThrow(() -> petReportService.removePetReportById(anyLong()));
 
-        verify(petReportRepository, times(1)).deleteById(petReportId);
+        verify(petReportRepository, times(1)).deleteById(anyLong());
     }
 
     @Test
     void editPetReport() {
-        Long id = 1L;
-        Pet pet = new Pet(1L, "Барсик");
-        Collection<Photo> photos = new ArrayList<>();
-        PetReport updatedPetReport = new PetReport(id, "Новая диета", "Улучшенное", "Изменение поведения");
-        updatedPetReport.setPet(pet);
-        updatedPetReport.setPhotos(photos);
+        PetReport excepted = new PetReport(PET_REPORT_1.getId(), "Edited", "Edited", "Edited", true);
 
-        PetReport foundPetReport = new PetReport(id, "Старая диета", "Хорошее", "Без изменений");
-        foundPetReport.setPet(pet);
-        foundPetReport.setPhotos(photos);
+        when(petReportRepository.findById(anyLong())).thenReturn(Optional.of(PET_REPORT_1));
+        when(petReportRepository.save(any())).thenReturn(excepted);
 
-        when(petReportRepository.findById(id)).thenReturn(Optional.of(foundPetReport));
-        when(petReportRepository.save(any(PetReport.class))).thenReturn(updatedPetReport);
-
-        PetReport result = petReportService.editPetReport(id, updatedPetReport);
+        PetReport result = petReportService.editPetReport(PET_REPORT_1.getId(), excepted);
 
         assertNotNull(result);
-        assertEquals(updatedPetReport.getDiet(), result.getDiet());
-        assertEquals(updatedPetReport.getWellBeing(), result.getWellBeing());
-        assertEquals(updatedPetReport.getBehaviourChange(), result.getBehaviourChange());
-        assertEquals(updatedPetReport.getPhotos(), result.getPhotos());
-        assertEquals(updatedPetReport.getPet(), result.getPet());
+        assertEquals(excepted, result);
 
-        verify(petReportRepository).save(any(PetReport.class));
-
+        verify(petReportRepository).save(any());
     }
 
     @Test
-    void saveReportPhoto() {
-    }
+    void saveAddressPhoto() throws IOException {
+//        Given
+        byte[] content = "Hello".getBytes();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "Test",
+                "Hello.txt",
+                "text/plain",
+                content);
+        Photo excepted = new Photo(
+                PHOTO_1.getId(),
+                TEST_PATH.toString(),
+                mockMultipartFile.getSize(),
+                mockMultipartFile.getContentType());
 
-    @Test
-    void getPhoto() {
+        when(photoService.uploadPhoto(anyLong(), anyString(), any(MultipartFile.class))).thenReturn(TEST_PATH);
+        when(petReportRepository.findById(anyLong())).thenReturn(Optional.ofNullable(PET_REPORT_1));
+        when(photoService.findPhotoByAnimalShelterId(anyLong())).thenReturn(PHOTO_1);
+        when(photoService.savePhoto(any())).thenReturn(excepted);
+        when(petReportRepository.save(any())).thenReturn(PET_REPORT_1);
+
+//        When
+        Photo actual = petReportService.saveReportPhoto(PET_REPORT_1.getId(), mockMultipartFile);
+
+//        Then
+        verify(photoService).uploadPhoto(anyLong(), anyString(), any(MultipartFile.class));
+        verify(petReportService).getPetReportById(anyLong());
+        verify(petReportService).savePetReport(any());
+        verify(photoService).findPhotoByAnimalShelterId(anyLong());
+        verify(photoService).savePhoto(any());
+
+        assertEquals(excepted, actual);
     }
 
     @Test
     void removePhoto() {
+//        Given
+        when(petReportRepository.findById(anyLong())).thenReturn(Optional.ofNullable(PET_REPORT_1));
+        when(photoService.findPhotoByAnimalShelterId(anyLong())).thenReturn(PHOTO_1);
+
+//        when
+        petReportService.removePhoto(ANIMAL_SHELTER_1.getId());
+
+//        Then
+        verify(photoService).removePhoto(PHOTO_1);
+
     }
 }

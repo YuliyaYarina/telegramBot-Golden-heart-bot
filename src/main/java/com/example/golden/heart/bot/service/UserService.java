@@ -58,6 +58,7 @@ public class UserService {
         return userRepository.findById(id)
                 .map(foundUser -> {
                     foundUser.setName(user.getName());
+                    foundUser.setUserName(user.getUserName());
                     foundUser.setChatId(user.getChatId());
                     foundUser.setPet(user.getPet());
                     foundUser.setRole(user.getRole());
@@ -175,7 +176,7 @@ public class UserService {
             throw new VolunteerAlreadyAppointedException();
         }
     }
-    List<User> findByProbationPeriod(Integer probationPeriod) {
+    public List<User> findByProbationPeriod(Integer probationPeriod) {
         return userRepository.findByProbationPeriod(probationPeriod);
     }
 }

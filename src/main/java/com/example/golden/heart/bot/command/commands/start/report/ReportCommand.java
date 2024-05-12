@@ -11,10 +11,8 @@ import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.model.Update;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 

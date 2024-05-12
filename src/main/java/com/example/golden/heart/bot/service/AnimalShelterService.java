@@ -59,10 +59,13 @@ public class AnimalShelterService {
     public void removeAnimalShelterById(Long id) {
         AnimalShelter animalShelter = getAnimalShelterById(id);
         List<Pet> pets = animalShelter.getShelterPets().stream().toList();
-        for (Pet pet : pets) {
-            pet.setAnimalShelter(null);
+
+        if (!pets.isEmpty()) {
+            for (Pet pet : pets) {
+                pet.setAnimalShelter(null);
+            }
+            petService.saveAll(pets);
         }
-        petService.saveAll(pets);
         if (animalShelter.getAddressPhoto() != null) {
             photoService.removePhoto(photoService.getPhoto(animalShelter.getAddressPhoto().getId()));
         }

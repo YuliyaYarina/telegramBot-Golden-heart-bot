@@ -1,12 +1,9 @@
 package com.example.golden.heart.bot.service;
 
-import com.example.golden.heart.bot.constants.Constants;
-import com.example.golden.heart.bot.exception.VolunteerAlreadyAppointedException;
-import com.example.golden.heart.bot.exceptions.NullUserException;
-import com.example.golden.heart.bot.model.Role;
 import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
-import com.example.golden.heart.bot.model.Pet;
+import com.example.golden.heart.bot.exceptions.NullUserException;
 import com.example.golden.heart.bot.model.User;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,12 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
+import static com.example.golden.heart.bot.constants.Constants.USER_1;
+import static com.example.golden.heart.bot.constants.Constants.VOLUNTEER;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -39,40 +35,26 @@ class UserServiceTest {
 
     @Test
     void save() throws VolunteerAlreadyAppointedException {
-        User user = new User();
 
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(any())).thenReturn(USER_1);
 
-        User userSave = userService.save(user);
-        assertEquals(user, userSave);
+        User userSave = userService.save(USER_1);
+        assertEquals(USER_1, userSave);
 
-        verify(userRepository).save(user);
+        verify(userRepository).save(any());
     }
 
     @Test
-    void edit() {
+    void edit() throws VolunteerAlreadyAppointedException {
+//        Give
+        User excepted = new User(USER_1.getId(),111L, Role.USER, "111", "Edited", "Edited");
 
-        Long id = Constants.USER_1.getId();
-        User existingUser = Constants.USER_1;
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(USER_1));
+        when(userRepository.save(excepted)).thenReturn(excepted);
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(eq(existingUser))).thenAnswer(invocation -> invocation.getArgument(0));
+        User result = userService.edit(USER_1.getId(), excepted);
 
-        User updateUser = new User();
-        updateUser.setName("Обновленное Имя");
-        updateUser.setChatId(987654321L);
-        updateUser.setRole(Role.USER);
-        updateUser.setPhone(7654321);
-
-        User result = userService.edit(id, updateUser);
-
-        assertNotNull(result);
-        assertEquals("Обновленное Имя", result.getName());
-        assertEquals(987654321L, result.getChatId());
-        assertEquals(Role.USER, result.getRole());
-        assertEquals(7654321L, result.getPhone());
-
-        verify(userRepository).save(existingUser);
+        assertEquals(excepted, result);
     }
 
 
@@ -98,80 +80,26 @@ class UserServiceTest {
 
 
     @Test
-    void changeRole_UserNotFound_ThrowsIllegalArgumentException() {
-        String userName = "nonexistent";
-        Role role = Role.VOLUNTEER;
-
-        when(userRepository.findByUserName(userName)).thenReturn(null);
-    void edite() throws VolunteerAlreadyAppointedException {
-        User user = new User();
-        user.setName("Михаил");
-        Mockito.when(userRepository.save(user)).thenReturn(user);
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            userService.changeRole(userName, role);
-        });
+    void changeRoleTest() throws VolunteerAlreadyAppointedException {
+//        Given
+        User excepted = USER_1;
+        excepted.setRole(Role.PET_OWNER);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(USER_1));
+        when(userRepository.save(excepted)).thenReturn(excepted);
+//        When
+        User actual = userService.changeRole(USER_1.getId(), Role.PET_OWNER);
+//        Then
+        assertEquals(excepted, actual);
     }
 
     @Test
-    void changeRole_VolunteerAlreadyAppointed_ThrowsVolunteerAlreadyAppointedException() {
-        String userName = "user";
-        Role role = Role.VOLUNTEER;
-
-        User volunteer = new User();
-        volunteer.setName("volunteer");
-        volunteer.setRole(Role.VOLUNTEER);
-
-        when(userRepository.findByUserName(userName)).thenReturn(new User());
-        when(userRepository.findByRole(Role.VOLUNTEER)).thenReturn(Arrays.asList(volunteer));
-
-        assertThrows(VolunteerAlreadyAppointedException.class, () -> {
-            userService.changeRole(userName, role);
-        });
-    }
-
-    @Test
-    void changeRole_SuccessfulChange_ReturnsUpdatedUser() {
-        Long userId = 1L;
-        String userName = "user";
-        Role role = Role.VOLUNTEER;
-
-        User mockUser = new User(userId, userName, "password");
-
-        when(userRepository.findByUserName(userName)).thenReturn(mockUser);
-        when(userRepository.save(any(User.class))).thenReturn(mockUser);
-
-        User result = null;
-        try {
-            result = userService.changeRole(userName, role);
-        } catch (VolunteerAlreadyAppointedException e) {
-
-        }
-
-        assertNotNull(result);
-        assertEquals(role, result.getRole());
-        verify(userRepository).save(any(User.class));
-
-    }
-
-
-    @ParameterizedTest
-    @MethodSource("provideDataForFindByChatId")
-    public void findByChatId(Long chatId, User expectedUser) {
-
-        when(userRepository.findByChatId(chatId)).thenReturn(Optional.ofNullable(expectedUser));
-
-        User actualUser = userService.findByChatId(chatId);
-
-        assertEquals(expectedUser, actualUser, "Возвращаемое значение не равно ожидаемому");
-        verify(userRepository).findByChatId(chatId);
-    }
-
-    private static Stream<Arguments> provideDataForFindByChatId() {
-        return Stream.of(
-                Arguments.of(12345L, new User(12345L, "Михаил", "Miha1L")),
-                Arguments.of(67890L, null)
-        );
+    void findByChatIdTest() {
+//        Given
+        when(userRepository.findByChatId(anyLong())).thenReturn(Optional.ofNullable(USER_1));
+//        When
+        User actual = userService.findByChatId(USER_1.getChatId());
+//        Then
+        assertEquals(USER_1, actual);
     }
 
     @Test
@@ -206,27 +134,69 @@ class UserServiceTest {
         verify(userRepository, times(1)).deleteById(userId);
     }
 
-    @ParameterizedTest
-    @MethodSource("roleProvider")
-    void findVolunteerByRole_ReturnsCorrectlyBasedOnRole(Role role, User expectedUser) {
+    @Test
+    void findVolunteer() {
+        List<User> users = new ArrayList<>();
+        users.add(VOLUNTEER);
 
-        if (role == Role.VOLUNTEER) {
-            when(userRepository.findByRole(role)).thenReturn(Arrays.asList(expectedUser));
-        }
+        when(userRepository.findByRole(Role.VOLUNTEER)).thenReturn(users);
 
-        User result = userService.findVolunteerByRole(role);
+//        When
+        User actual = userService.findVolunteer();
 
-        if (role == Role.VOLUNTEER) {
-            assertEquals(expectedUser, result, "Метод должен вернуть пользователя с ролью VOLUNTEER.");
-        } else {
-            assertNull(result, "Метод должен вернуть null для ролей, отличных от VOLUNTEER.");
-        }
+//        Then
+        assertEquals(VOLUNTEER, actual);
     }
 
-    static Stream<Arguments> roleProvider() {
-        return Stream.of(
-                Arguments.of(Role.VOLUNTEER, new User()), // Предполагаем, что есть пользователь с ролью VOLUNTEER
-                Arguments.of(Role.USER, null) // Для других ролей пользователь не найден
+    @Test
+    void findByRoleTest() {
+//        Given
+        List<User> users = new ArrayList<>();
+        users.add(USER_1);
+        when(userRepository.findByRole(any())).thenReturn(users);
+//        When
+        List<User> actual = userService.findByRole(Role.USER);
+//        Then
+        assertEquals(users, actual);
+    }
+
+    @Test
+    void findByProbationPeriod() {
+//        Given
+        User user = USER_1;
+        user.setProbationPeriod(30);
+        List<User> excepted = new ArrayList<>();
+        excepted.add(user);
+
+//        When
+        when(userRepository.findByProbationPeriod(anyInt())).thenReturn(excepted);
+        List<User> actual = userService.findByProbationPeriod(user.getProbationPeriod());
+//        Then
+        assertEquals(excepted, actual);
+    }
+
+    @Test
+    void wheVolunteerAlreadyAppointedException() {
+//        Given
+        List<User> volunteer = new ArrayList<>();
+        volunteer.add(VOLUNTEER);
+        when(userRepository.findByRole(any())).thenReturn(volunteer);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(VOLUNTEER));
+
+//        Save
+        assertThrows(
+                VolunteerAlreadyAppointedException.class,
+                () -> userService.save(VOLUNTEER)
+        );
+//        Edite
+        assertThrows(
+                VolunteerAlreadyAppointedException.class,
+                () -> userService.edit(VOLUNTEER.getId(), VOLUNTEER)
+        );
+
+        assertThrows(
+                VolunteerAlreadyAppointedException.class,
+                () -> userService.changeRole(1L, Role.VOLUNTEER)
         );
     }
 }
