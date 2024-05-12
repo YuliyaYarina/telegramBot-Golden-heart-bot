@@ -93,3 +93,7 @@ ALTER TABLE bot_user
 -- changeset vgulenkov:4
 ALTER TABLE bot_user
 ADD COLUMN probation_period INT;
+
+-- changeset Yuliya:2
+ALTER TABLE pet_report
+ADD COLUMN is_viewed BOOLEAN NOT NULL;
