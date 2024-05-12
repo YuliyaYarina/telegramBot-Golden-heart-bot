@@ -13,10 +13,21 @@ public class DogBehavioristService {
     @Autowired
     private DogBehavioristRepository dogBehavioristRepo;
 
+    /**
+     * Сохраняет в БД киногола
+     * @param dogBehaviorist
+     * @return возвращает сохранненого кинолога
+     */
     public DogBehaviorist save(DogBehaviorist dogBehaviorist) {
         return dogBehavioristRepo.save(dogBehaviorist);
     }
 
+    /**
+     * Редактирует информацию о кинологе
+     * @param id
+     * @param dogBehaviorist
+     * @return возвращает изменненую информацию кинолога
+     */
     public DogBehaviorist edite(Long id, DogBehaviorist dogBehaviorist) {
         return dogBehavioristRepo.findById(id)
                 .map(fundDogBehaviorist -> {
@@ -26,9 +37,15 @@ public class DogBehavioristService {
                 }).orElse(null);
     }
 
+    /**
+     * Находит в БД кинолога
+     * @param id
+     * @return возвращает найденного кинолога, или NULL
+     */
     public DogBehaviorist getById(Long id) {
         return dogBehavioristRepo.findById(id).orElse(null);
     }
+
 
     public boolean remove(Long id) {
         dogBehavioristRepo.deleteById(id);

@@ -8,7 +8,7 @@ import com.pengrad.telegrambot.model.Update;
  */
 public interface Command {
     /**
-     * Метод для основной логики команды
+     * Обработка отправленных сообщений, и отправление ответа
      */
     void execute(Update update);
 

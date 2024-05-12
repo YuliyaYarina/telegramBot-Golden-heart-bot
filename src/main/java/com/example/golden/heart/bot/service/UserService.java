@@ -51,6 +51,13 @@ public class UserService {
     private final Pattern INCOMING_MESSAGE_PATTERN_PHONE_WITH_DASH = Pattern.compile("\\+\\d{1}-\\d{3}-\\d{3}-\\d{2}-\\d{2}");
     private final String PHONE_ADDED = "Ваш номер успешно принят. Спасибо)";
 
+    /**
+     * Редактирует информацию о пользователе
+     * @param id - id пользователя
+     * @param user - изменение состояния чата
+     * @return пользователя с изменнеными данными
+     * @throws VolunteerAlreadyAppointedException
+     */
     public User edit(Long id, User user) throws VolunteerAlreadyAppointedException {
         if (user.getRole() == Role.VOLUNTEER){
         checkVolunteer();
@@ -71,6 +78,14 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Меняет роль пользователя
+     * @param id - id пользователя
+     * @param role - роль
+     * @return возвращает позьзователя с уже изменноной ролью
+     * @throws VolunteerAlreadyAppointedException если уже есть волонтер в БД выбрасывает ошибку
+
+     */
     public User changeRole(Long id, Role role) throws VolunteerAlreadyAppointedException {
         User foundUser = getById(id);
         if (foundUser == null) {
@@ -83,6 +98,12 @@ public class UserService {
         return userRepository.save(foundUser);
     }
 
+    /**
+     * изменение роли и привязка животногго
+     * @param userId - id пользователя
+     * @param petId - id питомца
+     * @return пользователь к которому привязали питомеца
+     */
     public User setPet(Long userId, Long petId) {
         User user = getById(userId);
         Pet pet = petService.getPetById(petId);
@@ -104,6 +125,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Поиск пользователя
+     * @param chatId - id чата
+     * @return пользоваткля
+     */
     public User findByChatId(Long chatId) {
         return userRepository.findByChatId(chatId).orElse(null);
     }
@@ -124,10 +150,18 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * Удаляет пользователя из БД
+     * @param id - id пользователя
+     */
     public void removeById(Long id) {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Добавляет номер в БД
+     * @param update - изменение состояния чата
+     */
     public void addedPhone(Update update) {
 
         Pattern patternsSpace = INCOMING_MESSAGE_PATTERN_PHONE_WITH_SPACE ;
@@ -150,6 +184,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Сохранение номера в БД
+     * @param update - изменение состояния чата
+     * @param phoneNumber - номер телефона
+     */
     private void savePhone(Update update, String phoneNumber){
         Long chatId = update.message().chat().id();
         User user = userRepository.findByChatId(chatId)
@@ -160,6 +199,10 @@ public class UserService {
         telegramBotSender.send(chatId, PHONE_ADDED);
     }
 
+    /**
+     * Поиск волонтера в БД
+     * @return нойденный волонтер, или NULL
+     */
     public User findVolunteer() {
         List<User> volunteers = userRepository.findByRole(Role.VOLUNTEER);
         if (!volunteers.isEmpty()) {
@@ -167,10 +210,20 @@ public class UserService {
         }
             return null;
     }
+
+    /**
+     * Ищет пользователя в БД по роли
+     * @param role - роль
+     * @return пользователя в БД по роли
+     */
     public List<User> findByRole(Role role){
         return userRepository.findByRole(role);
     }
 
+    /**
+     * Проверяет есть ли в БД воллонтер
+     * @throws VolunteerAlreadyAppointedException если есть пользователь в БД выбрасывает ошибку
+     */
     private void checkVolunteer() throws VolunteerAlreadyAppointedException {
         if (findVolunteer() != null) {
             throw new VolunteerAlreadyAppointedException();

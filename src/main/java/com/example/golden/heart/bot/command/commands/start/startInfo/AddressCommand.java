@@ -30,9 +30,6 @@ public class AddressCommand implements Command {
         this.telegramBotSender = telegramBotSender;
     }
 
-    /**
-     * доработать метод, добавить информацию из БД
-     */
     @Override
     public void execute(Update update) {
         AnimalShelter animalShelter = animalShelterService.getAnimalShelterById(1L);
@@ -51,6 +48,9 @@ public class AddressCommand implements Command {
         buttons.put("назад", START_INFO.getCommand());
     }
 
+    /**
+     *Отправляет фото проезда к приюту
+     */
     private boolean sendPhoto(Update update, AnimalShelter animalShelter) {
         Photo foundPhoto = photoService.findPhotoByAnimalShelterId(animalShelter.getId());
 

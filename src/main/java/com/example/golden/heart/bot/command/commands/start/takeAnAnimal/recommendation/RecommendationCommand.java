@@ -40,6 +40,11 @@ public class RecommendationCommand implements Command {
 
         telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
+
+    /**
+     *Проверяет выбранный тип животного, если Dog,
+     * отправляет 2 доб кнопки
+     */
     private String getChosenPetType(Update update) {
         User user = userService.findByChatId(getChatId(update));
         return user.getChosenPetType();
