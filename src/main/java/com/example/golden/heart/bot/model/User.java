@@ -28,6 +28,7 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "pet_id")
+    @JsonIgnore
     private Pet pet;
 
     private Integer probationPeriod;

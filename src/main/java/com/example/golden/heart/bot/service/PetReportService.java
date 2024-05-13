@@ -158,4 +158,8 @@ public class PetReportService {
     public List<PetReport> findAllByPetId(Long petId) {
         return petReportRepo.findAllByPetId(petId);
     }
+
+    public void removeAllByPetId(Long petId) {
+        petReportRepo.
+    }
 }

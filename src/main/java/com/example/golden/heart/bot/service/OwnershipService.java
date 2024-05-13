@@ -1,7 +1,9 @@
 package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.exceptions.NullUserException;
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
+import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Increase;
 import com.example.golden.heart.bot.model.enums.Role;
@@ -18,6 +20,8 @@ public class OwnershipService {
     private UserService userService;
     @Autowired
     private PetService petService;
+    @Autowired
+    PetReportService petReportService;
     @Autowired
     TelegramBotSender telegramBotSender;
 
@@ -37,7 +41,7 @@ public class OwnershipService {
      * @param petId id животного
      * @param increase кол-во доп. дней
      */
-    public void increaseProbationPeriod(Long petId, Increase increase) {
+    public void increaseProbationPeriod(Long petId, Increase increase) throws VolunteerAlreadyAppointedException {
         Pet pet = petService.getPetById(petId);
         checkPet(pet);
         User owner = pet.getOwner();
@@ -54,6 +58,7 @@ public class OwnershipService {
                 owner.setProbationPeriod(probationPeriod + 30);
                 break;
         }
+        userService.edit(owner.getId(), owner);
         telegramBotSender.send(owner.getChatId(), "Ваш испытательный срок продлен на " + increase.getTitle());
     }
 
@@ -78,12 +83,18 @@ public class OwnershipService {
      * Отправляет сообщение пользователю уведомляя его об этом.
      * @param petId id животного
      */
-    public void confirmOwnership(Long petId) {
+    public void confirmOwnership(Long petId) throws VolunteerAlreadyAppointedException {
         Pet pet = petService.getPetById(petId);
         checkPet(pet);
         User owner = pet.getOwner();
         checkOwner(owner);
+
+        owner.setPet(null);
+        owner.setRole(Role.USER);
         owner.setProbationPeriod(null);
+        userService.save(owner);
+
+        List<PetReport> reports = petReportService.findAllByPetId(petId);
         petService.removePetById(petId);
         telegramBotSender.send(owner.getChatId(), "Поздравляем! Вы прошли испытательный срок и теперь является полноценным владельцем питомца");
     }
