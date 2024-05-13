@@ -61,7 +61,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             if (update.message() != null && update.message().photo() == null) {
                 if (update.message().text().startsWith(commandPrefix)) {
                     commandContainer.findCommand(update.message().text().toLowerCase()).execute(update);
-                } else if (!reportStateStorage.getReportStateMap().isEmpty() &&
+                } else if (!update.message().text().startsWith(commandPrefix) &&
+                        !reportStateStorage.getReportStateMap().isEmpty() &&
                         reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
                     commandContainer.findCommand(REPORT.getCommand()).execute(update);
                 } else if (update.message() != null && update.message().text().startsWith(startsPhone)) {
