@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
+import static com.example.golden.heart.bot.command.enums.CommandName.REPORT;
 
 public class ReportCommand implements Command {
 
@@ -49,37 +50,48 @@ public class ReportCommand implements Command {
     @Override
     public void execute(Update update) {
 
-        Map<String,String> map = new LinkedHashMap<>();
+
 
         Long chatId = getChatId(update);
 
+
+
         if (!checkUserRoleAndPet(chatId)) {
+            Map<String,String> map = new LinkedHashMap<>();
             message = "Извините у вас нет питомца. Или возникла кокая та ошибка.\n" +
                     "Если вы приобретали питомца, попробуйте связатся с волонтером";
             map.put("Позвать волонтера", "/volunteer");
+            telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
+        } if (checkUserRoleAndPet(chatId)) {
+            checkUpdateWhenCallbackQuery(update, chatId);
+            if (update.message() != null) {
+                ReportState state = reportStateStorage.getValue(chatId);
+
+                if (state == null) {
+                    reportStateStorage.setValue(chatId, ReportState.START);
+                    state = reportStateStorage.getValue(chatId);
+                }
+
+                switch (state) {
+                    case START -> startReport(chatId);
+                    case DIET -> dietReport(chatId, update);
+                    case PHOTO -> photoReport(chatId, update);
+                    case BEHAVIOR -> behaviorReport(chatId, update);
+                    case WELL_BEING -> wellBeingReport(chatId, update);
+                }
+            }
+            telegramBotSender.send(getChatId(update), message);
         }
 
-        if (checkUserRoleAndPet(chatId)) {
-            ReportState state = reportStateStorage.getValue(chatId);
+    }
 
-            if (state == null) {
-                reportStateStorage.setValue(chatId, ReportState.START);
-                state = reportStateStorage.getValue(chatId);
-            }
-
-            switch (state) {
-                case START -> startReport(chatId);
-                case DIET -> dietReport(chatId, update);
-                case PHOTO -> photoReport(chatId, update);
-                case BEHAVIOR -> behaviorReport(chatId, update);
-                case WELL_BEING -> wellBeingReport(chatId, update);
-            }
-
+    private void checkUpdateWhenCallbackQuery(Update update, Long chatId) {
+        if (update.message() == null &&
+                update.callbackQuery() != null &&
+                update.callbackQuery().data().equals(REPORT.getCommand())
+        ) {
+            startReport(chatId);
         }
-
-
-
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 
     private void startReport(Long chatId) {
@@ -116,7 +128,7 @@ public class ReportCommand implements Command {
         message =
                 """
                         Я принял изменение привычек
-                        А теперь расскажите о Общее самочувствие и привыкание к новому месту
+                        А теперь расскажите об общем самочувствии и привыкание к новому месту
                         """;
 
         PetReport petReport = findReport(chatId);
@@ -180,7 +192,7 @@ public class ReportCommand implements Command {
 
     private Boolean checkUserRoleAndPet(Long chatId) {
         User user = userService.findByChatId(chatId);
-        return user.getRole().equals(Role.VOLUNTEER) && user.getPet() != null;
+        return user.getRole().equals(Role.PET_OWNER) && user.getPet() != null;
     }
 
 
