@@ -103,3 +103,7 @@ ALTER TABLE pet_report
 DROP COLUMN IF EXISTS is_viewed;
 ALTER TABLE pet_report
 ADD COLUMN IF NOT EXISTS is_viewed BOOLEAN NOT NULL;
+
+-- changeset karybekov2:2
+ALTER TABLE pet
+DROP COLUMN IF EXISTS photo_id;

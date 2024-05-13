@@ -2,6 +2,7 @@ package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
+import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Role;
@@ -30,9 +31,8 @@ public class PetService {
 
     @Autowired
     PhotoService photoService;
-
     @Autowired
-    UserService userService;
+    PetReportService reportService;
 
     Logger logger = LoggerFactory.getLogger(PhotoService.class);
 
@@ -55,7 +55,6 @@ public class PetService {
         return petRepository.findById(id)
                 .map(foundPet -> {
                     foundPet.setNick(pet.getNick());
-                    foundPet.setPhoto(pet.getPhoto());
                     foundPet.setAnimalShelter(pet.getAnimalShelter());
                     foundPet.setOwner(pet.getOwner());
                     return petRepository.save(foundPet);
@@ -75,12 +74,14 @@ public class PetService {
      * Удаляет питомца в БД по id
      * @param id - id питомца
      */
-    public void removePetById(Long id) throws VolunteerAlreadyAppointedException {
-        Pet pet = getPetById(id);
-        User user = pet.getOwner();
-        user.setRole(Role.USER);
-        user.setPet(null);
-        userService.save(user);
+    public void removePetById(Long id) {
+        Photo photo = photoService.findPhotoByPetId(id);
+//        Проверка сушестваыния фото
+        if (photo.getFilePath() != null) {
+            photoService.removePhoto(photo);
+        }
+
+        reportService.removeAllByPetId(id);
         petRepository.deleteById(id);
     }
 
@@ -124,7 +125,6 @@ public class PetService {
         Pet pet = getPetById(petId);
         Photo photo = photoService.findPhotoByPetId(petId);
 
-        pet.setPhoto(null);
         savePet(pet);
 
         photoService.removePhoto(photo);
@@ -149,7 +149,6 @@ public class PetService {
         photo.setFileSize(file.getSize());
         photo.setMediaType(file.getContentType());
 
-        pet.setPhoto(photo);
 
         photoService.savePhoto(photo);
         savePet(pet);
