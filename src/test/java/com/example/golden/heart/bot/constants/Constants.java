@@ -25,6 +25,8 @@ public class Constants {
 
     public static Photo PHOTO_1 = new Photo(0L, "Test", 111, "Test");
 
+    public static DogBehaviorist DOG_BEHAVIORIST_1 = new DogBehaviorist(0L, "Test", 111);
+
     public static Path TEST_PATH = Path.of("TEST/PATH.jpg");
 
 
