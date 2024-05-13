@@ -27,36 +27,33 @@ public class UserController {
             summary = "Создать пользователя"
     )
     @PostMapping
-    public ResponseEntity<String> saveUser(@RequestBody User user) {
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
         try {
             user = userService.save(user);
         } catch (VolunteerAlreadyAppointedException e) {
             logger.error("Exception: ", e);
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(user.toString());
+        return ResponseEntity.ok(user);
     }
 
     @Operation(
             summary = "Изменить данные пользователя"
     )
     @PutMapping("/{id}")
-    public ResponseEntity<String> editUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user) {
         User foundUser;
         try {
             foundUser = userService.edit(id, user);
 
         } catch (VolunteerAlreadyAppointedException e) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(e.getMessage());
+            logger.error("Exception: ", e);
+            return ResponseEntity.badRequest().build();
         }
         if (foundUser == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(foundUser.toString());
+        return ResponseEntity.ok(foundUser);
     }
 
     @Operation(
@@ -126,7 +123,7 @@ public class UserController {
     @Operation(
             summary = "Получить список пользователей по роли"
     )
-    @GetMapping
+    @GetMapping("find-by-role")
         public ResponseEntity<List<User>> findByRole (@RequestParam Role role){
             List<User> users = userService.findByRole(role);
             if (users.isEmpty()) {
