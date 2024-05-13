@@ -3,13 +3,19 @@ package com.example.golden.heart.bot.command.commands.start.report;
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.command.enums.ReportState;
 import com.example.golden.heart.bot.model.PetReport;
+import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.service.PetReportService;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.GetFile;
+import com.pengrad.telegrambot.response.GetFileResponse;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -21,6 +27,12 @@ import static com.example.golden.heart.bot.command.commands.CommandUtils.getChat
 public class ReportCommand implements Command {
 
     String message;
+    private TelegramBot telegramBot;
+
+    public ReportCommand(TelegramBot telegramBot) {
+        this.telegramBot = telegramBot;
+    }
+
     private TelegramBotSender telegramBotSender;
 
     private PetReportService petReportService;
@@ -127,12 +139,31 @@ public class ReportCommand implements Command {
         reportStateStorage.replaceValue(chatId, ReportState.PHOTO);
     }
 
-    private void photoReport(Long chatID, Update update) {
+    private Photo photoReport(Long chatID, Update update) {
         message =
                 """
                         Я принял ваш отчет. Хорошого дня.\s
                         Если будут проблемы с отчетом то наш волонтер свяжется с вами
                         """;
+
+        if (update.message().photo() != null) {
+            String fileId = update.message().photo()[2].fileId();
+            Long fileSize = update.message().photo()[2].fileSize();
+            GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
+            File file = getFileResponse.file();
+            String fileUrl = telegramBot.getFullFilePath(file);
+            byte[] pic;
+            try {
+                pic = telegramBot.getFileContent(getFileResponse.file());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Photo photo = new Photo();
+            photo.setData(pic);
+            photo.setFileSize(fileSize);
+            photo.setFilePath(fileUrl);
+            return photo;
+        }
 
         reportStateStorage.remove(chatID);
     }
