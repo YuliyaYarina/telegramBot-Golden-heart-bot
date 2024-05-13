@@ -1,7 +1,10 @@
 package com.example.golden.heart.bot.service;
 
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.Photo;
+import com.example.golden.heart.bot.model.User;
+import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.repository.PetRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -27,6 +30,9 @@ public class PetService {
 
     @Autowired
     PhotoService photoService;
+
+    @Autowired
+    UserService userService;
 
     Logger logger = LoggerFactory.getLogger(PhotoService.class);
 
@@ -69,7 +75,12 @@ public class PetService {
      * Удаляет питомца в БД по id
      * @param id - id питомца
      */
-    public void removePetById(Long id) {
+    public void removePetById(Long id) throws VolunteerAlreadyAppointedException {
+        Pet pet = getPetById(id);
+        User user = pet.getOwner();
+        user.setRole(Role.USER);
+        user.setPet(null);
+        userService.save(user);
         petRepository.deleteById(id);
     }
 

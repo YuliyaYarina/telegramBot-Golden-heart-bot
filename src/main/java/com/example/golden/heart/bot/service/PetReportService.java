@@ -160,6 +160,6 @@ public class PetReportService {
     }
 
     public void removeAllByPetId(Long petId) {
-        petReportRepo.
+        petReportRepo.deleteAllByPetId(petId);
     }
 }

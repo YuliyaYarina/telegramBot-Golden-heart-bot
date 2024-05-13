@@ -89,12 +89,8 @@ public class OwnershipService {
         User owner = pet.getOwner();
         checkOwner(owner);
 
-        owner.setPet(null);
-        owner.setRole(Role.USER);
         owner.setProbationPeriod(null);
         userService.save(owner);
-
-        List<PetReport> reports = petReportService.findAllByPetId(petId);
         petService.removePetById(petId);
         telegramBotSender.send(owner.getChatId(), "Поздравляем! Вы прошли испытательный срок и теперь является полноценным владельцем питомца");
     }
