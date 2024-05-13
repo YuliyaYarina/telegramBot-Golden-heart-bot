@@ -119,17 +119,4 @@ class PetServiceTest {
         verify(petRepository).saveAll(pets);
 
     }
-    @Test
-    void savePetPhoto() throws IOException {
-
-   }
-   @Test
-   void getPhoto() throws IOException {
-
-   }
-
-   @Test
-   void removePhoto() {
-
-    }
 }
