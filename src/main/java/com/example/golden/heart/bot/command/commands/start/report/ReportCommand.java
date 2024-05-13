@@ -139,6 +139,13 @@ public class ReportCommand implements Command {
         reportStateStorage.replaceValue(chatId, ReportState.PHOTO);
     }
 
+    /**
+     * Метод обрабатывает изображение, отправленное в чат Бота и создает объект класса Photo с его параметрами
+     * @param chatID
+     * @param update
+
+     * @return Photo
+     */
     private Photo photoReport(Long chatID, Update update) {
         message =
                 """
