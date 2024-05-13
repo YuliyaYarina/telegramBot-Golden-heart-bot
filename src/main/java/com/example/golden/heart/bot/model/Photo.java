@@ -11,10 +11,12 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long chatId;
 
     private String filePath;
     private long fileSize;
     private String mediaType;
+    private byte[] data;
 
     @OneToOne
     @JoinColumn(name = "animal_shelter_id")

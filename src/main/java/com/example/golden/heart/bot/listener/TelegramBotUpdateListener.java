@@ -4,6 +4,7 @@ import com.example.golden.heart.bot.command.CommandContainer;
 import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
 import com.example.golden.heart.bot.command.commands.start.report.ReportStateStorage;
 import com.example.golden.heart.bot.command.enums.ReportState;
+import com.example.golden.heart.bot.service.PetReportService;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -31,6 +32,11 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     private CommandContainer commandContainer;
 
     private UserService userService;
+    private PetReportService petReportService;
+
+    public TelegramBotUpdateListener(PetReportService petReportService) {
+        this.petReportService = petReportService;
+    }
 
     @Autowired
     public TelegramBotUpdateListener(TelegramBot telegramBot, ReportStateStorage reportStateStorage, CommandContainer commandContainer, UserService userService) {
@@ -52,21 +58,23 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-            if (update.message() != null) {
+            if (update.message() != null && update.message().photo() == null) {
                 if (update.message().text().startsWith(commandPrefix)) {
                     commandContainer.findCommand(update.message().text().toLowerCase()).execute(update);
                 } else if (!reportStateStorage.getReportStateMap().isEmpty() &&
                         reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
                     commandContainer.findCommand(REPORT.getCommand()).execute(update);
+                } else if (update.message() != null && update.message().text().startsWith(startsPhone)) {
+                    logger.info("Сообщение отправлено: " + update.message().text());
+                    userService.addedPhone(update);
                 }
-            } else {
-                if (update.callbackQuery() != null) {
-                    commandContainer.findCommand(update.callbackQuery().data()).execute(update);
+            } else if (update.callbackQuery() != null){
+                commandContainer.findCommand(update.callbackQuery().data()).execute(update);
+            } else if (update.message().photo() != null) {
+                if (!reportStateStorage.getReportStateMap().isEmpty() &&
+                        reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
+                    commandContainer.findCommand(REPORT.getCommand()).execute(update);
                 }
-            }
-            if (update.message() != null && update.message().text().startsWith(startsPhone)) {
-                logger.info("Сообщение отправлено: " + update.message().text());
-                userService.addedPhone(update);
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
