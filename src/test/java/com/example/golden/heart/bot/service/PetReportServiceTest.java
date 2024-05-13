@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -71,7 +72,7 @@ class PetReportServiceTest {
 
     @Test
     void editPetReport() {
-        PetReport excepted = new PetReport(PET_REPORT_1.getId(), "Edited", "Edited", "Edited", true);
+        PetReport excepted = new PetReport(PET_REPORT_1.getId(), "Edited", "Edited", "Edited", true, LocalDate.now());
 
         when(petReportRepository.findById(anyLong())).thenReturn(Optional.of(PET_REPORT_1));
         when(petReportRepository.save(any())).thenReturn(excepted);
