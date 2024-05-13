@@ -25,10 +25,6 @@ public class Pet {
     @JsonIgnore
     private User owner;
 
-    @OneToOne
-    @JoinColumn(name = "photo_id")
-    @JsonIgnore
-    private Photo photo;
 
     public Pet() {
     }
