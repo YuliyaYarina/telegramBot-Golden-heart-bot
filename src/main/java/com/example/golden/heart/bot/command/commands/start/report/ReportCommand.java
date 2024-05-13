@@ -154,6 +154,7 @@ public class ReportCommand implements Command {
                         """;
 
         if (update.message().photo() != null) {
+            Long chatId = update.message().chat().id();
             String fileId = update.message().photo()[2].fileId();
             Long fileSize = update.message().photo()[2].fileSize();
             GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
@@ -166,6 +167,7 @@ public class ReportCommand implements Command {
                 throw new RuntimeException(e);
             }
             Photo photo = new Photo();
+            photo.setChatId(chatId);
             photo.setData(pic);
             photo.setFileSize(fileSize);
             photo.setFilePath(fileUrl);
