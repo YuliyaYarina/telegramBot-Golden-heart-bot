@@ -8,6 +8,7 @@ import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +39,38 @@ public class PetReportService {
 
     Logger logger = LoggerFactory.getLogger(PetReportService.class);
 
+    /**
+     * Сохраняет отчет в БД
+     * @param petReport - отчет
+     * @return сохраненный отчет
+     */
     public PetReport savePetReport(PetReport petReport) {
         return petReportRepo.save(petReport);
     }
+
+    /**
+     * Находит отчет в БД по id
+     * @param id- id отчета
+     * @return найденный отчет
+     */
     public PetReport getPetReportById(Long id) {
         return petReportRepo.findById(id).orElse(null);
     }
 
+    /**
+     * Удаляет отчет по id
+     * @param id - id отчета
+     */
     public void removePetReportById(Long id) {
         petReportRepo.deleteById(id);
     }
 
+    /**
+     * Редактирует отчет
+     * @param id - id отчета
+     * @param petReport - изменненый отчет
+     * @return измененный отчет
+     */
     public PetReport editPetReport(Long id, PetReport petReport) {
         return petReportRepo.findById(id)
                 .map(foundReport -> {
@@ -79,6 +101,12 @@ public class PetReportService {
         return savePhotoToDateBase(reportId, filePath, null, file);
     }
 
+    /**
+     * Ищет фото в БД
+     * @param petReportId - id отчета
+     * @param response - тело запроса
+     * @throws IOException может выдать ошибку
+     */
     public void getPhoto(Long petReportId, HttpServletResponse response) throws IOException {
         Photo photo = photoService.findPhotoByReportId(petReportId);
         photoService.getPhoto(photo, response);
@@ -135,13 +163,26 @@ public class PetReportService {
         return photoService.savePhoto(photo);
     }
 
-
+    /**
+     *
+     * @return все отчеты
+     */
     public List<PetReport> getAllPetReports() {
         return petReportRepo.findAll();
     }
 
+    /**
+     *
+     * @param petId- id питомца
+     * @return все отчеты у конкретного питомца
+     */
     public List<PetReport> findAllByPetId(Long petId) {
         return petReportRepo.findAllByPetId(petId);
+    }
+
+    @Transactional
+    public void removeAllByPetId(Long petId) {
+        petReportRepo.deleteAllByPetId(petId);
     }
 
     /**

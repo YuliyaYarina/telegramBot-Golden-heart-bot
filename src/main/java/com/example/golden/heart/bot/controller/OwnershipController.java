@@ -1,6 +1,7 @@
 package com.example.golden.heart.bot.controller;
 
 import com.example.golden.heart.bot.exceptions.NullUserException;
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Increase;
@@ -8,19 +9,17 @@ import com.example.golden.heart.bot.service.OwnershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/owner")
 public class OwnershipController {
     @Autowired
     private OwnershipService ownershipService;
 
-    @GetMapping
+    @GetMapping("/findAllWithEndedProbation")
     public ResponseEntity<List<User>> findAllOwnersWithEndedProbation() {
         List<User> owners = ownershipService.findAllOwnersWithEndedProbation();
         if (owners.isEmpty()) {
@@ -29,7 +28,7 @@ public class OwnershipController {
         return ResponseEntity.ok(owners);
     }
 
-    @PutMapping("increase-probation")
+    @PutMapping("/increase-probation")
     public ResponseEntity<String> increaseProbationPeriod(Long petId, Increase increase) {
         try {
             ownershipService.increaseProbationPeriod(petId, increase);
@@ -37,11 +36,13 @@ public class OwnershipController {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
+        } catch (VolunteerAlreadyAppointedException e) {
+            ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok("Испытательный срок увеличен");
     }
 
-    @DeleteMapping
+    @DeleteMapping("revokeOwnerShip")
     public ResponseEntity<String> revokeOwnership(Long petId) {
         try {
             ownershipService.revokeOwnership(petId);
@@ -53,7 +54,7 @@ public class OwnershipController {
         return ResponseEntity.ok("Отмена испытательного срока, питомца требуется вернуть в приют");
     }
 
-    @PutMapping
+    @PutMapping("confirmOwnership")
     public ResponseEntity<String> confirmOwnership(Long petId) {
         try {
             ownershipService.confirmOwnership(petId);
@@ -61,6 +62,8 @@ public class OwnershipController {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
+        } catch (VolunteerAlreadyAppointedException e) {
+            throw new RuntimeException(e);
         }
         return ResponseEntity.ok("Испытательный срок пройден успешно");
     }

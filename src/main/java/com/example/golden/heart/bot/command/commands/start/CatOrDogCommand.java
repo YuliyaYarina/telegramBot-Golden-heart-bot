@@ -38,6 +38,9 @@ public class CatOrDogCommand implements Command {
         setChoice(update);
     }
 
+    /**
+     * Сохраняет в БД выбранный тип животного
+     */
     private void setChoice(Update update) {
         String choice = update.callbackQuery().data();
         userService.setChoiceCatOrDogCommand(getChatId(update), choice);

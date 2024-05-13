@@ -51,6 +51,13 @@ public class HomeImprovementYoungCommand implements Command {
         telegramBotSender.sendMessage(collectMessage(update), getChatId(update), telegramBotSender.setButtons(map));
     }
 
+    /**
+     *
+     * Собирает сообщение для отправки,
+     * если пользователь выбрал собаку, то отправляет messageForDog,
+     * если пользователь выбрал кошку, то отправляет messageForCat.
+     *
+     */
     private String collectMessage(Update update) {
          User user = userService.findByChatId(getChatId(update));
         if (user.getChosenPetType().equals(CAT.getCommand())) {

@@ -25,6 +25,10 @@ public class TelegramBotNotifier {
     @Autowired
     UserService userService;
 
+    /**
+     * Метод который срабатывает автоматически в 21:00
+     * Оповещает пользователя о не заполненом отчете ...
+     */
     @Scheduled(cron = "0 0 21 * * *")
     public void checkReports() {
         LocalDate date = LocalDate.now();
