@@ -1,18 +1,25 @@
 package com.example.golden.heart.bot.controller;
 
+import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.service.PetReportService;
+import com.example.golden.heart.bot.service.PetService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.lang.reflect.ParameterizedType;
+import java.time.LocalDate;
+import java.util.List;
 
 import static com.example.golden.heart.bot.constants.Constants.*;
 import static com.example.golden.heart.bot.constants.Constants.HOST;
@@ -34,6 +41,9 @@ class PetReportControllerTest {
     PetReportService petReportService;
     @Autowired
     TestRestTemplate testRestTemplate;
+
+    @Autowired
+    PetService petService;
 
     @Test
     public void contextLoads() throws Exception {
@@ -60,7 +70,7 @@ class PetReportControllerTest {
     public void testEditePetReport() {
 //        Given
         PetReport petReport = petReportService.savePetReport(PET_REPORT_1);
-        PetReport editePetReport = new PetReport(petReport.getId(), "EDITED", "Edited", "Edited", true);
+        PetReport editePetReport = new PetReport(petReport.getId(), "EDITED", "Edited", "Edited", true, petReport.getDate());
         HttpEntity<PetReport> requestEntity = new HttpEntity<>(editePetReport);
 
 //        When
@@ -93,6 +103,28 @@ class PetReportControllerTest {
     }
 
     @Test
+    public void testFindByPetId() {
+//        Given
+        ParameterizedTypeReference<List<PetReport>> responseType = new ParameterizedTypeReference<List<PetReport>>() {};
+        Pet pet = petService.savePet(PET_1);
+        PetReport petReport = PET_REPORT_1;
+        petReport.setPet(pet);
+        petReportService.savePetReport(petReport);
+//      When
+        ResponseEntity<List<PetReport>> response = testRestTemplate.exchange(
+                HOST + port + "/petReport/all-reports-for-pet?petId=" + pet.getId(),
+                HttpMethod.GET,
+                null,
+                responseType
+        );
+
+//        Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+
+
+    @Test
     public void testDeletePetReport() {
 //        Given
         PetReport excepted = petReportService.savePetReport(PET_REPORT_1);
@@ -116,7 +148,7 @@ class PetReportControllerTest {
 
     @Test
     public void testWhenPetReportNotFound() {
-        PetReport petReport = new PetReport(444L, "TEST", "TEST", "TEST", true);
+        PetReport petReport = new PetReport(444L, "TEST", "TEST", "TEST", true, LocalDate.now());
         HttpEntity<PetReport> requestEntity = new HttpEntity<>(petReport);
 //        When
         ResponseEntity<PetReport> editeResponse = testRestTemplate.exchange(

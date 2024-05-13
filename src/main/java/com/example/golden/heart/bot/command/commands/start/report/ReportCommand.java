@@ -11,10 +11,8 @@ import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.model.Update;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
@@ -65,6 +63,7 @@ public class ReportCommand implements Command {
                 case BEHAVIOR -> behaviorReport(chatId, update);
                 case WELL_BEING -> wellBeingReport(chatId, update);
             }
+
         }
 
 
@@ -143,7 +142,7 @@ public class ReportCommand implements Command {
 
     private Boolean checkUserRoleAndPet(Long chatId) {
         User user = userService.findByChatId(chatId);
-        return user.getRole().equals(Role.PET_OWNER) && user.getPet() != null;
+        return user.getRole().equals(Role.VOLUNTEER) && user.getPet() != null;
     }
 
 

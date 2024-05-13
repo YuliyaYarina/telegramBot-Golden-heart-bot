@@ -35,4 +35,14 @@ public class Photo {
 
     }
 
+    /**
+     * Конструктор для создания тестовых объектов
+     */
+    public Photo(Long id, String filePath, long fileSize, String mediaType) {
+        this.id = id;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.mediaType = mediaType;
+    }
+
 }

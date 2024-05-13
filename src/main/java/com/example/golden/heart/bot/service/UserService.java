@@ -65,6 +65,7 @@ public class UserService {
         return userRepository.findById(id)
                 .map(foundUser -> {
                     foundUser.setName(user.getName());
+                    foundUser.setUserName(user.getUserName());
                     foundUser.setChatId(user.getChatId());
                     foundUser.setPet(user.getPet());
                     foundUser.setRole(user.getRole());
@@ -83,7 +84,6 @@ public class UserService {
      * @param role - роль
      * @return возвращает позьзователя с уже изменноной ролью
      * @throws VolunteerAlreadyAppointedException если уже есть волонтер в БД выбрасывает ошибку
-
      */
     public User changeRole(Long id, Role role) throws VolunteerAlreadyAppointedException {
         User foundUser = getById(id);
@@ -228,7 +228,7 @@ public class UserService {
             throw new VolunteerAlreadyAppointedException();
         }
     }
-    List<User> findByProbationPeriod(Integer probationPeriod) {
+    public List<User> findByProbationPeriod(Integer probationPeriod) {
         return userRepository.findByProbationPeriod(probationPeriod);
     }
 }
