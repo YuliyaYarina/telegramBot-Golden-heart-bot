@@ -3,6 +3,7 @@ package com.example.golden.heart.bot.service;
 import com.example.golden.heart.bot.command.commands.CommandUtils;
 import com.example.golden.heart.bot.exceptions.NullUserException;
 import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
+import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
 import com.example.golden.heart.bot.model.Pet;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +30,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PetService petService;
+    @Autowired
+    private PetReportService petReportService;
 
     @Autowired
     private TelegramBotSender telegramBotSender;
@@ -89,8 +93,13 @@ public class UserService {
         }
         user.setPet(pet);
         user.setRole(Role.PET_OWNER);
+        user.setProbationPeriod(30);
         pet.setOwner(user);
         petService.savePet(pet);
+        PetReport initialReport = new PetReport();
+        initialReport.setDate(LocalDate.now());
+        initialReport.setPet(pet);
+        petReportService.savePetReport(initialReport);
         return userRepository.save(user);
     }
 
@@ -165,5 +174,8 @@ public class UserService {
         if (findVolunteer() != null) {
             throw new VolunteerAlreadyAppointedException();
         }
+    }
+    List<User> findByProbationPeriod(Integer probationPeriod) {
+        return userRepository.findByProbationPeriod(probationPeriod);
     }
 }

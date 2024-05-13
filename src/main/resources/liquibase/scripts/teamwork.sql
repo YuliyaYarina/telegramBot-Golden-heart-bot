@@ -89,3 +89,7 @@ ADD COLUMN date DATE NOT NULL;
 -- changeset Yuliya:1
 ALTER TABLE bot_user
     ALTER COLUMN phone TYPE varchar(20);
+
+-- changeset vgulenkov:4
+ALTER TABLE bot_user
+ADD COLUMN probation_period INT;
