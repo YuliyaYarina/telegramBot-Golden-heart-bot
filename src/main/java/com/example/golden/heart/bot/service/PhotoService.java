@@ -81,8 +81,6 @@ public class PhotoService {
         } catch (IOException e) {
             System.out.println("Error downloading photo: " + e.getMessage());
         }
-    } else {
-        System.out.println("No photo found in the message.");
     }
 
 
