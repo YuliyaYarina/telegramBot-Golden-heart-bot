@@ -4,6 +4,7 @@ import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetReportRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,5 +158,10 @@ public class PetReportService {
      */
     public List<PetReport> findAllByPetId(Long petId) {
         return petReportRepo.findAllByPetId(petId);
+    }
+
+    @Transactional
+    public void removeAllByPetId(Long petId) {
+        petReportRepo.deleteAllByPetId(petId);
     }
 }

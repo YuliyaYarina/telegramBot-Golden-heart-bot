@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.controller;
 
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +61,7 @@ public class PetController {
             summary = "Удалить питомца"
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> removePet(@PathVariable Long id) {
+    public ResponseEntity<Pet> removePet(@PathVariable Long id) throws VolunteerAlreadyAppointedException {
         Pet pet = petService.getPetById(id);
         if (pet != null) {
             petService.removePetById(id);

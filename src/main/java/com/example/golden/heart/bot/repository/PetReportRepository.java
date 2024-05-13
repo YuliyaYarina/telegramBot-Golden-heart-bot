@@ -18,4 +18,6 @@ public interface PetReportRepository extends JpaRepository<PetReport, Long> {
 
     Optional<PetReport> findByPetIdAndDate(Long petId, LocalDate date);
     List<PetReport> findAllByPetId (Long petId);
+
+    void deleteAllByPetId(Long petId);
 }
