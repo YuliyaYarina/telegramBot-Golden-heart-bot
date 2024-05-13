@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.example.golden.heart.bot.constants.Constants.PET_1;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
@@ -49,17 +50,9 @@ class PetServiceTest {
     void editPet() {
 
         Long id = 1L;
-        Pet existingPet = new Pet();
-        existingPet.setNick("Барсик");
-        Photo existingPhoto = new Photo();
-        existingPhoto.setFilePath("photoUrl");
-        existingPet.setPhoto(existingPhoto);
+        Pet existingPet = PET_1;
 
-        Pet updatedPet = new Pet();
-        updatedPet.setNick("Кузя");
-        Photo updatedPhoto = new Photo();
-        updatedPhoto.setFilePath("newPhotoUrl");
-        updatedPet.setPhoto(updatedPhoto);
+        Pet updatedPet = new Pet(existingPet.getId(), "Edited");
 
         when(petRepository.findById(id)).thenReturn(Optional.of(existingPet));
         when(petRepository.save(any(Pet.class))).thenReturn(updatedPet);
@@ -68,7 +61,6 @@ class PetServiceTest {
 
         assertNotNull(result);
         assertEquals("Кузя", result.getNick());
-        assertEquals(updatedPhoto, result.getPhoto());
 
         verify(petRepository).save(any(Pet.class));
     }

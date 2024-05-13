@@ -1,5 +1,6 @@
 package com.example.golden.heart.bot.service;
 
+import com.example.golden.heart.bot.exceptions.VolunteerAlreadyAppointedException;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Increase;
@@ -49,7 +50,7 @@ class OwnershipServiceTest {
     }
 
     @Test
-    public void increaseProbationPeriodShortTest() {
+    public void increaseProbationPeriodShortTest() throws VolunteerAlreadyAppointedException {
         Long petId = 1L;
         Long chatId = 12345L;
         User owner = new User();
@@ -66,7 +67,7 @@ class OwnershipServiceTest {
     }
 
     @Test
-    public void increaseProbationPeriodLongTest() {
+    public void increaseProbationPeriodLongTest() throws VolunteerAlreadyAppointedException {
         Long petId = 1L;
         Long chatId = 12345L;
         User owner = new User();
@@ -103,7 +104,7 @@ class OwnershipServiceTest {
 
 
     @Test
-    void confirmOwnership() {
+    void confirmOwnership() throws VolunteerAlreadyAppointedException {
         Long petId = 1L;
         Long chatId = 1L;
         User owner = new User();

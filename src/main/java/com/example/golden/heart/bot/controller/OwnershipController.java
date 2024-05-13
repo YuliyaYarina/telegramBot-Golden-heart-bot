@@ -19,7 +19,7 @@ public class OwnershipController {
     @Autowired
     private OwnershipService ownershipService;
 
-    @GetMapping("findAllWithEndedProbation")
+    @GetMapping("/findAllWithEndedProbation")
     public ResponseEntity<List<User>> findAllOwnersWithEndedProbation() {
         List<User> owners = ownershipService.findAllOwnersWithEndedProbation();
         if (owners.isEmpty()) {
