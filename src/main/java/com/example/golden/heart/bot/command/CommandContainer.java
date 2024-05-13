@@ -12,6 +12,7 @@ import com.example.golden.heart.bot.command.commands.start.takeAnAnimal.recommen
 import com.example.golden.heart.bot.listener.TelegramBotUpdateListener;
 import com.example.golden.heart.bot.service.*;
 
+import com.pengrad.telegrambot.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import static com.example.golden.heart.bot.command.enums.CommandName.*;
 @Component
 public class CommandContainer{
 
+    private TelegramBot telegramBot;
     private TelegramBotSender telegramBotSender;
     private UserService userService;
     private DogBehavioristService dogBehavioristService;
@@ -42,7 +44,8 @@ public class CommandContainer{
     public CommandContainer(TelegramBotSender telegramBotSender, UserService userService,
                             DogBehavioristService dogBehavioristService, AnimalShelterService animalShelterService,
                             PhotoService photoService, PetReportService petReportService,
-                            ReportStateStorage reportStateStorage) {
+                            ReportStateStorage reportStateStorage, TelegramBot telegramBot) {
+        this.telegramBot = telegramBot;
         this.reportStateStorage = reportStateStorage;
         this.petReportService = petReportService;
         this.photoService = photoService;
@@ -86,7 +89,7 @@ public class CommandContainer{
            commandMap.put(GET_DOG_BEHAVIORIST.getCommand(), new DogBehavioristCommand(telegramBotSender, dogBehavioristService));
            commandMap.put(REASONS_FOR_REFUSAL.getCommand(), new ReasonsForRefusalCommand(telegramBotSender));
 
-        commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender, petReportService, userService, reportStateStorage));
+        commandMap.put(REPORT.getCommand(), new ReportCommand(telegramBotSender, petReportService, userService, reportStateStorage, telegramBot, photoService));
 
         commandMap.put(CONTACT_DETAILS.getCommand(), new ContactDetailsCommand(telegramBotSender));
         commandMap.put(VOLUNTEER.getCommand(), new VolonterCommand(telegramBotSender, userService));

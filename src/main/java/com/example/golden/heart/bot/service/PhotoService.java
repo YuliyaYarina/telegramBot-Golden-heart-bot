@@ -57,30 +57,34 @@ public class PhotoService {
         }
         return filePath;
     }
-    public void downloadPhoto (String fileId) {
-        GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
-        File file = getFileResponse.file();
+    public Path downloadPhoto (String fileId, Long reportId, String dir, File file) throws IOException {
+        logger.info("Wos invoked method for upload avatar from telegram");
         String fileUrl = telegramBot.getFullFilePath(file);
+
+        Path filePtah = Path.of(dir, reportId + "." + getExtension(Objects.requireNonNull(file.filePath())));
+        Files.createDirectories(filePtah.getParent());
+        Files.deleteIfExists(filePtah);
 
         // Download the photo
         try {
             URL url = new URL(fileUrl);
-            InputStream in = url.openStream();
-            FileOutputStream out = new FileOutputStream("photo.jpg");
+            InputStream is = url.openStream();
+            OutputStream out = Files.newOutputStream(filePtah, CREATE_NEW);
 
             byte[] buffer = new byte[1024];
             int bytesRead;
-            while ((bytesRead = in.read(buffer)) != -1) {
+            while ((bytesRead = is.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
             }
 
-            in.close();
+            is.close();
             out.close();
 
             System.out.println("Photo downloaded successfully: photo.jpg");
         } catch (IOException e) {
             System.out.println("Error downloading photo: " + e.getMessage());
         }
+        return filePtah;
     }
 
 

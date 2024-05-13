@@ -58,27 +58,24 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-            if (update.message() != null) {
+            if (update.message() != null && update.message().photo() == null) {
                 if (update.message().text().startsWith(commandPrefix)) {
                     commandContainer.findCommand(update.message().text().toLowerCase()).execute(update);
                 } else if (!reportStateStorage.getReportStateMap().isEmpty() &&
                         reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
                     commandContainer.findCommand(REPORT.getCommand()).execute(update);
+                } else if (update.message() != null && update.message().text().startsWith(startsPhone)) {
+                    logger.info("Сообщение отправлено: " + update.message().text());
+                    userService.addedPhone(update);
                 }
-            } else {
-                if (update.callbackQuery() != null) {
-                    commandContainer.findCommand(update.callbackQuery().data()).execute(update);
+            } else if (update.callbackQuery() != null){
+                commandContainer.findCommand(update.callbackQuery().data()).execute(update);
+            } else if (update.message().photo() != null) {
+                if (!reportStateStorage.getReportStateMap().isEmpty() &&
+                        reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
+                    commandContainer.findCommand(REPORT.getCommand()).execute(update);
                 }
             }
-            if (update.message() != null && update.message().text().startsWith(startsPhone)) {
-                logger.info("Сообщение отправлено: " + update.message().text());
-                userService.addedPhone(update);
-            }
-            if (update.message().photo() != null) {
-                String fileId = update.message().photo()[0].fileId();
-                petReportService.getFile(fileId);
-            }
-
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }

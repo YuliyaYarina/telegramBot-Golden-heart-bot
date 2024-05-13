@@ -4,6 +4,7 @@ import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PetReportRepository;
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,10 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -69,7 +71,12 @@ public class PetReportService {
      */
     public Photo saveReportPhoto(Long petReportId, MultipartFile file) throws IOException {
         Path filePath = photoService.uploadPhoto(petReportId, petReportDir, file);
-        return savePhotoToDateBase(petReportId, filePath, file);
+        return savePhotoToDateBase(petReportId, filePath, file, null);
+    }
+
+    public Photo saveReportPhotoBot(Long reportId, String fileId, File file) throws IOException {
+        Path filePath = photoService.downloadPhoto(fileId, reportId, petReportDir, file);
+        return savePhotoToDateBase(reportId, filePath, null, file);
     }
 
     public void getPhoto(Long petReportId, HttpServletResponse response) throws IOException {
@@ -98,29 +105,34 @@ public class PetReportService {
         return petReportRepo.findByPetIdAndDate(petId, date).orElse(null);
     }
 
-    private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile file) {
+    /**
+     * Сохроняет Photo в БД
+     * Сохроняет и фото полученный от controller и через телеграм
+     * @param petReportId id отчета к которому нужно привязать Photo
+     * @param filePath путь где сахранен файл(фото)
+     * @param multipartFile Файл(фото) полученный от контролера
+     * @param file файле(Фото) полученный от телеграм
+     * @return сохроненный Photo
+     */
+    private Photo savePhotoToDateBase(Long petReportId, Path filePath, MultipartFile multipartFile, File file) {
         PetReport petReport = getPetReportById(petReportId);
         if (petReport == null) {
             logger.info("petReport is null");
             return null;
         }
-
         Photo photo = photoService.findPhotoByReportId(petReportId);
         photo.setPetReport(petReport);
         photo.setFilePath(filePath.toString());
-        photo.setFileSize(file.getSize());
-        photo.setMediaType(file.getContentType());
+
+        if (multipartFile != null) {
+            photo.setFileSize(multipartFile.getSize());
+            photo.setMediaType(multipartFile.getContentType());
+        } else if (file != null) {
+            photo.setFileSize(file.fileSize());
+            photo.setMediaType(getMediaTypeFromFileExtension(file).toString());
+        }
 
         return photoService.savePhoto(photo);
-    }
-    public byte[] getFile (String fileId) {
-        GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
-        try {
-            byte[] pic = telegramBot.getFileContent(getFileResponse.file());
-            return pic;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 
@@ -130,5 +142,20 @@ public class PetReportService {
 
     public List<PetReport> findAllByPetId(Long petId) {
         return petReportRepo.findAllByPetId(petId);
+    }
+
+    /**
+     * Извлекает расшерения от пути файли и создает MediaType
+     * @param file из которого нужно получить расширение
+     * @return MediaType
+     */
+    private MediaType getMediaTypeFromFileExtension(File file) {
+        String extension = file.filePath().substring(file.filePath().lastIndexOf(".") + 1);
+
+        return switch (extension.toLowerCase()) {
+            case "jpeg", "jpg" -> MediaType.IMAGE_JPEG;
+            case "png" -> MediaType.IMAGE_PNG;
+            default -> MediaType.APPLICATION_OCTET_STREAM;
+        };
     }
 }

@@ -3,7 +3,6 @@ package com.example.golden.heart.bot.command.commands.start.report;
 import com.example.golden.heart.bot.command.Command;
 import com.example.golden.heart.bot.command.enums.ReportState;
 import com.example.golden.heart.bot.model.PetReport;
-import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.service.PetReportService;
@@ -18,10 +17,8 @@ import com.pengrad.telegrambot.response.GetFileResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
 
@@ -30,15 +27,6 @@ public class ReportCommand implements Command {
     String message;
     private TelegramBot telegramBot;
     private PhotoService photoService;
-
-    public ReportCommand(PhotoService photoService) {
-        this.photoService = photoService;
-    }
-
-    public ReportCommand(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
-    }
-
     private TelegramBotSender telegramBotSender;
 
     private PetReportService petReportService;
@@ -48,7 +36,10 @@ public class ReportCommand implements Command {
     private ReportStateStorage reportStateStorage;
 
     public ReportCommand(TelegramBotSender telegramBotSender, PetReportService petReportService,
-                         UserService userService, ReportStateStorage reportStateStorage) {
+                         UserService userService, ReportStateStorage reportStateStorage, TelegramBot telegramBot,
+                         PhotoService photoService) {
+        this.photoService = photoService;
+        this.telegramBot = telegramBot;
         this.reportStateStorage = reportStateStorage;
         this.userService = userService;
         this.petReportService = petReportService;
@@ -147,25 +138,39 @@ public class ReportCommand implements Command {
 
     /**
      * Метод обрабатывает изображение, отправленное в чат Бота и создает объект класса Photo с его параметрами
-     * @param chatID
+     * @param chatId
      * @param update
-
-     * @return Photo
      */
-    private Photo photoReport(Long chatID, Update update) {
-        message =
-                """
-                        Я принял ваш отчет. Хорошого дня.\s
-                        Если будут проблемы с отчетом то наш волонтер свяжется с вами
-                        """;
+    private void photoReport(Long chatId, Update update) {
+
+
+        PetReport petReport = findReport(chatId);
 
         if (update.message().photo() != null) {
-            String fileId = update.message().photo()[2].fileId();
-            photoService.downloadPhoto(fileId);
+            message =
+                    """
+                            Я принял ваш отчет. Хорошого дня.\s
+                            Если будут проблемы с отчетом то наш волонтер свяжется с вами
+                            """;
 
+            String fileId = update.message().photo()[2].fileId();
+            GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
+            File file = getFileResponse.file();
+            try {
+                petReportService.saveReportPhotoBot(petReport.getId(), fileId, file);
+
+            } catch (IOException ignored) {
+            }
+
+            reportStateStorage.remove(chatId);
+        } else {
+            message =
+                    """
+                            Отправьте пожалюста фото животного 
+                            """;
+            reportStateStorage.replaceValue(chatId, ReportState.PHOTO);
         }
 
-        reportStateStorage.remove(chatID);
     }
 
     private Boolean checkUserRoleAndPet(Long chatId) {
