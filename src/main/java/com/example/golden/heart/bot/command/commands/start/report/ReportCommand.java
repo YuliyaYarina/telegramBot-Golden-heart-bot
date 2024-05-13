@@ -7,6 +7,7 @@ import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.service.PetReportService;
+import com.example.golden.heart.bot.service.PhotoService;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
@@ -28,6 +29,11 @@ public class ReportCommand implements Command {
 
     String message;
     private TelegramBot telegramBot;
+    private PhotoService photoService;
+
+    public ReportCommand(PhotoService photoService) {
+        this.photoService = photoService;
+    }
 
     public ReportCommand(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
@@ -154,24 +160,9 @@ public class ReportCommand implements Command {
                         """;
 
         if (update.message().photo() != null) {
-            Long chatId = update.message().chat().id();
             String fileId = update.message().photo()[2].fileId();
-            Long fileSize = update.message().photo()[2].fileSize();
-            GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
-            File file = getFileResponse.file();
-            String fileUrl = telegramBot.getFullFilePath(file);
-            byte[] pic;
-            try {
-                pic = telegramBot.getFileContent(getFileResponse.file());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Photo photo = new Photo();
-            photo.setChatId(chatId);
-            photo.setData(pic);
-            photo.setFileSize(fileSize);
-            photo.setFilePath(fileUrl);
-            return photo;
+            photoService.downloadPhoto(fileId);
+
         }
 
         reportStateStorage.remove(chatID);
