@@ -57,7 +57,17 @@ public class PhotoService {
         }
         return filePath;
     }
-    public Path downloadPhoto (String fileId, Long reportId, String dir, File file) throws IOException {
+
+    /**
+     * Скачивает из базы Телеграмма отправленный пользователем фото,
+     * и сохраняет его на диск
+     * @param reportId id отчета к каторому нужно привязать фото
+     * @param dir директория куда нужно сохранить фото
+     * @param file файл для сохронения
+     * @return путь где был сохранен фото
+     * @throws IOException может выбросить ошибку
+     */
+    public Path downloadPhoto ( Long reportId, String dir, File file) throws IOException {
         logger.info("Wos invoked method for upload avatar from telegram");
         String fileUrl = telegramBot.getFullFilePath(file);
 
