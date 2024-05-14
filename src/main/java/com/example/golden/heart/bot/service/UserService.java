@@ -99,6 +99,7 @@ public class UserService {
         PetReport initialReport = new PetReport();
         initialReport.setDate(LocalDate.now());
         initialReport.setPet(pet);
+        initialReport.setViewed(false);
         petReportService.savePetReport(initialReport);
         return userRepository.save(user);
     }
