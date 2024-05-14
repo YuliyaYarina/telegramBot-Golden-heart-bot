@@ -34,7 +34,8 @@ public class PetReport {
     /**
      * Конструктор для создания тестовых объектов
      */
-    public PetReport(long id, String diet, String wellBeing, String behaviourChange, boolean isViewed) {
+    public PetReport(long id, String diet, String wellBeing, String behaviourChange, boolean isViewed, LocalDate date) {
+        this.date = date;
         this.id = id;
         this.diet = diet;
         this.wellBeing = wellBeing;

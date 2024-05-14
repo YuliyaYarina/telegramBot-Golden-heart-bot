@@ -2,6 +2,11 @@ package com.example.golden.heart.bot.service;
 
 import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.repository.PhotoRepository;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.File;
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.GetFile;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -22,6 +28,8 @@ public class PhotoService {
 
     @Autowired
     PhotoRepository photoRepository;
+    @Autowired
+    TelegramBot telegramBot;
 
     Logger logger = LoggerFactory.getLogger(PhotoService.class);
 
@@ -49,7 +57,46 @@ public class PhotoService {
         }
         return filePath;
     }
+    public Path downloadPhoto (String fileId, Long reportId, String dir, File file) throws IOException {
+        logger.info("Wos invoked method for upload avatar from telegram");
+        String fileUrl = telegramBot.getFullFilePath(file);
 
+        Path filePtah = Path.of(dir, reportId + "." + getExtension(Objects.requireNonNull(file.filePath())));
+        Files.createDirectories(filePtah.getParent());
+        Files.deleteIfExists(filePtah);
+
+        // Download the photo
+        try {
+            URL url = new URL(fileUrl);
+            InputStream is = url.openStream();
+            OutputStream out = Files.newOutputStream(filePtah, CREATE_NEW);
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+
+            is.close();
+            out.close();
+
+            System.out.println("Photo downloaded successfully: photo.jpg");
+        } catch (IOException e) {
+            System.out.println("Error downloading photo: " + e.getMessage());
+        }
+        return filePtah;
+    }
+
+
+
+
+
+    /**
+     * Возвращает фото с диска
+     * @param photo информация о фото
+     * @param response тело ответа
+     * @throws IOException может выбросить ошибку
+     */
     public void getPhoto(Photo photo, HttpServletResponse response) throws IOException {
         logger.info("Wos invoked method for get photo");
 
@@ -68,6 +115,11 @@ public class PhotoService {
         }
     }
 
+    /**
+     * Сохраняет инофрмацию о фото в БД
+     * @param photo информация о фото
+     * @return сохранненая информация о фото
+     */
     public Photo savePhoto(Photo photo) {
         return photoRepository.save(photo);
     }
@@ -84,6 +136,10 @@ public class PhotoService {
                 }).orElse(null);
     }
 
+    /**
+     * Удаляет фото с диска и из БД
+     * @param photo информация о фото
+     */
     public void removePhoto(Photo photo) {
         logger.info("Wos invoked methods for remove photo");
 
@@ -96,23 +152,47 @@ public class PhotoService {
         photoRepository.deleteById(photo.getId());
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public Photo getPhoto(Long id) {
         return photoRepository.findById(id).orElse(null);
     }
 
-
+    /**
+     *
+     * @param fileName  полное имя фото
+     * @return тип файла
+     */
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
+    /**
+     * Находит Photo по id отчету
+     * @param petReportId id отчета
+     * @return найденные Photo
+     */
     public Photo findPhotoByReportId(Long petReportId) {
         return photoRepository.findByPetReportId(petReportId).orElse(new Photo());
     }
 
+    /**
+     * Находит Photo по id приюта
+     * @param animalShelterId id приюта
+     * @return возвращает найденные Photo
+     */
     public Photo findPhotoByAnimalShelterId(Long animalShelterId) {
         return photoRepository.findByAnimalShelterId(animalShelterId).orElse(new Photo());
     }
 
+    /**
+     * Находит Photo по id питомца
+     * @param petId id питомца
+     * @return возвращает найденные Photo
+     */
     public Photo findPhotoByPetId(Long petId) {
         return photoRepository.findByPetId(petId).orElse(new Photo());
     }

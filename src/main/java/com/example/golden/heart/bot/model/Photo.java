@@ -11,10 +11,12 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long chatId;
 
     private String filePath;
     private long fileSize;
     private String mediaType;
+    private byte[] data;
 
     @OneToOne
     @JoinColumn(name = "animal_shelter_id")
@@ -33,6 +35,16 @@ public class Photo {
 
     public Photo() {
 
+    }
+
+    /**
+     * Конструктор для создания тестовых объектов
+     */
+    public Photo(Long id, String filePath, long fileSize, String mediaType) {
+        this.id = id;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.mediaType = mediaType;
     }
 
 }

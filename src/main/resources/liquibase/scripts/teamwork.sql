@@ -97,3 +97,13 @@ ADD COLUMN probation_period INT;
 -- changeset Yuliya:2
 ALTER TABLE pet_report
 ADD COLUMN is_viewed BOOLEAN NOT NULL;
+
+-- changeset karybekov2:1
+ALTER TABLE pet_report
+DROP COLUMN IF EXISTS is_viewed;
+ALTER TABLE pet_report
+ADD COLUMN IF NOT EXISTS is_viewed BOOLEAN NOT NULL;
+
+-- changeset karybekov2:2
+ALTER TABLE pet
+DROP COLUMN IF EXISTS photo_id;

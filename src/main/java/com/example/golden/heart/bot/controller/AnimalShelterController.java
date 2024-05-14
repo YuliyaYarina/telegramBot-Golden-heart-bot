@@ -74,7 +74,7 @@ public class AnimalShelterController {
     @PostMapping(value = "/{animalShelterId}/address/schema/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> saveAddressSchema(@PathVariable Long animalShelterId,
                                                     @RequestParam MultipartFile file) throws IOException {
-        if (file.getSize() > 1024 * 500) {
+        if (file.getSize() > 1024 * 5000) {
             return ResponseEntity.badRequest().body("File is too big");
         }
         animalShelterService.saveAddressPhoto(animalShelterId, file);

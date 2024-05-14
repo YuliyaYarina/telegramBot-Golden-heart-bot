@@ -6,21 +6,28 @@ import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.service.PetReportService;
+import com.example.golden.heart.bot.service.PhotoService;
 import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.GetFile;
+import com.pengrad.telegrambot.response.GetFileResponse;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.example.golden.heart.bot.command.commands.CommandUtils.getChatId;
+import static com.example.golden.heart.bot.command.enums.CommandName.REPORT;
 
 public class ReportCommand implements Command {
 
     String message;
+    private TelegramBot telegramBot;
+    private PhotoService photoService;
     private TelegramBotSender telegramBotSender;
 
     private PetReportService petReportService;
@@ -30,7 +37,10 @@ public class ReportCommand implements Command {
     private ReportStateStorage reportStateStorage;
 
     public ReportCommand(TelegramBotSender telegramBotSender, PetReportService petReportService,
-                         UserService userService, ReportStateStorage reportStateStorage) {
+                         UserService userService, ReportStateStorage reportStateStorage, TelegramBot telegramBot,
+                         PhotoService photoService) {
+        this.photoService = photoService;
+        this.telegramBot = telegramBot;
         this.reportStateStorage = reportStateStorage;
         this.userService = userService;
         this.petReportService = petReportService;
@@ -40,36 +50,48 @@ public class ReportCommand implements Command {
     @Override
     public void execute(Update update) {
 
-        Map<String,String> map = new LinkedHashMap<>();
+
 
         Long chatId = getChatId(update);
 
+
+
         if (!checkUserRoleAndPet(chatId)) {
+            Map<String,String> map = new LinkedHashMap<>();
             message = "Извините у вас нет питомца. Или возникла кокая та ошибка.\n" +
                     "Если вы приобретали питомца, попробуйте связатся с волонтером";
             map.put("Позвать волонтера", "/volunteer");
+            telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
+        } if (checkUserRoleAndPet(chatId)) {
+            checkUpdateWhenCallbackQuery(update, chatId);
+            if (update.message() != null) {
+                ReportState state = reportStateStorage.getValue(chatId);
+
+                if (state == null) {
+                    reportStateStorage.setValue(chatId, ReportState.START);
+                    state = reportStateStorage.getValue(chatId);
+                }
+
+                switch (state) {
+                    case START -> startReport(chatId);
+                    case DIET -> dietReport(chatId, update);
+                    case PHOTO -> photoReport(chatId, update);
+                    case BEHAVIOR -> behaviorReport(chatId, update);
+                    case WELL_BEING -> wellBeingReport(chatId, update);
+                }
+            }
+            telegramBotSender.send(getChatId(update), message);
         }
 
-        if (checkUserRoleAndPet(chatId)) {
-            ReportState state = reportStateStorage.getValue(chatId);
+    }
 
-            if (state == null) {
-                reportStateStorage.setValue(chatId, ReportState.START);
-                state = reportStateStorage.getValue(chatId);
-            }
-
-            switch (state) {
-                case START -> startReport(chatId);
-                case DIET -> dietReport(chatId, update);
-                case PHOTO -> photoReport(chatId, update);
-                case BEHAVIOR -> behaviorReport(chatId, update);
-                case WELL_BEING -> wellBeingReport(chatId, update);
-            }
+    private void checkUpdateWhenCallbackQuery(Update update, Long chatId) {
+        if (update.message() == null &&
+                update.callbackQuery() != null &&
+                update.callbackQuery().data().equals(REPORT.getCommand())
+        ) {
+            startReport(chatId);
         }
-
-
-
-        telegramBotSender.sendMessage(message, getChatId(update), telegramBotSender.setButtons(map));
     }
 
     private void startReport(Long chatId) {
@@ -106,7 +128,7 @@ public class ReportCommand implements Command {
         message =
                 """
                         Я принял изменение привычек
-                        А теперь расскажите о Общее самочувствие и привыкание к новому месту
+                        А теперь расскажите об общем самочувствии и привыкание к новому месту
                         """;
 
         PetReport petReport = findReport(chatId);
@@ -131,14 +153,41 @@ public class ReportCommand implements Command {
         reportStateStorage.replaceValue(chatId, ReportState.PHOTO);
     }
 
-    private void photoReport(Long chatID, Update update) {
-        message =
-                """
-                        Я принял ваш отчет. Хорошого дня.\s
-                        Если будут проблемы с отчетом то наш волонтер свяжется с вами
-                        """;
+    /**
+     * Метод обрабатывает изображение, отправленное в чат Бота и создает объект класса Photo с его параметрами
+     * @param chatId
+     * @param update
+     */
+    private void photoReport(Long chatId, Update update) {
 
-        reportStateStorage.remove(chatID);
+
+        PetReport petReport = findReport(chatId);
+
+        if (update.message().photo() != null) {
+            message =
+                    """
+                            Я принял ваш отчет. Хорошого дня.\s
+                            Если будут проблемы с отчетом то наш волонтер свяжется с вами
+                            """;
+
+            String fileId = update.message().photo()[2].fileId();
+            GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
+            File file = getFileResponse.file();
+            try {
+                petReportService.saveReportPhotoBot(petReport.getId(), fileId, file);
+
+            } catch (IOException ignored) {
+            }
+
+            reportStateStorage.remove(chatId);
+        } else {
+            message =
+                    """
+                            Отправьте пожалюста фото животного 
+                            """;
+            reportStateStorage.replaceValue(chatId, ReportState.PHOTO);
+        }
+
     }
 
     private Boolean checkUserRoleAndPet(Long chatId) {
