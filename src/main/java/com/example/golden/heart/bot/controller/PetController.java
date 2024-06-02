@@ -3,6 +3,7 @@ package com.example.golden.heart.bot.controller;
 import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,10 +22,12 @@ public class PetController {
     private PetService petService;
 
     @Operation(
-            summary = "Добавить питомца"
+            summary = "Добавить питомца",
+            tags = "Питомец"
     )
     @PostMapping
-    public ResponseEntity<Pet> savePet(@RequestBody Pet pet) {
+    public ResponseEntity<Pet> savePet(@Parameter(description = "Добавьте информацию о питомце")
+                                           @RequestBody Pet pet) {
         Pet pet1 = petService.savePet(pet);
         if (pet1 == null) {
             return ResponseEntity.badRequest().build();
@@ -33,10 +36,13 @@ public class PetController {
     }
 
     @Operation(
-            summary = "Изменить данные питомца"
+            summary = "Изменить данные питомца",
+            tags = "Питомец"
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Pet> editPet(@PathVariable Long id, @RequestBody Pet pet) {
+    public ResponseEntity<Pet> editPet(@PathVariable(name = "id питомца") Long id,
+                                       @Parameter(description = "Добавьте информацию о питомце")
+                                       @RequestBody Pet pet) {
         Pet foundPet = petService.editPet(id, pet);
         if (foundPet == null) {
             return ResponseEntity.notFound().build();
@@ -45,10 +51,11 @@ public class PetController {
     }
 
     @Operation(
-            summary = "Показать данные питомца"
+            summary = "Показать данные питомца",
+            tags = "Питомец"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<Pet> getPet(@PathVariable Long id) {
+    public ResponseEntity<Pet> getPet(@PathVariable(name = "id питомца") Long id) {
         Pet pet = petService.getPetById(id);
         if (pet == null) {
             return ResponseEntity.notFound().build();
@@ -57,10 +64,11 @@ public class PetController {
     }
 
     @Operation(
-            summary = "Удалить питомца"
+            summary = "Удалить питомца",
+            tags = "Питомец"
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> removePet(@PathVariable Long id) {
+    public ResponseEntity<Pet> removePet(@PathVariable(name = "id питомца") Long id) {
         Pet pet = petService.getPetById(id);
         if (pet != null) {
             petService.removePetById(id);
@@ -70,10 +78,12 @@ public class PetController {
     }
 
     @Operation(
-            summary = "Добавить фото питомцу"
+            summary = "Добавить фото питомцу",
+            tags = "Питомец"
     )
     @PostMapping(value = "/{petId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> savePetPhoto(@PathVariable Long petId,
+    public ResponseEntity<String> savePetPhoto(@PathVariable(name = "id питомца") Long petId,
+                                               @Parameter(description = "Добавьте фото")
                                                @RequestParam MultipartFile file) throws IOException {
         if (file.getSize() > 1024 * 500) {
             return ResponseEntity.ok("File is too big");
@@ -83,19 +93,21 @@ public class PetController {
     }
 
     @Operation(
-            summary = "Фото питомца"
+            summary = "Фото питомца",
+            tags = "Питомец"
     )
     @GetMapping(value = "/{petId}/photo")
-    public void downloadPhoto(@PathVariable Long petId,
+    public void downloadPhoto(@PathVariable(name = "id питомца") Long petId,
                               HttpServletResponse response) throws IOException {
         petService.getPhoto(petId, response);
     }
 
     @Operation(
-            summary = "Удалить фото у питомца"
+            summary = "Удалить фото у питомца",
+            tags = "Питомец"
     )
     @DeleteMapping(value = "/{petId}/photo")
-    public ResponseEntity<String> removePhoto(@PathVariable Long petId) {
+    public ResponseEntity<String> removePhoto(@PathVariable(name = "id питомца") Long petId) {
         petService.removePhoto(petId);
         return ResponseEntity.ok().build();
     }

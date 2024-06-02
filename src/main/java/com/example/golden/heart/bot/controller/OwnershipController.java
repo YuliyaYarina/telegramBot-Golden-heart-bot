@@ -5,21 +5,25 @@ import com.example.golden.heart.bot.model.Pet;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.model.enums.Increase;
 import com.example.golden.heart.bot.service.OwnershipService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/ownership")
 public class OwnershipController {
+
     @Autowired
     private OwnershipService ownershipService;
 
+    @Operation(
+            summary = "Получить список всех владельцев животных, с закончевшимся испытательным сроком",
+            tags = "Испытательный срок"
+    )
     @GetMapping
     public ResponseEntity<List<User>> findAllOwnersWithEndedProbation() {
         List<User> owners = ownershipService.findAllOwnersWithEndedProbation();
@@ -29,8 +33,13 @@ public class OwnershipController {
         return ResponseEntity.ok(owners);
     }
 
+    @Operation(
+            summary = "Увеличить испытательный срок",
+            tags = "Испытательный срок"
+    )
     @PutMapping("increase-probation")
-    public ResponseEntity<String> increaseProbationPeriod(Long petId, Increase increase) {
+    public ResponseEntity<String> increaseProbationPeriod(@RequestParam(name = "id питомца")Long petId,
+                                                          @RequestParam(name = "кол-во дней")Increase increase) {
         try {
             ownershipService.increaseProbationPeriod(petId, increase);
         } catch (IllegalArgumentException | NullUserException e) {
@@ -41,8 +50,12 @@ public class OwnershipController {
         return ResponseEntity.ok("Испытательный срок увеличен");
     }
 
+    @Operation(
+            summary = "Отметить, что испытательный срок провален",
+            tags = "Испытательный срок"
+    )
     @DeleteMapping
-    public ResponseEntity<String> revokeOwnership(Long petId) {
+    public ResponseEntity<String> revokeOwnership(@RequestParam(name = "id питомца") Long petId) {
         try {
             ownershipService.revokeOwnership(petId);
         } catch (IllegalArgumentException | NullUserException e) {
@@ -53,8 +66,12 @@ public class OwnershipController {
         return ResponseEntity.ok("Отмена испытательного срока, питомца требуется вернуть в приют");
     }
 
+    @Operation(
+            summary = "Отметить, что испытательный срок успешно пройден",
+            tags = "Испытательный срок"
+    )
     @PutMapping
-    public ResponseEntity<String> confirmOwnership(Long petId) {
+    public ResponseEntity<String> confirmOwnership(@RequestParam(name = "id питомца")Long petId) {
         try {
             ownershipService.confirmOwnership(petId);
         } catch (IllegalArgumentException | NullUserException e) {

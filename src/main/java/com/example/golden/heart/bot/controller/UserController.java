@@ -5,6 +5,10 @@ import com.example.golden.heart.bot.model.enums.Role;
 import com.example.golden.heart.bot.model.User;
 import com.example.golden.heart.bot.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.models.media.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,11 @@ public class UserController {
     private UserService userService;
 
     @Operation(
-            summary = "Создать пользователя"
+            summary = "Создать пользователя",
+            tags = "Операции с пользователем",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Добавьте пользователя"
+            )
     )
     @PostMapping
     public ResponseEntity<String> saveUser(@RequestBody User user) {
@@ -40,10 +48,15 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Изменить данные пользователя"
+            summary = "Изменить данные пользователя",
+            tags = "Операции с пользователем",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Изменяемый пользователь"
+            )
     )
     @PutMapping("/{id}")
-    public ResponseEntity<String> editUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<String> editUser(@RequestParam(name = "id пользователя") Long id,
+                                           @RequestBody User user) {
         User foundUser;
         try {
             foundUser = userService.edit(id, user);
@@ -60,10 +73,11 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Получить пользователя по id"
+            summary = "Получить пользователя по id",
+            tags = "Операции с пользователем"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<User> getUser(@RequestParam(name = "id пользователя") Long id) {
         User user = userService.getById(id);
         if (user == null) {
             return ResponseEntity.notFound().build();
@@ -72,10 +86,11 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Удалить пользователя"
+            summary = "Удалить пользователя",
+            tags = "Операции с пользователем"
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> removeUser(@PathVariable Long id) {
+    public ResponseEntity<User> removeUser(@RequestParam(name = "id пользователя") Long id) {
         User user = userService.getById(id);
         if (user != null) {
             userService.removeById(id);
@@ -85,10 +100,12 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Изменить роль пользователю"
+            summary = "Изменить роль пользователю",
+            tags = "Операции с пользователем"
     )
     @PutMapping("/change-role")
-    public ResponseEntity<String> changeRole(@RequestParam Long id, @RequestParam Role role) {
+    public ResponseEntity<String> changeRole(@RequestParam(name = "id пользователя") Long id,
+                                             @Parameter(description = "Данные которые хотите изменить")@RequestParam Role role) {
         User user;
         try {
             user = userService.changeRole(id, role);
@@ -107,10 +124,12 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Привязать питомца к пользователю"
+            summary = "Привязать питомца к пользователю",
+            tags = "Операции с пользователем"
     )
     @PutMapping("/set-pet")
-    public ResponseEntity<String> setPet(@RequestParam Long userId, @RequestParam Long petId) {
+    public ResponseEntity<String> setPet(@RequestParam(name = "id пользователя") Long userId,
+                                         @RequestParam(name = "id питомца") Long petId) {
         User user;
         try {
             user = userService.setPet(userId, petId);
@@ -124,10 +143,12 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Получить список пользователей по роли"
+            summary = "Получить список пользователей по роли",
+            tags = "Операции с пользователем"
     )
     @GetMapping
-        public ResponseEntity<List<User>> findByRole (@RequestParam Role role){
+        public ResponseEntity<List<User>> findByRole (@Parameter(description = "Выберете роль, по которой хотите получить список пользователей")
+                                                          @RequestParam(name = "роль") Role role){
             List<User> users = userService.findByRole(role);
             if (users.isEmpty()) {
                 return ResponseEntity.notFound().build();
