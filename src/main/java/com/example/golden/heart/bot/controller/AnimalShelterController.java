@@ -5,6 +5,7 @@ import com.example.golden.heart.bot.model.Photo;
 import com.example.golden.heart.bot.service.AnimalShelterService;
 import com.example.golden.heart.bot.service.PhotoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -24,7 +25,11 @@ public class AnimalShelterController {
     private PhotoService photoService;
 
     @Operation(
-            summary = "Добавить приют"
+            summary = "Добавить приют",
+            tags = "Приют",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Добавьте приют"
+            )
     )
     @PostMapping
     public ResponseEntity<AnimalShelter> createAnimalShelter(@RequestBody AnimalShelter animalShelter) {
@@ -32,10 +37,15 @@ public class AnimalShelterController {
     }
 
     @Operation(
-            summary = "Изменить информацию о приюте"
+            summary = "Изменить информацию о приюте",
+            tags = "Приют",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Введите информацию которую нужно изменить"
+            )
     )
     @PutMapping("/{id}")
-    public ResponseEntity<AnimalShelter> editeAnimalShelter(@PathVariable Long id, @RequestBody AnimalShelter animalShelter) {
+    public ResponseEntity<AnimalShelter> editeAnimalShelter(@RequestParam(name = "id приюта") Long id,
+                                                            @RequestBody AnimalShelter animalShelter) {
         AnimalShelter foundAnimalShelter = animalShelterService.editAnimalShelter(id, animalShelter);
         if (foundAnimalShelter == null) {
             return ResponseEntity.notFound().build();
@@ -44,10 +54,11 @@ public class AnimalShelterController {
     }
 
     @Operation(
-            summary = "Показать информацию о приюте"
+            summary = "Показать информацию о приюте",
+            tags = "Приют"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<AnimalShelter> getAnimalShelter(@PathVariable Long id) {
+    public ResponseEntity<AnimalShelter> getAnimalShelter(@RequestParam(name = "id приюта") Long id) {
         AnimalShelter animalShelter = animalShelterService.getAnimalShelterById(id);
         if (animalShelter == null) {
             return ResponseEntity.notFound().build();
@@ -56,10 +67,11 @@ public class AnimalShelterController {
     }
 
     @Operation(
-            summary = "Удалить приют"
+            summary = "Удалить приют",
+            tags = "Приют"
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<AnimalShelter> removeAnimalShelter(@PathVariable Long id) {
+    public ResponseEntity<AnimalShelter> removeAnimalShelter(@RequestParam(name = "id приюта") Long id) {
         AnimalShelter animalShelter = animalShelterService.getAnimalShelterById(id);
         if (animalShelter != null) {
             animalShelterService.removeAnimalShelterById(id);
@@ -69,10 +81,12 @@ public class AnimalShelterController {
     }
 
     @Operation(
-            summary = "Добавить фото проезда к приюту"
+            summary = "Добавить фото проезда к приюту",
+            tags = "Приют"
     )
     @PostMapping(value = "/{animalShelterId}/address/schema/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> saveAddressSchema(@PathVariable Long animalShelterId,
+                                                    @Parameter(description = "Прикрепите фото")
                                                     @RequestParam MultipartFile file) throws IOException {
         if (file.getSize() > 1024 * 5000) {
             return ResponseEntity.badRequest().body("File is too big");
@@ -83,7 +97,8 @@ public class AnimalShelterController {
 
 
     @Operation(
-            summary = "Показать фото проезда к приюту"
+            summary = "Показать фото проезда к приюту",
+            tags = "Приют"
     )
     @GetMapping(value = "/{animalShelterId}/photo")
     public ResponseEntity<String> downloadPhoto(@PathVariable Long animalShelterId,
@@ -99,7 +114,8 @@ public class AnimalShelterController {
     }
 
     @Operation(
-            summary = "Удалить фото проезда"
+            summary = "Удалить фото проезда",
+            tags = "Приют"
     )
     @DeleteMapping(value = "/{animalShelterId}/photo")
     public ResponseEntity<String> removePhoto(@PathVariable Long animalShelterId) {
