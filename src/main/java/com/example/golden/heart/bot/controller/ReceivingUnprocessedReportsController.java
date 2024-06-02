@@ -33,7 +33,7 @@ public class ReceivingUnprocessedReportsController {
             summary = "Получить отчет по id, не помечая как просмотренный"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseEntity<Object>> getPetReport(@PathVariable(required = false, name = "id отчета") Long id) {
+    public ResponseEntity<ResponseEntity<Object>> getPetReport(@RequestParam(required = false, name = "id отчета") Long id) {
         return ResponseEntity.ok(ruReportService.getPetReport(id));
     }
 
@@ -49,7 +49,8 @@ public class ReceivingUnprocessedReportsController {
             summary = "Пометить, что отчет просмотрен"
     )
     @PutMapping("/{id}/viewed")
-    public ResponseEntity<ResponseEntity<PetReport>> markReportAsViewed(@PathVariable(required = false, name = "id отчета") Long id){
+    public ResponseEntity<ResponseEntity<PetReport>> markReportAsViewed(
+            @RequestParam(name = "id отчета") Long id){
         return ResponseEntity.ok(ruReportService.markReportAsViewed(id));
     }
 
@@ -57,9 +58,10 @@ public class ReceivingUnprocessedReportsController {
             summary = "Отправление сообщения, о плохо заполненном отчете"
     )
     @PostMapping("/{id}")
-    public ResponseEntity<ResponseEntity<PetReport>> messageReport(@Parameter(description = "Отправить усыновителю: Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного.")
-                                                                       @PathVariable(required = false, name = "id отчета") Long id) {
-        logger.info(" отправка сообщения пользователю по id:" + id);
+    public ResponseEntity<ResponseEntity<PetReport>> messageReport(
+            @Parameter(description = "Отправить усыновителю: Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного.")
+                                                                       @RequestParam(name = "id отчета") Long id) {
+        logger.info(" отправка сообщения пользователю по отчету с id:" + id);
         return ResponseEntity.ok(ruReportService.messageReport(id));
     }
 
