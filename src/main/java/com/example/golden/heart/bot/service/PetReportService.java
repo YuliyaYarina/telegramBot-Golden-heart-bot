@@ -96,8 +96,15 @@ public class PetReportService {
         return savePhotoToDateBase(petReportId, filePath, file, null);
     }
 
-    public Photo saveReportPhotoBot(Long reportId, String fileId, File file) throws IOException {
-        Path filePath = photoService.downloadPhoto(fileId, reportId, petReportDir, file);
+    /**
+     * Сохраняет фото на диск и данные фото в базу данных
+     * @param reportId
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public Photo saveReportPhotoBot(Long reportId, File file) throws IOException {
+        Path filePath = photoService.downloadPhoto( reportId, petReportDir, file);
         return savePhotoToDateBase(reportId, filePath, null, file);
     }
 

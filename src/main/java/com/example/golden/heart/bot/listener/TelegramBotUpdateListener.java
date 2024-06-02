@@ -5,6 +5,7 @@ import com.example.golden.heart.bot.command.commands.start.report.ReportCommand;
 import com.example.golden.heart.bot.command.commands.start.report.ReportStateStorage;
 import com.example.golden.heart.bot.command.enums.ReportState;
 import com.example.golden.heart.bot.service.PetReportService;
+import com.example.golden.heart.bot.service.TelegramBotSender;
 import com.example.golden.heart.bot.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -32,6 +33,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
     private CommandContainer commandContainer;
 
     private UserService userService;
+    private TelegramBotSender telegramBotSender;
     private PetReportService petReportService;
 
     public TelegramBotUpdateListener(PetReportService petReportService) {
@@ -61,7 +63,8 @@ public class TelegramBotUpdateListener implements UpdatesListener {
             if (update.message() != null && update.message().photo() == null) {
                 if (update.message().text().startsWith(commandPrefix)) {
                     commandContainer.findCommand(update.message().text().toLowerCase()).execute(update);
-                } else if (!reportStateStorage.getReportStateMap().isEmpty() &&
+                } else if (!update.message().text().startsWith(commandPrefix) &&
+                        !reportStateStorage.getReportStateMap().isEmpty() &&
                         reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
                     commandContainer.findCommand(REPORT.getCommand()).execute(update);
                 } else if (update.message() != null && update.message().text().startsWith(startsPhone)) {
@@ -70,7 +73,7 @@ public class TelegramBotUpdateListener implements UpdatesListener {
                 }
             } else if (update.callbackQuery() != null){
                 commandContainer.findCommand(update.callbackQuery().data()).execute(update);
-            } else if (update.message().photo() != null) {
+            } else if (update.message() != null &&update.message().photo() != null) {
                 if (!reportStateStorage.getReportStateMap().isEmpty() &&
                         reportStateStorage.getReportStateMap().get(getChatId(update)) != null) {
                     commandContainer.findCommand(REPORT.getCommand()).execute(update);
