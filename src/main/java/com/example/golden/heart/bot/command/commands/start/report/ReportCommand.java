@@ -174,7 +174,7 @@ public class ReportCommand implements Command {
             GetFileResponse getFileResponse = telegramBot.execute(new GetFile(fileId));
             File file = getFileResponse.file();
             try {
-                petReportService.saveReportPhotoBot(petReport.getId(), fileId, file);
+                petReportService.saveReportPhotoBot(petReport.getId(), file);
 
             } catch (IOException ignored) {
             }

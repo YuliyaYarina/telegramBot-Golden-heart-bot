@@ -3,6 +3,7 @@ package com.example.golden.heart.bot.controller;
 import com.example.golden.heart.bot.model.PetReport;
 import com.example.golden.heart.bot.service.PetReportService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +22,8 @@ public class PetReportController {
     private PetReportService petReportService;
 
     @Operation(
-            summary = "Создать отчет"
+            summary = "Создать отчет",
+            tags = "Отчет"
     )
     @PostMapping
     public ResponseEntity<PetReport> savePetReport(@RequestBody PetReport petReport) {
@@ -29,7 +31,8 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Изменить отчет"
+            summary = "Изменить отчет",
+            tags = "Отчет"
     )
     @PutMapping("/{id}")
     public ResponseEntity<PetReport> editePetReport(@PathVariable Long id, @RequestBody PetReport petReport) {
@@ -41,10 +44,11 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Показать отчет"
+            summary = "Показать отчет",
+            tags = "Отчет"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<PetReport> getPetReport(@PathVariable Long id) {
+    public ResponseEntity<PetReport> getPetReport(@PathVariable(name = "id отчета") Long id) {
         PetReport petReport = petReportService.getPetReportById(id);
         if (petReport == null) {
             return ResponseEntity.notFound().build();
@@ -53,7 +57,8 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Показать все отчеты"
+            summary = "Показать все отчеты",
+            tags = "Отчет"
     )
     @GetMapping("get-all-pet-reports")
     public ResponseEntity<List<PetReport>>  getAllPetReports(){
@@ -65,10 +70,11 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Показать все отчеты по питомцу"
+            summary = "Показать все отчеты по питомцу",
+            tags = "Отчет"
     )
     @GetMapping("all-reports-for-pet")
-    public ResponseEntity<List<PetReport>> findAllByPetId (@RequestParam Long petId){
+    public ResponseEntity<List<PetReport>> findAllByPetId (@RequestParam(name = "id питомца") Long petId){
         List<PetReport> petReports = petReportService.findAllByPetId(petId);
         if (petReports.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -77,10 +83,11 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Удалить отчет"
+            summary = "Удалить отчет",
+            tags = "Отчет"
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<PetReport> removePetReport(@PathVariable Long id) {
+    public ResponseEntity<PetReport> removePetReport(@PathVariable(name = "id отчета") Long id) {
         PetReport petReport = petReportService.getPetReportById(id);
         if (petReport != null) {
             petReportService.removePetReportById(id);
@@ -90,12 +97,14 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Загрузить фото в отчет"
+            summary = "Загрузить фото в отчет",
+            tags = "Отчет"
     )
     @PostMapping(value = "/{reportId}/photo/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveReportPhoto(@PathVariable Long reportId,
+    public ResponseEntity<String> saveReportPhoto(@PathVariable(name = "id отчета") Long reportId,
+                                                  @Parameter(description = "Добавьте фото")
                                                   @RequestParam MultipartFile photoReport) throws IOException {
-        if (photoReport.getSize() > 1024 * 500) {
+        if (photoReport.getSize() > 2048 * 2048) {
             return ResponseEntity.badRequest().body("File is too big");
         }
         petReportService.saveReportPhoto(reportId, photoReport);
@@ -103,19 +112,21 @@ public class PetReportController {
     }
 
     @Operation(
-            summary = "Показать фото в отчете"
+            summary = "Показать фото в отчете",
+            tags = "Отчет"
     )
     @GetMapping(value = "/{petReportId}/photo")
-    public void downloadPhoto(@PathVariable Long petReportId,
+    public void downloadPhoto(@PathVariable(name = "id отчета") Long petReportId,
                               HttpServletResponse response) throws IOException {
         petReportService.getPhoto(petReportId, response);
     }
 
     @Operation(
-            summary = "Удалить фото в отчете"
+            summary = "Удалить фото в отчете",
+            tags = "Отчет"
     )
     @DeleteMapping(value = "/{petReportId}/photo")
-    public ResponseEntity<String> removePhoto(@PathVariable Long petReportId) {
+    public ResponseEntity<String> removePhoto(@PathVariable(name = "id отчета") Long petReportId) {
         petReportService.removePhoto(petReportId);
         return ResponseEntity.ok().build();
     }
